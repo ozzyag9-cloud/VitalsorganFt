@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Heart, Brain, Zap, Droplets, Activity, Gauge, Flame, Wallet, Trophy, User, ArrowRight, X, Shield, Fingerprint, Calendar, Lock, LineChart, Cpu, Coins, Search, Hourglass, BarChart2, Globe, ExternalLink } from 'lucide-react';
+import { Heart, Brain, Zap, Droplets, Activity, Gauge, Flame, Wallet, Trophy, User, ArrowRight, X, Shield, Fingerprint, Calendar, Lock, LineChart, Cpu, Coins, Search, Hourglass, BarChart2, Globe, ExternalLink, Star } from 'lucide-react';
 import { AreaChart, Area, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { useVitals } from './hooks/useVitals';
 import { cn, formatNumber } from './lib/utils';
@@ -335,10 +335,40 @@ const LandingPage = ({ onEnter }: { onEnter: (v: string) => void }) => {
            { label: "Yield Distributed", val: "128K", sub: "$VITAL Tokens" },
            { label: "Hardware Units", val: "882", sub: "Vitals Ring Pre-orders" }
          ].map((stat, i) => (
-           <div key={i} className="bg-white/[0.02] border border-white/5 p-8 rounded-3xl text-center">
+           <div key={i} className="bg-white/[0.02] border border-white/5 p-8 rounded-3xl text-center hover:bg-white/5 transition-colors cursor-default">
               <p className="text-3xl font-mono font-bold text-white mb-1">{stat.val}</p>
               <p className="text-[10px] text-indigo-500 font-black uppercase tracking-widest mb-1">{stat.label}</p>
               <p className="text-[8px] text-slate-600 font-mono tracking-widest">{stat.sub}</p>
+           </div>
+         ))}
+      </section>
+
+      {/* Protocol Core: Security & Yield */}
+      <section className="py-20 grid grid-cols-1 md:grid-cols-3 gap-6">
+         {[
+           { 
+             title: "ZK-Biometrics", 
+             desc: "Your health data never touches a server. We use Zero-Knowledge Proofs to verify synchronization targets without exposing raw telemetry.",
+             icon: Lock 
+           },
+           { 
+             title: "Phygital Minting", 
+             desc: "Every NFT corresponds to a physical Batch-01 hardware unit. The digital asset functions as your proof-of-ownership for shipping.",
+             icon: Cpu 
+           },
+           { 
+             title: "$VITAL Economy", 
+             desc: "The protocol distributes yield based on biological consistency. Maintain a 90% sync rate to maximize your $VITAL rewards.",
+             icon: Coins 
+           }
+         ].map((item, i) => (
+           <div key={i} className="p-10 bg-[#05070c] border border-white/5 rounded-[40px] space-y-6 relative overflow-hidden group">
+              <div className="w-12 h-12 bg-indigo-500/10 rounded-2xl flex items-center justify-center border border-indigo-500/20">
+                 <item.icon className="w-5 h-5 text-indigo-400" />
+              </div>
+              <h3 className="text-xl font-display font-black text-white uppercase tracking-tight">{item.title}</h3>
+              <p className="text-sm text-slate-500 leading-relaxed font-light">{item.desc}</p>
+              <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-500/5 blur-3xl -z-10 group-hover:bg-indigo-500/10 transition-colors" />
            </div>
          ))}
       </section>
@@ -644,6 +674,37 @@ const LandingPage = ({ onEnter }: { onEnter: (v: string) => void }) => {
                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-[radial-gradient(circle_at_center,_rgba(99,102,241,0.05)_0%,_transparent_70%)] pointer-events-none" />
             </div>
          </div>
+      </section>
+
+      {/* Roadmap Section */}
+      <section className="py-40 border-t border-white/5">
+        <div className="text-center max-w-3xl mx-auto mb-32 space-y-6">
+           <p className="text-[10px] text-indigo-500 font-black uppercase tracking-[0.6em]">Protocol Evolution</p>
+           <h2 className="text-6xl font-display font-black text-white uppercase tracking-tighter leading-none">The Sovereign <br/> Roadmap</h2>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+           {[
+             { phase: "Q3 2024", title: "Genesis Mint", items: ["1000 Founding NFTs", "Whitelist Open", "$VITAL Seed Pool"] },
+             { phase: "Q4 2024", title: "Ring Batch 01", items: ["Hardware Pre-orders", "App Beta Launch", "Solana Integration"] },
+             { phase: "Q1 2025", title: "Biosync Live", items: ["Oracle V1 Deployment", "Yield Distribution", "ZK-Privacy Launch"] },
+             { phase: "Q2 2025", title: "Governance", items: ["$VITAL Staking", "DAO Framework", "Ecosystem Grants"] }
+           ].map((phase, i) => (
+             <div key={i} className="bg-white/[0.02] border border-white/5 p-10 rounded-[40px] space-y-8 relative group">
+                <div className="text-amber-500 font-mono text-[10px] font-black uppercase tracking-widest">{phase.phase}</div>
+                <h3 className="text-2xl font-display font-black text-white uppercase tracking-tight">{phase.title}</h3>
+                <ul className="space-y-3">
+                   {phase.items.map((item, j) => (
+                     <li key={j} className="flex items-center gap-3 text-xs text-slate-500 font-light">
+                        <div className="w-1 h-1 rounded-full bg-indigo-500" />
+                        {item}
+                     </li>
+                   ))}
+                </ul>
+                <div className="absolute top-1/2 left-0 w-1 h-12 bg-indigo-500 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity" />
+             </div>
+           ))}
+        </div>
       </section>
     </div>
   );
@@ -1226,7 +1287,7 @@ const Dashboard = ({ nft, user, sync, claim, evolve, activate, pairWearable, act
                  )}
                  <div className="px-3 py-1 bg-indigo-500/10 border border-indigo-500/30 rounded text-[8px] text-indigo-400 font-black uppercase tracking-widest flex items-center gap-2">
                     <Globe className="w-3 h-3" />
-                    patrickianbern1.nft Resolving
+                    {user.web3Domain || "Unlinked Identity"}
                  </div>
               </div>
               
@@ -1499,13 +1560,13 @@ const Dashboard = ({ nft, user, sync, claim, evolve, activate, pairWearable, act
                  <div className="bg-white/[0.02] border border-white/10 p-8 rounded-3xl space-y-6">
                     <div className="flex justify-between items-center text-white">
                        <span className="text-[10px] text-slate-600 font-black uppercase tracking-widest">Sovereign Domain</span>
-                       <span className="text-sm font-mono font-bold text-indigo-400">patrickianbern1.nft</span>
+                       <span className="text-sm font-mono font-bold text-indigo-400">{user.web3Domain || "NO_DOMAIN_ATTACHED"}</span>
                     </div>
                     <div className="h-px bg-white/5" />
                     <div className="flex justify-between items-center text-white">
                        <span className="text-[10px] text-slate-600 font-black uppercase tracking-widest">IPFS Manifest CID</span>
                        <span className="text-[10px] font-mono font-bold text-white uppercase select-all truncate ml-4">
-                          {isGeneratingManifest ? `GENERATING... ${manifestProgress}%` : "QmXp9V...patrick...8Zp2"}
+                          {isGeneratingManifest ? `GENERATING... ${manifestProgress}%` : (user.web3Domain ? "QmXp9V...authenticated...8Zp2" : "AWAITING_DOMAIN_LINK")}
                        </span>
                     </div>
                  </div>
@@ -1526,7 +1587,7 @@ const Dashboard = ({ nft, user, sync, claim, evolve, activate, pairWearable, act
                           <li>Select <span className="text-white font-bold">Export to ZIP</span> to download the full protocol codebase to your machine.</li>
                           <li>Open your terminal in the exported folder and run <code className="bg-black/50 px-1 rounded text-indigo-400">npm install && npm run build</code>.</li>
                           <li>Upload the resulting <code className="text-indigo-400">dist/</code> folder to an IPFS provider (Pinata, Fleek, or your own node).</li>
-                          <li>Copy the CID and paste it into the <span className="text-white font-bold">Website / Content Hash</span> field in your Unstoppable Domains dashboard for <span className="text-indigo-400 font-bold">patrickianbern1.nft</span>.</li>
+                          <li>Copy the CID and paste it into the <span className="text-white font-bold">Website / Content Hash</span> field in your domain dashboard (e.g. Unstoppable Domains or ENS).</li>
                        </ol>
                     </div>
 
