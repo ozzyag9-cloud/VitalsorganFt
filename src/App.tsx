@@ -52,7 +52,7 @@ const Navbar = ({ view, setView, balance, user, connectWallet }: { view: string,
         <button onClick={() => setView('landing')} className={cn("hover:text-indigo-400 transition-colors uppercase", view === 'landing' && "text-indigo-400")}>Protocol</button>
         <button onClick={() => setView('launchpad')} className={cn("hover:text-indigo-400 transition-colors uppercase", view === 'launchpad' && "text-indigo-400")}>Launchpad</button>
         <button onClick={() => setView('mint')} className={cn("hover:text-indigo-400 transition-colors uppercase", view === 'mint' && "text-indigo-400")}>Minting</button>
-        <button onClick={() => setView('dashboard')} className={cn("hover:text-indigo-400 transition-colors uppercase", view === 'dashboard' && "text-indigo-400")}>Dashboard</button>
+        <button onClick={() => setView('dashboard')} className={cn("hover:text-indigo-400 transition-colors uppercase", view === 'dashboard' && "text-indigo-400")}>Deployment Suite</button>
       </div>
     </div>
 
@@ -287,7 +287,7 @@ const LandingPage = ({ onEnter }: { onEnter: (v: string) => void }) => {
             onClick={() => onEnter('dashboard')} 
             className="group relative px-12 py-6 border border-white/10 rounded-sm overflow-hidden bg-white/5 hover:bg-white/10 transition-colors"
           >
-            <span className="text-xs font-black uppercase tracking-[0.5em] text-slate-300">View Sovereign Suite</span>
+            <span className="text-xs font-black uppercase tracking-[0.5em] text-slate-300">Sovereign Deployment</span>
           </button>
         </motion.div>
       </section>
@@ -1318,7 +1318,7 @@ const Dashboard = ({ nft, user, sync, claim, evolve, activate, pairWearable, act
                  <p className="text-[10px] text-indigo-500 font-black uppercase tracking-[0.6em]">Node Registry</p>
                  <h2 className="text-5xl font-display font-black text-white uppercase tracking-tighter leading-none">Global <br/> Reach</h2>
                  <p className="text-slate-500 text-sm max-w-sm leading-relaxed font-light">
-                   Your {nft.certificateTier} identity is globally resolvable. Map your biometric hash to a sovereign top-level domain.
+                   Your {nft.certificateTier} identity is globally resolvable. Map your biometric hash to a sovereign top-level domain like your registered <span className="text-indigo-400 font-bold">patrickianbern1.nft</span>.
                  </p>
               </div>
 
@@ -1343,8 +1343,19 @@ const Dashboard = ({ nft, user, sync, claim, evolve, activate, pairWearable, act
                       disabled={isGeneratingManifest}
                       className="w-full py-6 bg-white text-slate-950 rounded-2xl font-black uppercase tracking-[0.4em] text-xs hover:bg-slate-200 active:scale-95 transition-all shadow-xl shadow-white/5 leading-none disabled:opacity-50"
                     >
-                       {isGeneratingManifest ? 'Indexing Bio-Hash...' : 'Generate Publishing Manifest'}
+                       {isGeneratingManifest ? 'Indexing Bio-Hash...' : 'Generate New IPFS CID'}
                     </button>
+
+                    <div className="bg-indigo-500/10 border border-indigo-500/20 p-8 rounded-3xl space-y-4">
+                       <h4 className="text-xs font-black uppercase tracking-widest text-white">Handshake Instructions</h4>
+                       <ol className="text-[11px] text-slate-400 space-y-3 list-decimal ml-4 font-light">
+                          <li>Click the <span className="text-white font-bold">Settings (Gear) icon</span> in the top-right corner of the AI Studio interface.</li>
+                          <li>Select <span className="text-white font-bold">Export to ZIP</span> to download the full protocol codebase to your machine.</li>
+                          <li>Open your terminal in the exported folder and run <code className="bg-black/50 px-1 rounded text-indigo-400">npm install && npm run build</code>.</li>
+                          <li>Upload the resulting <code className="text-indigo-400">dist/</code> folder to an IPFS provider (Pinata, Fleek, or your own node).</li>
+                          <li>Copy the CID and paste it into the <span className="text-white font-bold">Website / Content Hash</span> field in your Unstoppable Domains dashboard for <span className="text-indigo-400 font-bold">patrickianbern1.nft</span>.</li>
+                       </ol>
+                    </div>
 
                     <div className="bg-white/[0.02] border border-white/10 p-8 rounded-3xl space-y-6">
                        <div className="flex justify-between items-center">
@@ -1374,23 +1385,6 @@ const Dashboard = ({ nft, user, sync, claim, evolve, activate, pairWearable, act
                             </div>
                           ))}
                        </div>
-                    </div>
-
-                    <div className="flex items-center gap-4 py-4 px-2">
-                       <div className="h-px bg-white/5 flex-1" />
-                       <span className="text-[8px] text-slate-700 font-black uppercase tracking-widest">Cross-Chain Replication</span>
-                       <div className="h-px bg-white/5 flex-1" />
-                    </div>
-
-                    <div className="grid grid-cols-2 gap-4">
-                       <button className="py-5 border border-white/10 text-white rounded-2xl font-black uppercase tracking-[0.2em] text-[10px] hover:bg-white/5 transition-all flex items-center justify-center gap-2">
-                          <span className="w-2 h-2 rounded-full bg-indigo-500" />
-                          Link .eth
-                       </button>
-                       <button className="py-5 border border-white/10 text-white rounded-2xl font-black uppercase tracking-[0.2em] text-[10px] hover:bg-white/5 transition-all flex items-center justify-center gap-2">
-                          <span className="w-2 h-2 rounded-full bg-emerald-500" />
-                          Link .sol
-                       </button>
                     </div>
                  </div>
               </div>
@@ -1429,14 +1423,14 @@ const Dashboard = ({ nft, user, sync, claim, evolve, activate, pairWearable, act
                  </div>
               </div>
 
-              <div className="bg-indigo-500/5 border border-indigo-500/10 p-10 rounded-[40px] flex gap-8 items-start hover:bg-indigo-500/10 transition-colors">
-                 <div className="p-5 bg-indigo-500/20 rounded-3xl border border-indigo-500/30">
-                    <ExternalLink className="w-8 h-8 text-indigo-400" />
+              <div className="bg-emerald-500/5 border border-emerald-500/10 p-10 rounded-[40px] flex gap-8 items-start hover:bg-emerald-500/10 transition-colors">
+                 <div className="p-5 bg-emerald-500/20 rounded-3xl border border-emerald-500/30">
+                    <Globe className="w-8 h-8 text-emerald-400" />
                  </div>
                  <div className="space-y-4">
-                    <h4 className="text-xl font-display font-black text-white uppercase tracking-widest">Attach to patrickianbern1.nft</h4>
+                    <h4 className="text-xl font-display font-black text-white uppercase tracking-widest">Traditional DNS Setup</h4>
                     <p className="text-sm text-slate-500 leading-relaxed font-light">
-                       To complete your sovereign host, use the **Export to ZIP** feature in the Settings menu. Upload your `dist/` folder to Fleek or Pinata, and update the **Content Record** for `patrickianbern1.nft` with the generated IPFS CID.
+                       If you have custom **NS (Name Server)** details from a registrar, you should enter them in your domain management dashboard (e.g. Unstoppable Domains or your DNS provider). This allows you to route traffic to traditional CDN nodes or custom servers instead of IPFS.
                     </p>
                  </div>
               </div>
