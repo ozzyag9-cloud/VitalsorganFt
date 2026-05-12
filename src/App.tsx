@@ -129,6 +129,7 @@ const Sablier = ({ targetDate }: { targetDate: string }) => {
 
 const IdentityModal = ({ isOpen, onClose, onConnect }: { isOpen: boolean, onClose: () => void, onConnect: (domain: string) => void }) => {
   const [domain, setDomain] = useState('');
+  const [activeTab, setActiveTab] = useState<'domain' | 'wallet'>('wallet');
   
   if (!isOpen) return null;
 
@@ -138,73 +139,104 @@ const IdentityModal = ({ isOpen, onClose, onConnect }: { isOpen: boolean, onClos
         <motion.div 
           initial={{ opacity: 0, scale: 0.9, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
-          className="bg-[#05070c] border border-white/10 p-10 rounded-[40px] max-w-md w-full space-y-10 relative overflow-hidden shadow-2xl"
+          className="bg-[#05070c] border border-white/10 p-10 rounded-[40px] max-w-md w-full space-y-8 relative overflow-hidden shadow-2xl"
         >
           <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-indigo-500 to-rose-500" />
           
           <div className="flex justify-between items-start">
              <div className="space-y-2">
-                <h2 className="text-3xl font-display font-black text-white uppercase tracking-tighter leading-none">Connect Identity</h2>
-                <p className="text-[10px] text-slate-500 uppercase tracking-widest font-black">Link your Web3 Domain to the Vitals Protocol</p>
+                <h2 className="text-3xl font-display font-black text-white uppercase tracking-tighter leading-none">Access Protocol</h2>
+                <p className="text-[10px] text-slate-500 uppercase tracking-widest font-black">Sync your biological identity to the grid</p>
              </div>
              <button onClick={onClose} className="p-2 hover:bg-white/5 rounded-full text-slate-500 transition-colors">
                 <X className="w-5 h-5" />
              </button>
           </div>
 
+          <div className="flex bg-white/5 p-1 rounded-xl border border-white/5">
+             <button 
+               onClick={() => setActiveTab('wallet')}
+               className={cn(
+                 "flex-1 py-3 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all",
+                 activeTab === 'wallet' ? "bg-white text-slate-950 mr-1" : "text-slate-500"
+               )}
+             >
+               Wallet Connect
+             </button>
+             <button 
+               onClick={() => setActiveTab('domain')}
+               className={cn(
+                 "flex-1 py-3 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all",
+                 activeTab === 'domain' ? "bg-white text-slate-950 ml-1" : "text-slate-500"
+               )}
+             >
+               Web3 Domain
+             </button>
+          </div>
+
           <div className="space-y-6">
-             <div className="space-y-3">
-                <label className="text-[10px] text-indigo-500 font-black uppercase tracking-widest ml-1">Web3 Domain / NS</label>
-                <div className="relative group">
-                   <input 
-                     type="text" 
-                     value={domain}
-                     onChange={(e) => setDomain(e.target.value)}
-                     placeholder="vital.nft"
-                     className="w-full bg-slate-950 border border-white/10 rounded-2xl px-6 py-4 text-white font-mono placeholder:text-slate-700 focus:outline-none focus:border-indigo-500/50 transition-colors"
-                   />
-                   <div className="absolute right-4 top-1/2 -translate-y-1/2 flex gap-2">
-                      {['.nft', '.eth', '.sol'].map(ext => (
-                         <button 
-                           key={ext}
-                           onClick={() => { if(!domain.includes('.')) setDomain(domain + ext) }}
-                           className="px-2 py-1 bg-white/5 border border-white/5 rounded text-[8px] text-slate-600 uppercase font-black hover:text-white transition-colors"
-                         >
-                           {ext}
-                         </button>
-                      ))}
-                   </div>
-                </div>
-             </div>
+             {activeTab === 'wallet' ? (
+               <div className="grid grid-cols-1 gap-3">
+                  {[
+                    { id: 'phantom', name: 'Phantom', icon: 'https://phantom.app/favicon.ico' },
+                    { id: 'metamask', name: 'MetaMask', icon: 'https://metamask.io/favicon.ico' },
+                    { id: 'walletconnect', name: 'WalletConnect', icon: 'https://walletconnect.com/favicon.ico' }
+                  ].map(wallet => (
+                    <button 
+                      key={wallet.id}
+                      onClick={() => onConnect('')}
+                      className="flex items-center justify-between p-4 bg-white/5 border border-white/5 rounded-2xl hover:bg-white/10 hover:border-indigo-500/50 transition-all group"
+                    >
+                       <div className="flex items-center gap-4">
+                          <img src={wallet.icon} alt={wallet.name} className="w-6 h-6 rounded-lg" referrerPolicy="no-referrer" />
+                          <span className="text-xs font-black uppercase tracking-widest text-slate-300 group-hover:text-white">{wallet.name}</span>
+                       </div>
+                       <ArrowRight className="w-4 h-4 text-slate-700 group-hover:text-indigo-400 group-hover:translate-x-1 transition-all" />
+                    </button>
+                  ))}
+               </div>
+             ) : (
+               <div className="space-y-6">
+                  <div className="space-y-3">
+                    <label className="text-[10px] text-indigo-500 font-black uppercase tracking-widest ml-1">Domain Resolver</label>
+                    <div className="relative group">
+                       <input 
+                         type="text" 
+                         value={domain}
+                         onChange={(e) => setDomain(e.target.value)}
+                         placeholder="vital.nft"
+                         className="w-full bg-slate-950 border border-white/10 rounded-2xl px-6 py-4 text-white font-mono placeholder:text-slate-700 focus:outline-none focus:border-indigo-500/50 transition-colors"
+                       />
+                       <div className="absolute right-4 top-1/2 -translate-y-1/2 flex gap-2">
+                          {['.nft', '.eth', '.sol'].map(ext => (
+                             <button 
+                               key={ext}
+                               onClick={() => { if(!domain.includes('.')) setDomain(domain + ext) }}
+                               className="px-2 py-1 bg-white/5 border border-white/5 rounded text-[8px] text-slate-600 uppercase font-black hover:text-white transition-colors"
+                             >
+                               {ext}
+                             </button>
+                          ))}
+                       </div>
+                    </div>
+                  </div>
+                  <button 
+                    onClick={() => onConnect(domain)}
+                    className="w-full py-5 bg-white text-slate-950 rounded-2xl font-black uppercase tracking-[0.4em] text-[10px] hover:bg-slate-200 active:scale-95 transition-all shadow-xl shadow-white/5"
+                  >
+                    Synchronize Domain
+                  </button>
+               </div>
+             )}
 
              <div className="bg-indigo-500/5 border border-indigo-500/10 p-6 rounded-2xl flex gap-4 items-start">
                 <div className="p-2 bg-indigo-500/10 rounded-lg">
                    <Shield className="w-4 h-4 text-indigo-400" />
                 </div>
                 <p className="text-[10px] text-slate-500 leading-relaxed italic">
-                   Identity mapping ensures your biological data is encrypted and tied to your sovereign on-chain name. No biometric data leaves your hardware link.
+                   All biological telemetry is encrypted end-to-end. Your private metrics only exist within the sovereign hardware enclave linked to your identity.
                 </p>
              </div>
-
-             <button 
-               onClick={() => onConnect(domain)}
-               className="w-full py-5 bg-white text-slate-950 rounded-2xl font-black uppercase tracking-[0.4em] text-[10px] hover:bg-slate-200 active:scale-95 transition-all shadow-xl shadow-white/5"
-             >
-               Synchronize Identity
-             </button>
-             
-             <div className="flex items-center gap-4 py-4">
-                <div className="h-px bg-white/5 flex-1" />
-                <span className="text-[8px] text-slate-700 font-black uppercase tracking-widest">Or simple wallet connect</span>
-                <div className="h-px bg-white/5 flex-1" />
-             </div>
-
-             <button 
-               onClick={() => onConnect('')}
-               className="w-full py-4 border border-white/10 text-white rounded-2xl font-black uppercase tracking-[0.2em] text-[10px] hover:bg-white/5 transition-all"
-             >
-               Quick Connect
-             </button>
           </div>
         </motion.div>
       </AnimatePresence>
@@ -248,10 +280,13 @@ const LandingPage = ({ onEnter }: { onEnter: (v: string) => void }) => {
             className="flex flex-col items-center gap-6"
           >
             <div className="inline-flex items-center gap-4 px-5 py-2 rounded-full bg-white/5 border border-indigo-500/20 backdrop-blur-md">
-                <div className="w-1.5 h-1.5 rounded-full bg-indigo-400 animate-pulse" />
-                <span className="text-[10px] font-black uppercase tracking-[0.4em] text-indigo-400">Protocol Pre-Sale Live in 45 Days</span>
+                <div className="w-1.5 h-1.5 rounded-full bg-rose-500 animate-pulse shadow-[0_0_8px_rgba(244,63,94,0.5)]" />
+                <span className="text-[10px] font-black uppercase tracking-[0.4em] text-white">Genesis Whitelist Remaining: <span className="text-rose-500">442 / 1000</span></span>
             </div>
-            <Sablier targetDate="2026-06-30T00:00:00Z" />
+            <div className="p-8 bg-black/40 border border-white/5 rounded-3xl backdrop-blur-xl">
+               <p className="text-[10px] text-slate-500 font-black uppercase tracking-[0.6em] mb-6">Founding Phase T-Minus</p>
+               <Sablier targetDate="2026-06-30T00:00:00Z" />
+            </div>
           </motion.div>
 
           <motion.h1 
@@ -261,11 +296,11 @@ const LandingPage = ({ onEnter }: { onEnter: (v: string) => void }) => {
             className="text-7xl md:text-9xl font-display italic text-white tracking-tighter leading-[0.85]"
           >
             Biological <br /> 
-            <span className="text-slate-100 not-italic font-sans font-black tracking-[-0.05em] uppercase text-6xl md:text-8xl leading-none">Encryption</span>
+            <span className="text-indigo-500 not-italic font-sans font-black tracking-[-0.05em] uppercase text-6xl md:text-8xl leading-none">Capital</span>
           </motion.h1>
 
           <p className="text-slate-400 max-w-2xl mx-auto text-lg md:text-xl font-light tracking-wide leading-relaxed">
-            VITALS is an enterprise-grade biological oracle system. By linking encrypted human biometrics to Dynamic NFTs (dNFTs), we create the first proof-of-humanity asset class that values personal health as a verifiable digital resource.
+            The world's first decentralized biological insurance & asset protocol. Tokenize your health, secure sovereign hardware, and earn $VITAL yield for biological excellence.
           </p>
         </div>
 
@@ -277,19 +312,85 @@ const LandingPage = ({ onEnter }: { onEnter: (v: string) => void }) => {
         >
           <button 
             onClick={() => onEnter('mint')} 
-            className="group relative px-12 py-6 bg-white rounded-sm overflow-hidden flex items-center gap-4 shadow-2xl shadow-indigo-500/20"
+            className="group relative px-12 py-6 bg-white rounded-sm overflow-hidden flex items-center gap-4 shadow-2xl shadow-white/5 hover:scale-105 active:scale-95 transition-all"
           >
-            <span className="text-xs font-black uppercase tracking-[0.5em] text-slate-950">Join Pre-Sale</span>
+            <span className="text-xs font-black uppercase tracking-[0.5em] text-slate-950">Join Whitelist</span>
             <ArrowRight className="w-4 h-4 text-slate-900 group-hover:translate-x-1 transition-transform" />
           </button>
 
           <button 
             onClick={() => onEnter('dashboard')} 
-            className="group relative px-12 py-6 border border-white/10 rounded-sm overflow-hidden bg-white/5 hover:bg-white/10 transition-colors"
+            className="group relative px-12 py-6 border border-white/10 rounded-sm overflow-hidden bg-white/5 hover:bg-white/10 transition-all hover:scale-105 active:scale-95"
           >
-            <span className="text-xs font-black uppercase tracking-[0.5em] text-slate-300">Sovereign Deployment</span>
+            <span className="text-xs font-black uppercase tracking-[0.5em] text-slate-300">Enter Dashboard</span>
           </button>
         </motion.div>
+      </section>
+
+      {/* Trust & Proof Section */}
+      <section className="py-20 grid grid-cols-2 md:grid-cols-4 gap-4">
+         {[
+           { label: "Secured TVL", val: "$4.1M", sub: "Genesis Pool" },
+           { label: "Verified Nodes", val: "1,442", sub: "Global Enclave" },
+           { label: "Yield Distributed", val: "128K", sub: "$VITAL Tokens" },
+           { label: "Hardware Units", val: "882", sub: "Vitals Ring Pre-orders" }
+         ].map((stat, i) => (
+           <div key={i} className="bg-white/[0.02] border border-white/5 p-8 rounded-3xl text-center">
+              <p className="text-3xl font-mono font-bold text-white mb-1">{stat.val}</p>
+              <p className="text-[10px] text-indigo-500 font-black uppercase tracking-widest mb-1">{stat.label}</p>
+              <p className="text-[8px] text-slate-600 font-mono tracking-widest">{stat.sub}</p>
+           </div>
+         ))}
+      </section>
+
+      {/* How it Works: Marketing Flow */}
+      <section className="py-40 border-t border-white/5">
+        <div className="text-center max-w-3xl mx-auto mb-32 space-y-6">
+           <p className="text-[10px] text-indigo-500 font-black uppercase tracking-[0.6em]">The Protocol Path</p>
+           <h2 className="text-6xl font-display font-black text-white uppercase tracking-tighter leading-none">Biological <br/> Manifestation</h2>
+           <p className="text-slate-500 text-lg leading-relaxed font-light">From baseline health to sovereign asset class. Follow the 4-step sequence to biological sovereignty.</p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-1">
+           {[
+             { 
+               step: "01",
+               title: "Secure Tier", 
+               icon: Lock,
+               desc: "Choose your biological focus and mint your Sovereign Digital Asset. This initializes your link to the global Vitals Oracle network." 
+             },
+             { 
+               step: "02",
+               title: "Hardware Link", 
+               icon: Cpu,
+               desc: "Pair your Vitals Ring or compatible wearable to the protocol. Biological telemetry is hashed and encrypted locally before transmission." 
+             },
+             { 
+               step: "03",
+               title: "Biological Sync", 
+               icon: Activity,
+               desc: "Achieve consistency targets (Sleep, Heart Rate, Activity) to secure $VITAL yield and evolve your dNFT aesthetic profile." 
+             },
+             { 
+               step: "04",
+               title: "Harvest Yield", 
+               icon: Coins,
+               desc: "Claim accrued $VITAL or swap for $VT-T Sovereign Stake to unlock advanced protocol governance and maximum yield multipliers." 
+             }
+           ].map((item, i) => (
+             <div key={i} className="bg-[#04060a] border border-white/5 p-12 space-y-10 group hover:bg-white/[0.01] transition-all relative overflow-hidden">
+                <div className="text-8xl font-display font-black text-white/[0.02] absolute -top-4 -left-4 group-hover:text-indigo-500/10 transition-colors">{item.step}</div>
+                <div className="w-16 h-16 bg-white/5 border border-white/10 rounded-2xl flex items-center justify-center group-hover:border-indigo-500/50 transition-all relative z-10">
+                   <item.icon className="w-6 h-6 text-indigo-400" strokeWidth={1} />
+                </div>
+                <div className="space-y-4 relative z-10">
+                   <h3 className="text-2xl font-display font-black text-white uppercase tracking-tight">{item.title}</h3>
+                   <p className="text-slate-500 text-sm leading-relaxed font-light">{item.desc}</p>
+                </div>
+                <div className="absolute bottom-0 left-0 w-full h-1 bg-indigo-500 scale-x-0 group-hover:scale-x-100 transition-transform origin-left" />
+             </div>
+           ))}
+        </div>
       </section>
 
       {/* Platform Features: Uniqueness */}
@@ -493,6 +594,57 @@ const LandingPage = ({ onEnter }: { onEnter: (v: string) => void }) => {
             </div>
          </div>
       </section>
+
+      {/* Marketing / Tokenomics Section */}
+      <section className="py-40 bg-indigo-500/5 -mx-6 px-6">
+         <div className="max-w-4xl mx-auto text-center space-y-24">
+            <div className="space-y-6">
+               <p className="text-[10px] text-indigo-500 font-black uppercase tracking-[0.6em] animate-bounce">Limited Time Opportunity</p>
+               <h2 className="text-6xl font-display font-black text-white uppercase tracking-tighter leading-none">The Sovereign <br/> Pre-Sale</h2>
+               <p className="text-slate-400 text-lg leading-relaxed font-light">
+                 By participating in the Genesis Whitelist, you are securing more than just a certificate. You are funding the future of biological sovereignty and receiving maximum protocol utility.
+               </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+               {[
+                 { title: "2.5x Yield", sub: "Permanent Boost", desc: "Genesis NFTs carry a permanent 2.5x multiplier on all $VITAL accrued biological synchronization." },
+                 { title: "Hardware Drop", sub: "Priority Batch", desc: "Founders receive Batch 01 priority shipping for the Vitals Ring (October 2026 delivery)." },
+                 { title: "Zero Fees", sub: "Lifetime Benefit", desc: "Zero protocol synchronization fees for all biological telemetry mappings across the entire ecosystem." }
+               ].map((benefit, i) => (
+                 <div key={i} className="p-10 bg-black/40 border border-white/5 rounded-3xl text-left space-y-4 hover:border-indigo-500/30 transition-all group">
+                    <div className="text-indigo-400 flex items-center justify-between">
+                       <span className="text-xs font-black uppercase tracking-widest">{benefit.sub}</span>
+                       <Star className="w-4 h-4 fill-indigo-400 group-hover:scale-125 transition-transform" />
+                    </div>
+                    <h3 className="text-2xl font-black text-white uppercase tracking-tight">{benefit.title}</h3>
+                    <p className="text-slate-500 text-[11px] leading-relaxed font-light">{benefit.desc}</p>
+                 </div>
+               ))}
+            </div>
+
+            <div className="bg-slate-950 border border-white/10 rounded-[40px] p-12 flex flex-col md:flex-row items-center justify-between gap-12 text-left relative overflow-hidden">
+               <div className="space-y-6 relative z-10">
+                  <h3 className="text-3xl font-display font-black text-white uppercase tracking-tighter">$VITAL Ecosystem</h3>
+                  <p className="text-slate-500 text-sm max-w-sm font-light">The $VITAL token powers the biological oracle. Supply is strictly limited, with 60% reserved for synchronization rewards.</p>
+                  <button 
+                    onClick={() => onEnter('mint')}
+                    className="flex items-center gap-4 text-[10px] font-black uppercase tracking-[0.4em] text-indigo-400 hover:text-white transition-colors"
+                  >
+                    View Tokenomics Paper <ArrowRight className="w-3 h-3" />
+                  </button>
+               </div>
+               <div className="flex -space-x-4">
+                  {[1,2,3].map(i => (
+                    <div key={i} className="w-20 h-20 rounded-full border-2 border-slate-950 bg-gradient-to-br from-indigo-500 to-rose-500 flex items-center justify-center shadow-2xl">
+                       <Coins className="w-10 h-10 text-white opacity-20" />
+                    </div>
+                  ))}
+               </div>
+               <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-[radial-gradient(circle_at_center,_rgba(99,102,241,0.05)_0%,_transparent_70%)] pointer-events-none" />
+            </div>
+         </div>
+      </section>
     </div>
   );
 };
@@ -510,20 +662,24 @@ const MintingPage = ({ user, buy, connectWallet }: { user: any, buy: (id: string
     <div className="max-w-7xl mx-auto py-24 px-6 min-h-screen">
       <div className="flex flex-col lg:flex-row justify-between items-end mb-24 gap-12">
         <div className="space-y-6">
-          <h1 className="text-7xl font-display font-black uppercase tracking-tighter leading-none text-white">Acquire Protocol Tier</h1>
-          <p className="text-slate-500 text-lg max-w-xl italic uppercase tracking-tight">
-            Select your biological focus and initiate software emulation. Hardware pairing becomes available upon physical ring delivery.
+          <div className="inline-flex items-center gap-4 px-4 py-1.5 bg-indigo-500/10 border border-indigo-500/20 rounded-full">
+             <div className="w-1.5 h-1.5 rounded-full bg-indigo-500 animate-pulse" />
+             <span className="text-[10px] font-black uppercase tracking-widest text-indigo-400">Genesis Founder Mint Live</span>
+          </div>
+          <h1 className="text-7xl font-display font-black uppercase tracking-tighter leading-none text-white">Secure <br/> Your Link</h1>
+          <p className="text-slate-500 text-lg max-w-xl font-light leading-relaxed">
+            Mint your Protocol Tier to begin decentralized biological synchronization. All founding certificates include a Genesis Founder badge and prioritized hardware allocation.
           </p>
         </div>
         
-        <div className="flex flex-col items-end gap-6">
-           <div className="bg-white/5 border border-white/10 p-2 rounded-xl flex gap-2">
+        <div className="flex flex-col items-end gap-6 w-full lg:w-auto">
+           <div className="bg-white/5 border border-white/10 p-2 rounded-xl flex gap-2 w-full lg:w-auto">
               {['USDT', 'ETH', 'SOL'].map((curr) => (
                 <button 
                   key={curr}
                   onClick={() => setSelectedCurrency(curr as any)}
                   className={cn(
-                    "px-6 py-2 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all",
+                    "flex-1 lg:px-6 py-3 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all",
                     selectedCurrency === curr ? "bg-white text-slate-950 shadow-xl" : "text-slate-500 hover:text-white"
                   )}
                 >
@@ -532,15 +688,32 @@ const MintingPage = ({ user, buy, connectWallet }: { user: any, buy: (id: string
               ))}
            </div>
            {!user?.walletConnected && (
-             <motion.div 
-               animate={{ x: [0, 5, 0] }}
-               transition={{ duration: 0.5, repeat: Infinity }}
-               className="text-[10px] text-amber-500 font-bold uppercase tracking-widest"
+             <button 
+               onClick={connectWallet}
+               className="w-full lg:w-auto bg-amber-500/10 border border-amber-500/30 text-amber-500 px-8 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-amber-500 hover:text-white transition-all flex items-center gap-3"
              >
-               * Connect Wallet to Initiate Mint
-             </motion.div>
+               <Wallet className="w-4 h-4" />
+               Connect Wallet to Mint
+             </button>
            )}
         </div>
+      </div>
+
+      <div className="hidden lg:block mb-24 p-12 bg-indigo-500/5 border border-indigo-500/10 rounded-[40px] relative overflow-hidden">
+         <div className="flex justify-between items-center relative z-10">
+            <div className="space-y-2">
+               <h3 className="text-3xl font-display font-black text-white uppercase tracking-tighter leading-none">Public Launch Countdown</h3>
+               <p className="text-slate-500 uppercase tracking-widest text-[10px] font-black leading-none">Founder Whitelist ends in</p>
+            </div>
+            <Sablier targetDate="2026-06-30T00:00:00Z" />
+            <div className="text-right">
+               <p className="text-3xl font-mono font-bold text-white tabular-nums">442/1000</p>
+               <p className="text-[10px] text-slate-500 font-black uppercase tracking-widest">Left at Whitelist Price</p>
+            </div>
+         </div>
+         <div className="absolute top-0 right-0 p-12 opacity-[0.03]">
+            <Hourglass className="w-64 h-64 text-white" strokeWidth={1} />
+         </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -1316,9 +1489,9 @@ const Dashboard = ({ nft, user, sync, claim, evolve, activate, pairWearable, act
               
               <div className="space-y-4">
                  <p className="text-[10px] text-indigo-500 font-black uppercase tracking-[0.6em]">Node Registry</p>
-                 <h2 className="text-5xl font-display font-black text-white uppercase tracking-tighter leading-none">Global <br/> Reach</h2>
+                 <h2 className="text-5xl font-display font-black text-white uppercase tracking-tighter leading-none">Domain <br/> Mapping</h2>
                  <p className="text-slate-500 text-sm max-w-sm leading-relaxed font-light">
-                   Your {nft.certificateTier} identity is globally resolvable. Map your biometric hash to a sovereign top-level domain like your registered <span className="text-indigo-400 font-bold">patrickianbern1.nft</span>.
+                   Establish your sovereign endpoint. Map your biometric hash to a permanent Web3 domain or custom NS records.
                  </p>
               </div>
 
