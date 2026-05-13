@@ -5,7 +5,7 @@ import crypto from "crypto";
 
 async function startServer() {
   const app = express();
-  const PORT = 3000;
+  const PORT = Number(process.env.PORT || 8080);
 
   app.use(express.json());
 
@@ -181,6 +181,10 @@ async function startServer() {
   };
 
   // API Routes
+  app.get("/healthz", (req, res) => {
+    res.status(200).json({ ok: true, service: "vitals-dnft", port: PORT });
+  });
+
   app.get("/api/state", (req, res) => {
     res.json(state);
   });
@@ -431,7 +435,7 @@ async function startServer() {
   }
 
   app.listen(PORT, "0.0.0.0", () => {
-    console.log(`Vitals Server running on http://localhost:${PORT}`);
+    console.log(`Vitals Server listening on 0.0.0.0:${PORT}`);
   });
 }
 

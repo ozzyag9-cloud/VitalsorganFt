@@ -1,10 +1,5 @@
-# fly.toml app configuration file generated for vitalsdynft on 2026-05-13T22:12:38Z
-#
-# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
-#
-
-app = 'vitalsdynft'
-primary_region = 'ams'
+app = "vitalsdynft"
+primary_region = "ams"
 
 [build]
   dockerfile = 'Dockerfile'
