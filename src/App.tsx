@@ -1569,6 +1569,25 @@ const Dashboard = ({ nft, user, sync, claim, evolve, activate, pairWearable, act
                           {isGeneratingManifest ? `GENERATING... ${manifestProgress}%` : (user.web3Domain ? "QmXp9V...authenticated...8Zp2" : "AWAITING_DOMAIN_LINK")}
                        </span>
                     </div>
+                    <div className="h-px bg-white/5" />
+                    <div className="grid grid-cols-1 gap-4 text-white">
+                       <div className="flex justify-between items-center gap-6">
+                          <span className="text-[10px] text-slate-600 font-black uppercase tracking-widest">Target Chain</span>
+                          <span className="text-[10px] font-mono font-bold text-emerald-400 uppercase">{nft.chainName} / {nft.chainId}</span>
+                       </div>
+                       <div className="flex justify-between items-center gap-6">
+                          <span className="text-[10px] text-slate-600 font-black uppercase tracking-widest">Contract</span>
+                          <span className="text-[10px] font-mono font-bold text-white uppercase select-all truncate max-w-[220px]">{nft.contractAddress}</span>
+                       </div>
+                       <div className="flex justify-between items-center gap-6">
+                          <span className="text-[10px] text-slate-600 font-black uppercase tracking-widest">Bio Commitment</span>
+                          <span className="text-[10px] font-mono font-bold text-indigo-300 uppercase select-all truncate max-w-[220px]">{nft.biometricCommitment}</span>
+                       </div>
+                       <div className="flex justify-between items-center gap-6">
+                          <span className="text-[10px] text-slate-600 font-black uppercase tracking-widest">Metadata API</span>
+                          <span className="text-[10px] font-mono font-bold text-white uppercase select-all">{nft.metadataUri}</span>
+                       </div>
+                    </div>
                  </div>
 
                  <div className="space-y-4">
@@ -1581,13 +1600,13 @@ const Dashboard = ({ nft, user, sync, claim, evolve, activate, pairWearable, act
                     </button>
 
                     <div className="bg-indigo-500/10 border border-indigo-500/20 p-8 rounded-3xl space-y-4">
-                       <h4 className="text-xs font-black uppercase tracking-widest text-white">Handshake Instructions</h4>
+                       <h4 className="text-xs font-black uppercase tracking-widest text-white">On-Chain Deployment Instructions</h4>
                        <ol className="text-[11px] text-slate-400 space-y-3 list-decimal ml-4 font-light">
-                          <li>Click the <span className="text-white font-bold">Settings (Gear) icon</span> in the top-right corner of the AI Studio interface.</li>
-                          <li>Select <span className="text-white font-bold">Export to ZIP</span> to download the full protocol codebase to your machine.</li>
-                          <li>Open your terminal in the exported folder and run <code className="bg-black/50 px-1 rounded text-indigo-400">npm install && npm run build</code>.</li>
-                          <li>Upload the resulting <code className="text-indigo-400">dist/</code> folder to an IPFS provider (Pinata, Fleek, or your own node).</li>
-                          <li>Copy the CID and paste it into the <span className="text-white font-bold">Website / Content Hash</span> field in your domain dashboard (e.g. Unstoppable Domains or ENS).</li>
+                          <li>Read <code className="bg-black/50 px-1 rounded text-indigo-400">/api/deployment/manifest</code> to generate the constructor and first-mint payload.</li>
+                          <li>Deploy <code className="text-indigo-400">contracts/VitalsDynamicNFT.sol</code> with your oracle address and contract metadata URI.</li>
+                          <li>Mint with <code className="text-indigo-400">biometricCommitment</code> and <code className="text-indigo-400">holderProfileHash</code>; never upload raw biometrics to a public chain.</li>
+                          <li>Point marketplaces to <code className="text-indigo-400">/api/metadata/1</code> or pin that JSON to IPFS after each oracle evolution.</li>
+                          <li>Use <code className="text-indigo-400">evolveBiometrics</code> from the oracle to keep the dNFT alive as wearable data changes.</li>
                        </ol>
                     </div>
 

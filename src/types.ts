@@ -42,6 +42,15 @@ export interface VitalsNft {
   hardwareSerial: string | null;
   virtualAssetBurned: boolean;
   earnedTraits: string[]; // Milestone flags (Vital mark, etc)
+  tokenId: number;
+  chainId: number;
+  chainName: string;
+  contractAddress: string;
+  transactionHash: string | null;
+  metadataUri: string;
+  biometricCommitment: string;
+  holderProfileHash: string;
+  evolutionNonce: number;
 }
 
 export interface UserStats {
@@ -61,6 +70,7 @@ export interface UserStats {
   walletConnected: boolean;
   walletAddress: string | null;
   web3Domain: string | null;
+  holderName: string;
 }
 
 export interface HealthTarget {
