@@ -4,6 +4,7 @@
 
 # Vitals Dynamic NFT Platform
 
+Vitals is a deployment-ready React/Express platform for a living biometric dynamic NFT certificate. The app presents a biometric certificate UI, exposes ERC-721 metadata and presale endpoints, and includes a standalone Solidity contract that can mint and evolve an NFT from oracle-verified wearable state. The recommended launch path is Base Sepolia testnet first, then Base mainnet after presale funding, audit, and treasury readiness.
 Vitals is a deployment-ready React/Express platform for a living biometric dynamic NFT certificate. The app presents a biometric certificate UI, exposes ERC-721 metadata endpoints, and includes a standalone Solidity contract that can mint and evolve an NFT from oracle-verified wearable state.
 
 ## What changed for blockchain deployment

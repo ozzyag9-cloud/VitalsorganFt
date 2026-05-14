@@ -721,15 +721,28 @@ const MintingPage = ({ user, buy, connectWallet }: { user: any, buy: (id: string
 
   return (
     <div className="max-w-7xl mx-auto py-24 px-6 min-h-screen">
+      <div className="mb-10 grid grid-cols-1 md:grid-cols-3 gap-4">
+        {[
+          { label: 'Testnet', value: 'Base Sepolia', tone: 'text-emerald-400' },
+          { label: 'Temporary Site', value: 'vitalsdynft.fly.dev', tone: 'text-indigo-400' },
+          { label: 'Mainnet Path', value: 'Base after presale funding', tone: 'text-amber-400' }
+        ].map((item) => (
+          <div key={item.label} className="bg-white/[0.03] border border-white/10 rounded-2xl p-5">
+            <p className="text-[9px] text-slate-600 font-black uppercase tracking-[0.35em] mb-2">{item.label}</p>
+            <p className={cn("text-sm font-mono font-bold uppercase", item.tone)}>{item.value}</p>
+          </div>
+        ))}
+      </div>
+
       <div className="flex flex-col lg:flex-row justify-between items-end mb-24 gap-12">
         <div className="space-y-6">
           <div className="inline-flex items-center gap-4 px-4 py-1.5 bg-indigo-500/10 border border-indigo-500/20 rounded-full">
              <div className="w-1.5 h-1.5 rounded-full bg-indigo-500 animate-pulse" />
-             <span className="text-[10px] font-black uppercase tracking-widest text-indigo-400">Genesis Founder Mint Live</span>
+             <span className="text-[10px] font-black uppercase tracking-widest text-indigo-400">Base Sepolia Presale Ready</span>
           </div>
           <h1 className="text-7xl font-display font-black uppercase tracking-tighter leading-none text-white">Secure <br/> Your Link</h1>
           <p className="text-slate-500 text-lg max-w-xl font-light leading-relaxed">
-            Mint your Protocol Tier to begin decentralized biological synchronization. All founding certificates include a Genesis Founder badge and prioritized hardware allocation.
+            Mint your Protocol Tier to begin decentralized biological synchronization. The testnet presale is configured for Base Sepolia first, with Base mainnet migration after treasury, audit, and liquidity milestones.
           </p>
         </div>
         
@@ -824,7 +837,7 @@ const MintingPage = ({ user, buy, connectWallet }: { user: any, buy: (id: string
                          : "bg-white text-slate-950 hover:bg-slate-200 active:scale-95 disabled:opacity-20"
                      )}
                    >
-                     {cert.isOwned ? "Already Owned" : "Request Protocol Lock"}
+                     {cert.isOwned ? "Already Owned" : "Reserve Testnet Slot"}
                    </button>
                 </div>
             </div>
