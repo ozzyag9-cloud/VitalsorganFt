@@ -1,6 +1,14 @@
 import { useState, useEffect } from 'react';
 import { VitalsNft, UserStats } from '../types';
 
+const BASE_SEPOLIA = {
+  chainId: '0x14a34',
+  chainName: 'Base Sepolia',
+  nativeCurrency: { name: 'Sepolia Ether', symbol: 'ETH', decimals: 18 },
+  rpcUrls: ['https://sepolia.base.org'],
+  blockExplorerUrls: ['https://sepolia.basescan.org']
+};
+
 export function useVitals() {
   const [nft, setNft] = useState<VitalsNft | null>(null);
   const [user, setUser] = useState<UserStats | null>(null);
@@ -163,23 +171,51 @@ export function useVitals() {
   };
 
   const connectWallet = async (domain?: string) => {
-    // Simulated wallet connection
     try {
-        setLoading(true);
-        setTimeout(() => {
-            if (user) {
-                setUser({
-                    ...user,
-                    walletConnected: true,
-                    walletAddress: '0x7f2a...88cc11',
-                    web3Domain: domain || null
-                });
-            }
-            setLoading(false);
-        }, 1200);
+      setLoading(true);
+      const ethereum = (window as any).ethereum;
+
+      if (ethereum?.request) {
+        const accounts = await ethereum.request({ method: 'eth_requestAccounts' }) as string[];
+        const walletAddress = accounts[0];
+
+        try {
+          await ethereum.request({
+            method: 'wallet_switchEthereumChain',
+            params: [{ chainId: BASE_SEPOLIA.chainId }]
+          });
+        } catch (switchError: any) {
+          if (switchError?.code === 4902) {
+            await ethereum.request({
+              method: 'wallet_addEthereumChain',
+              params: [BASE_SEPOLIA]
+            });
+          } else {
+            throw switchError;
+          }
+        }
+
+        await fetch('/api/connect-wallet', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ walletAddress, web3Domain: domain || null })
+        });
+        await fetchState();
+        return;
+      }
+
+      if (user) {
+        setUser({
+          ...user,
+          walletConnected: true,
+          walletAddress: '0x7f2a00000000000000000000000000000088cc11',
+          web3Domain: domain || null
+        });
+      }
     } catch (e) {
-        console.error(e);
-        setLoading(false);
+      console.error(e);
+    } finally {
+      setLoading(false);
     }
   };
 

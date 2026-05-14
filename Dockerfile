@@ -34,8 +34,8 @@ COPY --from=builder /app/server.ts ./server.ts
 COPY --from=builder /app/tsconfig.json ./tsconfig.json
 COPY --from=builder /app/metadata.json ./metadata.json
 
-# Expose port (must match server.ts)
-EXPOSE 3000
+# Expose Fly's default HTTP service port (server.ts also honors $PORT)
+EXPOSE 8080
 
 # Start the server using the compiled frontend
 CMD ["npm", "start"]
