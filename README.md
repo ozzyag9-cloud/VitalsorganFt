@@ -5,6 +5,7 @@
 # Vitals Dynamic NFT Platform
 
 Vitals is a deployment-ready React/Express platform for a living biometric dynamic NFT certificate. The app presents a biometric certificate UI, exposes ERC-721 metadata and presale endpoints, and includes a standalone Solidity contract that can mint and evolve an NFT from oracle-verified wearable state. The recommended launch path is Base Sepolia testnet first, then Base mainnet after presale funding, audit, and treasury readiness.
+Vitals is a deployment-ready React/Express platform for a living biometric dynamic NFT certificate. The app presents a biometric certificate UI, exposes ERC-721 metadata endpoints, and includes a standalone Solidity contract that can mint and evolve an NFT from oracle-verified wearable state.
 
 ## What changed for blockchain deployment
 
@@ -14,8 +15,6 @@ Vitals is a deployment-ready React/Express platform for a living biometric dynam
   - `GET /api/metadata/1` — ERC-721 metadata for the living certificate.
   - `GET /api/certificate/1` — certificate payload with holder and commitment fields.
   - `GET /api/deployment/manifest` — constructor args and first-mint inputs.
-  - `GET /api/deployment/status` — environment readiness without exposing secrets.
-  - `GET /api/presale` — launch-ready campaign copy, tier pricing, supply, and Base Sepolia network details.
   - `POST /api/deployment/simulate` — records a local deployment receipt for demos.
 - The Deployment Suite UI displays chain, contract, metadata URI, and biometric commitment details.
 
@@ -48,32 +47,26 @@ The repository does not require a specific Solidity toolchain. Compile `contract
 Required environment values for a production deployer:
 
 ```bash
-CHAIN_ID="84532"
-CHAIN_NAME="Base Sepolia"
-RPC_URL="https://sepolia.base.org"
-BLOCK_EXPLORER_URL="https://sepolia.basescan.org"
-APP_URL="https://vitalsdynft.fly.dev"
-VITALS_ORACLE_ADDRESS="0x..."
-TREASURY_ADDRESS="0x..."
+RPC_URL="https://your-chain-rpc"
 DEPLOYER_PRIVATE_KEY="0x..."
+VITALS_ORACLE_ADDRESS="0x..."
+APP_URL="https://your-vitals-platform.example"
 ```
 
 Recommended flow:
 
-1. Use a fresh deployer wallet/key for launch secrets. If a key was pasted into chat or tickets, treat it as compromised and replace it before holding value.
-2. Start the platform and request `GET /api/deployment/status`, `GET /api/presale`, and `GET /api/deployment/manifest`.
-3. Deploy `VitalsDynamicNFT` to Base Sepolia with:
+1. Start the platform and request `GET /api/deployment/manifest`.
+2. Deploy `VitalsDynamicNFT` with:
    - `initialOracle`
    - `initialContractURI`
-4. Call `mintLivingCertificate` from the holder wallet with:
+3. Call `mintLivingCertificate` from the holder wallet with:
    - `organType`
    - `biometricCommitment`
    - `holderProfileHash`
    - `certificateId`
    - `encryptedMetadataURI`
-5. Configure marketplaces to read `/api/metadata/1` or pin the metadata JSON to IPFS.
-6. Have the oracle call `evolveBiometrics` whenever verified wearable data changes.
-7. Launch the marketing campaign from `GET /api/presale`, using `https://vitalsdynft.fly.dev/` until a permanent TLD is connected.
+4. Configure marketplaces to read `/api/metadata/1` or pin the metadata JSON to IPFS.
+5. Have the oracle call `evolveBiometrics` whenever verified wearable data changes.
 
 ## Privacy and safety note
 

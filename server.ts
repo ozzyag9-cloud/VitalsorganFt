@@ -13,14 +13,6 @@ async function startServer() {
     `0x${crypto.createHash("sha256").update(JSON.stringify(payload)).digest("hex")}`;
 
   const nowIso = () => new Date().toISOString();
-  const appUrl = process.env.APP_URL || "https://vitalsdynft.fly.dev";
-  const baseSepolia = {
-    chainId: Number(process.env.CHAIN_ID || 84532),
-    hexChainId: "0x14a34",
-    name: process.env.CHAIN_NAME || "Base Sepolia",
-    rpcUrl: process.env.RPC_URL || "https://sepolia.base.org",
-    explorerUrl: process.env.BLOCK_EXPLORER_URL || "https://sepolia.basescan.org"
-  };
 
   // Mock State
   const state = {
@@ -44,9 +36,9 @@ async function startServer() {
       virtualAssetBurned: false,
       earnedTraits: ["Vital mark"],
       tokenId: 1,
-      chainId: baseSepolia.chainId,
-      chainName: baseSepolia.name,
-      contractAddress: process.env.VITALS_CONTRACT_ADDRESS || "0x0000000000000000000000000000000000000000",
+      chainId: 84532,
+      chainName: "Base Sepolia",
+      contractAddress: "0x0000000000000000000000000000000000000000",
       transactionHash: null,
       metadataUri: "/api/metadata/1",
       biometricCommitment: "",
@@ -129,8 +121,8 @@ async function startServer() {
     name: state.nft.name,
     description: "Vitals is a living biometric dynamic NFT certificate. Public metadata contains only cryptographic commitments to the holder wallet/profile and biometric state; raw biometric data is never exposed on-chain.",
     image: state.nft.image,
-    external_url: `${appUrl}/api/certificate/${state.nft.tokenId}`,
-    animation_url: `${appUrl}/`,
+    external_url: `${process.env.APP_URL || "http://localhost:3000"}/api/certificate/${state.nft.tokenId}`,
+    animation_url: `${process.env.APP_URL || "http://localhost:3000"}/`,
     certificate: {
       id: state.nft.certificateId,
       tier: state.nft.certificateTier,
@@ -188,45 +180,6 @@ async function startServer() {
     });
   };
 
-
-  const buildPresaleCampaign = () => ({
-    status: "base-sepolia-testnet-ready",
-    recommendation: "Launch on Base Sepolia first because the protocol contract is EVM/Solidity-native, then promote Base mainnet after treasury and audit readiness. Keep Solana as a later bridge/channel rather than delaying the presale.",
-    website: appUrl,
-    network: baseSepolia,
-    launchWindow: {
-      whitelistOpens: "2026-06-01T00:00:00Z",
-      publicMint: "2026-06-30T00:00:00Z",
-      mainnetMigration: "After presale treasury and audit milestones"
-    },
-    supply: { genesis: 1000, reserved: 58, available: 442 },
-    fundingGoal: { amount: 250000, currency: "USD", purpose: "audit, mainnet liquidity, hardware batch-01 deposits, and oracle operations" },
-    tiers: state.user.availableCertificates.map((certificate) => ({
-      id: certificate.id,
-      tier: certificate.tier,
-      organ: certificate.organ,
-      priceUsdt: certificate.priceUsdt,
-      estimatedBaseSepoliaEth: certificate.priceEth,
-      multiplier: certificate.multiplier,
-      traits: certificate.traits
-    })),
-    campaign: {
-      headline: "The first living biometric dNFT certificate for biological sovereignty.",
-      subheadline: "Mint a privacy-preserving Genesis certificate whose traits evolve from verified wearable signals.",
-      primaryCta: "Join the Base Sepolia Genesis Presale",
-      proofPoints: [
-        "Raw biometrics never go on-chain; only commitments and traits are public.",
-        "Oracle evolution updates health state, streaks, and trait bitmasks.",
-        "Founder certificates include hardware priority and lifetime synchronization benefits."
-      ],
-      socialPosts: [
-        "Vitals Genesis is moving to Base Sepolia: living biometric dNFTs, privacy-first metadata, and oracle-driven evolution.",
-        "Your health data should be sovereign. Vitals turns encrypted biometric commitments into evolving on-chain certificates.",
-        "Genesis presale funds audit, Base mainnet launch, and Batch-01 Vitals Ring production."
-      ]
-    }
-  });
-
   // API Routes
   app.get("/healthz", (req, res) => {
     res.status(200).json({ ok: true, service: "vitals-dnft", port: PORT });
@@ -261,42 +214,23 @@ async function startServer() {
     });
   });
 
-  app.get("/api/presale", (req, res) => {
-    res.json(buildPresaleCampaign());
-  });
-
-  app.get("/api/deployment/status", (req, res) => {
-    res.json({
-      appUrl,
-      network: baseSepolia,
-      contractAddress: state.nft.contractAddress,
-      contractConfigured: state.nft.contractAddress !== "0x0000000000000000000000000000000000000000",
-      deployerKeyConfigured: Boolean(process.env.DEPLOYER_PRIVATE_KEY),
-      oracleConfigured: Boolean(process.env.VITALS_ORACLE_ADDRESS),
-      treasuryConfigured: Boolean(process.env.TREASURY_ADDRESS),
-      requiredBeforeMainnet: ["fresh deployer key", "funded Base Sepolia wallet", "contract verification", "third-party audit", "mainnet treasury multisig"]
-    });
-  });
-
   app.get("/api/deployment/manifest", (req, res) => {
     res.json({
       contract: "VitalsDynamicNFT",
       source: "contracts/VitalsDynamicNFT.sol",
-      targetChain: { chainId: state.nft.chainId, name: state.nft.chainName, rpcUrl: baseSepolia.rpcUrl, explorerUrl: baseSepolia.explorerUrl },
+      targetChain: { chainId: state.nft.chainId, name: state.nft.chainName },
       constructorArgs: {
         initialOracle: process.env.VITALS_ORACLE_ADDRESS || "<oracle-address>",
-        initialContractURI: `${appUrl}/api/metadata/contract`
+        initialContractURI: `${process.env.APP_URL || "http://localhost:3000"}/api/metadata/contract`
       },
       firstMint: {
         organType: state.nft.organType,
         biometricCommitment: state.nft.biometricCommitment,
         holderProfileHash: state.nft.holderProfileHash,
         certificateId: state.nft.certificateId,
-        encryptedMetadataURI: `${appUrl}${state.nft.metadataUri}`
+        encryptedMetadataURI: `${process.env.APP_URL || "http://localhost:3000"}${state.nft.metadataUri}`
       },
-      presale: buildPresaleCampaign(),
-      requiredEnv: ["RPC_URL", "DEPLOYER_PRIVATE_KEY", "VITALS_ORACLE_ADDRESS", "TREASURY_ADDRESS", "APP_URL"],
-      secretHandling: "The deployer private key must be injected only as an environment secret. Do not commit or expose it in logs.",
+      requiredEnv: ["RPC_URL", "DEPLOYER_PRIVATE_KEY", "VITALS_ORACLE_ADDRESS", "APP_URL"],
       privacyNotice: "Do not put raw biometric samples or legal identity documents on a public blockchain. Commit hashes only."
     });
   });
@@ -314,20 +248,6 @@ async function startServer() {
     recomputeCommitments();
 
     res.json({ success: true, receipt: state.nft, metadata: buildMetadata() });
-  });
-
-  app.post("/api/connect-wallet", (req, res) => {
-    const { walletAddress, web3Domain } = req.body;
-    if (!walletAddress || !/^0x[a-fA-F0-9]{40}$/.test(walletAddress)) {
-      return res.status(400).json({ success: false, message: "A valid EVM wallet address is required" });
-    }
-
-    state.user.walletConnected = true;
-    state.user.walletAddress = walletAddress;
-    state.user.web3Domain = web3Domain || null;
-    recomputeCommitments();
-
-    res.json({ success: true, user: state.user, holderProfileHash: state.nft.holderProfileHash });
   });
 
   app.post("/api/set-target", (req, res) => {
