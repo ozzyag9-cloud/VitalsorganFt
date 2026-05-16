@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Heart, Brain, Zap, Droplets, Activity, Gauge, Flame, Wallet, Trophy, User, ArrowRight, X, Shield, Fingerprint, Calendar, Lock, LineChart, Cpu, Coins, Search, Hourglass, BarChart2, Globe, ExternalLink, Star } from 'lucide-react';
+import { Heart, Brain, Zap, Droplets, Activity, Gauge, Flame, Wallet, Trophy, User, ArrowRight, X, Shield, Fingerprint, Calendar, Lock, LineChart, Cpu, Coins, Search, Hourglass, BarChart2, Globe, ExternalLink, Star, Maximize2, Settings, KeyRound, Smartphone, Server } from 'lucide-react';
 import { AreaChart, Area, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { useVitals } from './hooks/useVitals';
 import { cn, formatNumber } from './lib/utils';
 import { BiometricCertificate } from './components/BiometricCertificate';
 import { HealthState, CertificateTier, OrganType } from './types';
 import { PhotorealisticRing } from './components/PhotorealisticRing';
+import { VitalOSBuilder } from './components/VitalOSBuilder';
+import { VitalOSHardwareAccess } from './components/VitalOSHardwareAccess';
 
 // --- Data ---
 const stepsData = [
@@ -53,6 +55,7 @@ const Navbar = ({ view, setView, balance, user, connectWallet }: { view: string,
         <button onClick={() => setView('launchpad')} className={cn("hover:text-indigo-400 transition-colors uppercase", view === 'launchpad' && "text-indigo-400")}>Launchpad</button>
         <button onClick={() => setView('mint')} className={cn("hover:text-indigo-400 transition-colors uppercase", view === 'mint' && "text-indigo-400")}>Minting</button>
         <button onClick={() => setView('dashboard')} className={cn("hover:text-indigo-400 transition-colors uppercase", view === 'dashboard' && "text-indigo-400")}>Deployment Suite</button>
+        <button onClick={() => setView('sovereign-os')} className={cn("hover:text-indigo-400 transition-colors uppercase", view === 'sovereign-os' && "text-indigo-400")}>Sovereign OS</button>
       </div>
     </div>
 
@@ -323,6 +326,13 @@ const LandingPage = ({ onEnter }: { onEnter: (v: string) => void }) => {
             className="group relative px-12 py-6 border border-white/10 rounded-sm overflow-hidden bg-white/5 hover:bg-white/10 transition-all hover:scale-105 active:scale-95"
           >
             <span className="text-xs font-black uppercase tracking-[0.5em] text-slate-300">Enter Dashboard</span>
+          </button>
+
+          <button 
+            onClick={() => onEnter('sovereign-os')} 
+            className="group relative px-12 py-6 border border-indigo-500/30 rounded-sm overflow-hidden bg-indigo-500/10 hover:bg-indigo-500/20 transition-all hover:scale-105 active:scale-95"
+          >
+            <span className="text-xs font-black uppercase tracking-[0.5em] text-indigo-200">Explore OS</span>
           </button>
         </motion.div>
       </section>
@@ -704,6 +714,257 @@ const LandingPage = ({ onEnter }: { onEnter: (v: string) => void }) => {
                 <div className="absolute top-1/2 left-0 w-1 h-12 bg-indigo-500 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity" />
              </div>
            ))}
+        </div>
+      </section>
+    </div>
+  );
+};
+
+
+const SovereignOSPage = () => {
+  const [isFullscreen, setIsFullscreen] = React.useState(false);
+
+  React.useEffect(() => {
+    const syncFullscreenState = () => setIsFullscreen(Boolean(document.fullscreenElement));
+    document.addEventListener('fullscreenchange', syncFullscreenState);
+    syncFullscreenState();
+    return () => document.removeEventListener('fullscreenchange', syncFullscreenState);
+  }, []);
+
+  const launchFullscreen = async () => {
+    if (!document.fullscreenElement && document.documentElement.requestFullscreen) {
+      await document.documentElement.requestFullscreen();
+    }
+  };
+
+  const agentProviders = [
+    { id: 'claude', name: 'Claude', owner: 'Anthropic', env: 'ANTHROPIC_API_KEY', role: 'Long-context product reasoning, safety review, and requirements clarification.' },
+    { id: 'openai', name: 'OpenAI', owner: 'OpenAI', env: 'OPENAI_API_KEY', role: 'App generation, tool orchestration, speech/text intent handling, and local workflow planning.' },
+    { id: 'gemini', name: 'Gemini', owner: 'Google', env: 'GEMINI_API_KEY', role: 'Multimodal understanding, sensor-context analysis, image/audio/video workflow support.' },
+    { id: 'deepcode', name: 'DeepCode', owner: 'Snyk/DeepCode', env: 'DEEPCODE_API_KEY', role: 'Generated-app code review, vulnerability scanning, and policy linting before install.' },
+    { id: 'grok', name: 'Grok', owner: 'xAI', env: 'XAI_API_KEY', role: 'Realtime assistant persona, exploratory reasoning, and external-world context adapters.' },
+  ];
+
+  const osSettings = [
+    { title: 'Device Settings', icon: Smartphone, items: ['Display + fullscreen shell', 'Notifications', 'Battery profile', 'Haptics', 'Input devices'] },
+    { title: 'Hardware Permissions', icon: Lock, items: ['Camera', 'Microphone', 'Location/GNSS', 'NFC', 'Bluetooth', 'Motion sensors'] },
+    { title: 'Agent Keys', icon: KeyRound, items: ['Claude', 'OpenAI', 'Gemini', 'DeepCode', 'Grok'] },
+    { title: 'Runtime Services', icon: Server, items: ['Local app sandbox', 'Audit log', 'OTA channel', 'Rollback points', 'Policy engine'] },
+  ];
+
+  const hardwareLayers = [
+    { title: 'Kernel + HAL Control', icon: Cpu, desc: 'A hardened Linux-derived core with audited hardware abstraction layers for modem, camera, GNSS, NFC, biometrics, secure element, battery, radios, haptics, microphones, and unused vendor sensor channels.' },
+    { title: 'Sensor App Mesh', icon: Activity, desc: 'Every hardware capability receives its own first-party operations app, permission scope, simulator, diagnostics panel, and event stream so users can inspect what the device can do.' },
+    { title: 'Privacy Enclave', icon: Shield, desc: 'Local-first identity, biometric commitments, encrypted health vaults, and attestation boundaries keep sensitive telemetry under the owner\'s control before any cloud or chain interaction.' },
+    { title: 'Audio + Text Intent Layer', icon: Brain, desc: 'Users describe workflows by voice or text; the OS converts intent into plans, schemas, UI flows, automations, and sandboxed apps without requiring traditional coding.' },
+  ];
+
+  const agentPipeline = [
+    'Capture natural-language intent from text or microphone',
+    'Clarify missing requirements and risk boundaries',
+    'Generate app manifest, data model, UI, automations, and permissions',
+    'Run simulations against hardware capability mocks',
+    'Package into a signed local mini-app with rollback and audit logs',
+  ];
+
+  const roadmap = [
+    { phase: 'Phase 0', title: 'Feasibility & Device Targeting', items: ['Pick one reference phone board', 'Map bootloader status and drivers', 'Document sensor inventory', 'Define closed-source modules and open-source base'] },
+    { phase: 'Phase 1', title: 'Core OS Prototype', items: ['Boot kernel and minimal shell', 'Implement HAL capability registry', 'Ship diagnostics apps', 'Add secure local identity vault'] },
+    { phase: 'Phase 2', title: 'Agent Runtime', items: ['Intent parser', 'No-code app generator', 'Sandboxed permissions', 'Voice command pipeline'] },
+    { phase: 'Phase 3', title: 'Developer + OEM Program', items: ['SDK and emulator', 'Hardware certification tests', 'OTA update service', 'Security review and compliance'] },
+  ];
+
+  return (
+    <div className="vitalos-shell max-w-[1600px] mx-auto py-6 md:py-8 px-3 md:px-6 overflow-hidden min-h-screen space-y-6 md:space-y-8">
+      <section className="vitalos-window relative p-5 md:p-8 overflow-hidden">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_rgba(99,102,241,0.25),_transparent_45%)] pointer-events-none" />
+        <div className="relative z-10 grid grid-cols-1 lg:grid-cols-[1.1fr_0.9fr] gap-12 items-center">
+          <div className="space-y-8">
+            <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-slate-950/80 border border-white/10">
+              <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+              <span className="text-[10px] font-black uppercase tracking-[0.4em] text-indigo-200">Sovereign Mobile OS Initiative</span>
+            </div>
+            <div className="space-y-5">
+              <h1 className="text-4xl md:text-6xl xl:text-7xl font-display font-black uppercase tracking-tighter leading-[0.86] text-white">
+                VitalOS <span className="text-indigo-400">Core</span>
+              </h1>
+              <p className="text-slate-300 text-sm md:text-base leading-relaxed font-light max-w-3xl">
+                A mobile operating system concept for full-device sovereignty: kernel-level hardware access, per-sensor operational apps, encrypted owner-controlled telemetry, and a multi-agent no-code layer that builds personalized mini-apps from natural language.
+              </p>
+            </div>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+              {['Closed-source product shell', 'Open-source hardened base', 'Hardware capability registry', 'Agent-built local apps'].map((item) => (
+                <div key={item} className="p-4 bg-black/30 border border-white/10 rounded-2xl text-[10px] text-slate-300 font-black uppercase tracking-widest leading-relaxed">
+                  {item}
+                </div>
+              ))}
+            </div>
+            <div className="flex flex-wrap gap-4">
+              <button
+                onClick={launchFullscreen}
+                className="px-6 py-4 bg-white text-slate-950 rounded-2xl text-[10px] font-black uppercase tracking-[0.3em] flex items-center gap-3 hover:scale-105 active:scale-95 transition-all"
+              >
+                <Maximize2 className="w-4 h-4" />
+                {isFullscreen ? 'Fullscreen Active' : 'Launch Fullscreen Web OS'}
+              </button>
+              <a
+                href="#vitalos-settings"
+                className="px-6 py-4 bg-indigo-500/10 border border-indigo-500/30 text-indigo-200 rounded-2xl text-[10px] font-black uppercase tracking-[0.3em] flex items-center gap-3 hover:bg-indigo-500/20 transition-all"
+              >
+                <Settings className="w-4 h-4" />
+                Open Settings
+              </a>
+            </div>
+          </div>
+          <div className="bg-slate-950/80 border border-white/10 rounded-[36px] p-6 shadow-2xl shadow-indigo-950/40">
+            <div className="rounded-[28px] border border-indigo-500/20 bg-black p-5 space-y-4">
+              <div className="flex items-center justify-between text-[10px] font-mono text-slate-500 uppercase tracking-widest">
+                <span>Agent Build Console</span>
+                <span className="text-emerald-400">Local</span>
+              </div>
+              <div className="space-y-3">
+                {[
+                  ['User', 'Build me a privacy-first asthma tracker that reads air quality, breathwork, GPS, and reminders.'],
+                  ['Planner', 'Mapping sensors: microphone, GNSS, accelerometer, AQI API, notification channel.'],
+                  ['Builder', 'Creating UI screens, vault schema, trigger rules, and permission manifest.'],
+                  ['Verifier', 'Sandbox simulation passed. Installable mini-app ready.']
+                ].map(([role, text]) => (
+                  <div key={role} className="p-4 rounded-2xl bg-white/[0.03] border border-white/5">
+                    <p className="text-[9px] text-indigo-400 font-black uppercase tracking-[0.3em] mb-2">{role}</p>
+                    <p className="text-xs text-slate-300 leading-relaxed">{text}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+        {hardwareLayers.map((layer) => (
+          <div key={layer.title} className="p-7 bg-white/[0.02] border border-white/5 rounded-[32px] hover:border-indigo-500/30 transition-all group">
+            <div className="w-12 h-12 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+              <layer.icon className="w-6 h-6 text-indigo-300" strokeWidth={1.5} />
+            </div>
+            <h3 className="text-lg font-display font-black uppercase tracking-tight text-white mb-3">{layer.title}</h3>
+            <p className="text-xs text-slate-500 leading-relaxed font-light">{layer.desc}</p>
+          </div>
+        ))}
+      </section>
+
+      <section className="grid grid-cols-1 lg:grid-cols-[0.9fr_1.1fr] gap-8 items-stretch">
+        <div className="vitalos-window p-5 md:p-7 space-y-5">
+          <p className="text-[10px] text-indigo-400 font-black uppercase tracking-[0.5em]">No-Code Agent Pipeline</p>
+          <h2 className="text-4xl font-display font-black uppercase tracking-tighter text-white">From voice prompt to installed app</h2>
+          <div className="space-y-4">
+            {agentPipeline.map((step, index) => (
+              <div key={step} className="flex gap-4 items-start">
+                <div className="w-8 h-8 rounded-full bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-[10px] font-mono text-indigo-300 shrink-0">{index + 1}</div>
+                <p className="text-sm text-slate-400 leading-relaxed">{step}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+        <div className="p-8 rounded-[36px] bg-white/[0.02] border border-white/5">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {[
+              { label: 'Hardware domains', value: '18+', icon: Cpu },
+              { label: 'Generated app types', value: 'Unlimited', icon: Zap },
+              { label: 'Permission model', value: 'Per sensor', icon: Lock },
+              { label: 'Identity mode', value: 'Owner vault', icon: Fingerprint },
+              { label: 'Automation scope', value: 'Device + cloud', icon: Globe },
+              { label: 'Audit trail', value: 'Always on', icon: LineChart },
+            ].map((metric) => (
+              <div key={metric.label} className="p-5 rounded-3xl bg-black/30 border border-white/5">
+                <metric.icon className="w-5 h-5 text-indigo-300 mb-5" strokeWidth={1.5} />
+                <p className="text-2xl font-black text-white tracking-tight">{metric.value}</p>
+                <p className="text-[9px] text-slate-500 font-black uppercase tracking-widest mt-1">{metric.label}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="grid grid-cols-1 lg:grid-cols-[1.1fr_0.9fr] gap-5" id="vitalos-settings">
+        <div className="p-8 rounded-[36px] bg-slate-900/60 border border-white/10 space-y-6">
+          <div className="flex items-center justify-between gap-4">
+            <div>
+              <p className="text-[10px] text-indigo-400 font-black uppercase tracking-[0.5em]">Multi-Agent Runtime</p>
+              <h2 className="text-2xl md:text-3xl font-display font-black uppercase tracking-tighter text-white mt-2">Provider mesh ready for your APIs</h2>
+            </div>
+            <KeyRound className="w-8 h-8 text-indigo-300 shrink-0" strokeWidth={1.5} />
+          </div>
+          <p className="text-sm text-slate-500 leading-relaxed">
+            The OS shell is prepared for Claude, OpenAI, Gemini, DeepCode, and Grok. API keys stay server-side through environment variables; the web client only receives provider readiness and routing metadata.
+          </p>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {agentProviders.map((provider) => (
+              <div key={provider.id} className="p-5 rounded-3xl bg-black/30 border border-white/5">
+                <div className="flex items-center justify-between gap-3 mb-4">
+                  <div>
+                    <h3 className="text-lg font-black text-white uppercase tracking-tight">{provider.name}</h3>
+                    <p className="text-[9px] text-slate-600 font-black uppercase tracking-widest">{provider.owner}</p>
+                  </div>
+                  <span className="px-2 py-1 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-300 text-[8px] font-black uppercase tracking-widest">Awaiting API</span>
+                </div>
+                <p className="text-[10px] text-indigo-300 font-mono mb-3">{provider.env}</p>
+                <p className="text-xs text-slate-500 leading-relaxed">{provider.role}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="vitalos-window p-5 md:p-7 space-y-5">
+          <div>
+            <p className="text-[10px] text-indigo-400 font-black uppercase tracking-[0.5em]">Fullscreen Web OS</p>
+            <h2 className="text-2xl md:text-3xl font-display font-black uppercase tracking-tighter text-white mt-2">Settings without leaving the app</h2>
+          </div>
+          <p className="text-sm text-slate-500 leading-relaxed">
+            The current deliverable runs as a fullscreen-capable PWA-style web shell. Browser security still requires user permission for protected hardware, but the interface is structured as the OS settings console you requested.
+          </p>
+          <div className="space-y-4">
+            {osSettings.map((group) => (
+              <div key={group.title} className="p-5 rounded-3xl bg-black/30 border border-white/5">
+                <div className="flex items-center gap-3 mb-4">
+                  <group.icon className="w-5 h-5 text-indigo-300" strokeWidth={1.5} />
+                  <h3 className="text-sm font-black text-white uppercase tracking-widest">{group.title}</h3>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  {group.items.map((item) => (
+                    <span key={item} className="px-3 py-1.5 rounded-full bg-white/[0.03] border border-white/5 text-[9px] text-slate-400 font-bold uppercase tracking-widest">{item}</span>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <VitalOSHardwareAccess />
+
+      <VitalOSBuilder />
+
+      <section className="py-10">
+        <div className="text-center max-w-3xl mx-auto mb-12 space-y-4">
+          <p className="text-[10px] text-indigo-400 font-black uppercase tracking-[0.5em]">Execution Roadmap</p>
+          <h2 className="text-5xl font-display font-black uppercase tracking-tighter text-white">Build it in controlled layers</h2>
+          <p className="text-slate-500 text-sm leading-relaxed">Modern phones are locked down by bootloaders, vendor drivers, modem firmware, and regulatory constraints. The practical path starts with one reference device, proves hardware control safely, then expands through certification.</p>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-5">
+          {roadmap.map((phase) => (
+            <div key={phase.phase} className="p-7 rounded-[32px] border border-white/5 bg-slate-900/40 space-y-5">
+              <p className="text-[10px] text-amber-400 font-mono font-black uppercase tracking-widest">{phase.phase}</p>
+              <h3 className="text-xl font-display font-black uppercase tracking-tight text-white">{phase.title}</h3>
+              <ul className="space-y-3">
+                {phase.items.map((item) => (
+                  <li key={item} className="flex gap-3 text-xs text-slate-500 leading-relaxed">
+                    <div className="w-1.5 h-1.5 rounded-full bg-indigo-400 mt-1.5 shrink-0" />
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
         </div>
       </section>
     </div>
@@ -1785,7 +2046,7 @@ const OrganIcon = ({ organ, className }: { organ: string, className?: string }) 
 
 export default function App() {
   const { nft, user, loading, sync, claim, evolve, activate, pairWearable, activateHardware, buy, setTarget, swapVitals, stakeVitals, unstakeVitals, logProgress, connectWallet } = useVitals();
-  const [view, setView] = React.useState('landing');
+  const [view, setView] = React.useState(() => new URLSearchParams(window.location.search).get('view') || 'landing');
   const [isIdentityModalOpen, setIsIdentityModalOpen] = React.useState(false);
 
   if (loading) return <div className="h-screen flex items-center justify-center text-slate-400 uppercase tracking-widest text-[10px] font-mono">Initializing Protocol...</div>;
@@ -1824,6 +2085,7 @@ export default function App() {
           {view === 'landing' && <LandingPage onEnter={setView} />}
           {view === 'launchpad' && user && <MintingPage user={user} buy={buy} connectWallet={() => setIsIdentityModalOpen(true)} />}
           {view === 'mint' && user && <MintingPage user={user} buy={buy} connectWallet={() => setIsIdentityModalOpen(true)} />}
+          {view === 'sovereign-os' && <SovereignOSPage />}
           {view === 'dashboard' && user && (
             <Dashboard 
               nft={nft || {
