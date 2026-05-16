@@ -7,9 +7,10 @@
 3. **Liveness layer** — `ProofOfLife` records self-submitted and validator-attested liveness heartbeats with configurable eligibility windows.
 4. **Attestation layer** — `AttestationRegistry` stores typed attestations from trusted issuers using proof hashes and metadata references.
 5. **Governance layer** — `GovernanceDAO` starts with OpenZeppelin Governor and an external IVotes token, then evolves toward proof-of-human voting controls.
-6. **Proof of Life Chain / L3 layer** — `chain/` models blocks, domain-specific validator quorum, incentives, public-goods funding, expert councils, and policy guardrails for a future standalone chain or Layer 3.
-7. **Application layer** — Next.js and Express expose human-readable dashboards, validator intake APIs, and integration points.
-8. **ZK layer** — `zk/` is prepared for Semaphore, Circom, Noir, and zk-SNARK verifier artifacts.
+6. **Proof of Life Chain / L3 layer** — `chain/` models blocks, domain-specific validator quorum, incentives, public-goods funding, expert councils, ambient proof fusion, and policy guardrails for a future standalone chain or Layer 3.
+7. **Proof of Life OS and hardware layer** — `os/` and `hardware/` define the node appliance image and Proof Pod multi-sensor reference design for privacy-preserving ambient intelligence.
+8. **Application layer** — Next.js and Express expose human-readable dashboards, validator intake APIs, and integration points.
+9. **ZK layer** — `zk/` is prepared for Semaphore, Circom, Noir, and zk-SNARK verifier artifacts.
 
 ## Contract relationships
 
@@ -67,3 +68,8 @@ The chain model treats proof-of-life and proof-of-health as transaction categori
 ## Expert councils and public-sector adoption
 
 The protocol should be governed by a DAO plus domain councils. Councils include constitutional/legal experts, education reform specialists, welfare and social protection experts, healthcare privacy professionals, security and election-integrity specialists, token economists, government officials, citizen advocates, and auditors. Their role is to draft standards and risk assessments that become transparent governance proposals, not to secretly control citizens.
+
+
+## Proof of Life OS and ambient intelligence
+
+Proof of Life OS packages the chain node, local API, oracle adapters, sensor gateway, encrypted queues, ZK services, and privacy-safe monitoring into a reproducible appliance image. Proof Pod hardware should use multiple sensors and secure-element signatures to produce local proof commitments. Ambient intelligence is recommended only as consent-based, short-lived, edge-processed evidence fusion; it must not become continuous surveillance.

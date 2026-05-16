@@ -4,3 +4,4 @@ export * from './consensus/eligibility.js';
 export * from './domains/councils.js';
 export * from './economics/incentives.js';
 export * from './policy/guardrails.js';
+export * from './ambient/sensorFusion.js';

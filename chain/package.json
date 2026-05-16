@@ -9,7 +9,7 @@
     "build": "tsc -p tsconfig.json",
     "start": "node dist/node/devnet.js",
     "lint": "tsc --noEmit",
-    "test": "tsx test/chain.test.ts"
+    "test": "tsx test/chain.test.ts && tsx test/ambient.test.ts"
   },
   "devDependencies": {
     "@types/node": "^22.18.8",

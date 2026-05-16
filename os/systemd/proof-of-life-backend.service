@@ -1,0 +1,26 @@
+[Unit]
+Description=Proof of Life Local API
+Wants=network-online.target proof-of-life-node.service
+After=network-online.target proof-of-life-node.service
+
+[Service]
+Type=simple
+User=prooflife
+Group=prooflife
+WorkingDirectory=/opt/proof-of-life
+Environment=NODE_ENV=production
+EnvironmentFile=-/etc/proof-of-life/backend.env
+ExecStart=/usr/bin/node /opt/proof-of-life/backend/dist/server.js
+Restart=always
+RestartSec=5
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/var/lib/proof-of-life /var/log/proof-of-life
+CapabilityBoundingSet=
+LockPersonality=true
+MemoryDenyWriteExecute=true
+
+[Install]
+WantedBy=multi-user.target

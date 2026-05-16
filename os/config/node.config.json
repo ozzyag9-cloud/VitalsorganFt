@@ -1,0 +1,34 @@
+{
+  "node": {
+    "name": "proof-of-life-edge-node",
+    "mode": "validator-oracle",
+    "network": "devnet",
+    "dataDirectory": "/var/lib/proof-of-life",
+    "httpBind": "127.0.0.1",
+    "httpPort": 8844
+  },
+  "privacy": {
+    "storeRawSensorData": false,
+    "storeRawBiometrics": false,
+    "exportOnlyCommitments": true,
+    "requireUserConsent": true,
+    "retentionSeconds": 300
+  },
+  "chain": {
+    "minValidatorStake": "10000",
+    "settlementMode": "layer3-devnet",
+    "settlementChain": "polygon-amoy"
+  },
+  "oracle": {
+    "enabledDomains": ["identity", "health", "education", "welfare", "voting", "citizenship"],
+    "submitProofHashesOnly": true,
+    "requireDeviceAttestation": true
+  },
+  "ambientSensors": {
+    "enabled": true,
+    "minimumDistinctSensorTypes": 4,
+    "minimumBiometricSignals": 2,
+    "minimumDeviceSignals": 1,
+    "maximumReadingAgeSeconds": 300
+  }
+}
