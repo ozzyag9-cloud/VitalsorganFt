@@ -1,5 +1,6 @@
 import React from 'react';
 import { Activity, Bot, CheckCircle2, FileJson, Lock, Mic, PlayCircle, Shield, Terminal, Wrench } from 'lucide-react';
+import { apiFetch } from '../lib/api';
 
 type VitalOSApp = {
   id: string;
@@ -82,6 +83,7 @@ export function VitalOSBuilder() {
   const [error, setError] = React.useState<string | null>(null);
 
   const loadBlueprint = React.useCallback(async () => {
+    const res = await apiFetch('/api/vitalos/blueprint');
     const res = await fetch('/api/vitalos/blueprint');
 
     if (!res.ok) {
@@ -106,6 +108,7 @@ export function VitalOSBuilder() {
     setAgentTrace([]);
 
     try {
+      const res = await apiFetch('/api/vitalos/apps/generate', {
       const res = await fetch('/api/vitalos/apps/generate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -150,6 +153,7 @@ export function VitalOSBuilder() {
   const installApp = async (appId: string) => {
     setError(null);
     try {
+      const res = await apiFetch(`/api/vitalos/apps/${appId}/install`, { method: 'POST' });
       const res = await fetch(`/api/vitalos/apps/${appId}/install`, { method: 'POST' });
       const data = await res.json();
 

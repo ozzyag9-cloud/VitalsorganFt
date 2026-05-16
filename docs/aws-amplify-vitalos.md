@@ -40,6 +40,8 @@ VITE_API_URL=https://your-api-domain.example.com/api
 APP_URL=https://your-amplify-domain.example.com
 ```
 
+If you only add Claude/OpenAI/Gemini/Grok keys to Amplify Hosting secrets, nothing visible will happen because Amplify static hosting builds public files and does not run `server.ts`. Provider secrets must be added to the separate backend runtime that serves `/api`.
+
 Do **not** put provider secrets in frontend code. Keep these on the backend service only:
 
 ```env
@@ -48,6 +50,11 @@ ANTHROPIC_API_KEY=
 OPENAI_API_KEY=
 DEEPCODE_API_KEY=
 XAI_API_KEY=
+CORS_ORIGIN=https://your-amplify-domain.example.com
+```
+
+After the backend is deployed, set `VITE_API_URL` in Amplify to that backend URL and redeploy the frontend.
+
 ```
 
 ## Recommended AWS production layout

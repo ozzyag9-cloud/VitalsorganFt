@@ -9,6 +9,7 @@
 
 @layer base {
   html {
+    font-size: 13px;
     font-size: 14px;
   }
 
@@ -16,6 +17,12 @@
     html { font-size: 15px; }
   }
 
+  #root {
+    @apply min-h-screen overflow-x-hidden;
+  }
+
+  body {
+    @apply bg-[#030712] text-slate-300 antialiased selection:bg-cyan-400/30 overflow-x-hidden;
   body {
     @apply bg-[#030712] text-slate-300 antialiased selection:bg-cyan-400/30;
     background:

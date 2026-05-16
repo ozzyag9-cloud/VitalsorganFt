@@ -9,6 +9,20 @@ async function startServer() {
 
   app.use(express.json());
 
+  app.use((req, res, next) => {
+    const allowedOrigin = process.env.CORS_ORIGIN || process.env.APP_URL || '*';
+    res.header('Access-Control-Allow-Origin', allowedOrigin);
+    res.header('Vary', 'Origin');
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    res.header('Access-Control-Allow-Methods', 'GET,POST,OPTIONS');
+
+    if (req.method === 'OPTIONS') {
+      return res.sendStatus(204);
+    }
+
+    next();
+  });
+
   const hashPayload = (payload: unknown) =>
     `0x${crypto.createHash("sha256").update(JSON.stringify(payload)).digest("hex")}`;
 
@@ -348,6 +362,21 @@ async function startServer() {
       holderProfileHash: state.nft.holderProfileHash,
       metadata: buildMetadata()
     });
+  });
+
+  app.post("/api/connect-wallet", (req, res) => {
+    const { walletAddress, web3Domain } = req.body;
+
+    if (!walletAddress || typeof walletAddress !== "string") {
+      return res.status(400).json({ success: false, message: "walletAddress is required" });
+    }
+
+    state.user.walletConnected = true;
+    state.user.walletAddress = walletAddress;
+    state.user.web3Domain = web3Domain || null;
+    recomputeCommitments();
+
+    res.json({ success: true, user: state.user, holderProfileHash: state.nft.holderProfileHash });
   });
 
   app.get("/api/vitalos/agent-providers", (req, res) => {

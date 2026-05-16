@@ -9,6 +9,7 @@ import { HealthState, CertificateTier, OrganType } from './types';
 import { PhotorealisticRing } from './components/PhotorealisticRing';
 import { VitalOSBuilder } from './components/VitalOSBuilder';
 import { VitalOSHardwareAccess } from './components/VitalOSHardwareAccess';
+import { VitalOSContractPanel } from './components/VitalOSContractPanel';
 
 // --- Data ---
 const stepsData = [
@@ -34,15 +35,15 @@ const sleepData = [
 // --- Components ---
 
 const Navbar = ({ view, setView, balance, user, connectWallet }: { view: string, setView: (v: string) => void, balance: number, user: any, connectWallet: () => void }) => (
-  <nav className="max-w-7xl mx-auto flex justify-between items-center mb-6 bg-slate-900/50 border border-slate-800 rounded-2xl p-4 sticky top-6 z-50 backdrop-blur-xl">
-    <div className="flex items-center gap-6">
+  <nav className="w-[calc(100%-1rem)] max-w-7xl mx-auto flex justify-between items-center gap-3 mb-4 bg-slate-900/70 border border-slate-800 rounded-2xl p-2.5 md:p-4 sticky top-2 md:top-6 z-50 backdrop-blur-xl overflow-hidden">
+    <div className="flex items-center gap-3 md:gap-6 min-w-0">
       <div 
         onClick={() => setView('landing')}
-        className="flex items-center gap-3 cursor-pointer group"
+        className="flex items-center gap-2 md:gap-3 cursor-pointer group min-w-0"
       >
-        <div className="w-10 h-10 bg-indigo-600 rounded-lg flex items-center justify-center font-black text-xl shadow-lg shadow-indigo-500/20 group-hover:rotate-12 transition-transform text-white">V</div>
+        <div className="w-8 h-8 md:w-10 md:h-10 shrink-0 bg-indigo-600 rounded-lg flex items-center justify-center font-black text-lg md:text-xl shadow-lg shadow-indigo-500/20 group-hover:rotate-12 transition-transform text-white">V</div>
         <div>
-          <h1 className="text-xl font-display font-black tracking-tight uppercase leading-none text-white">VITALS</h1>
+          <h1 className="text-base md:text-xl font-display font-black tracking-tight uppercase leading-none text-white truncate">VITALS</h1>
           <div className="flex items-center gap-2 mt-0.5">
             <span className="text-[8px] text-slate-500 font-mono tracking-[0.2em] leading-none uppercase">Gen-0 Protocol</span>
             <span className="text-[7px] bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 px-1 py-0.5 rounded font-black uppercase tracking-widest leading-none">Pre-sale Pending</span>
@@ -59,7 +60,7 @@ const Navbar = ({ view, setView, balance, user, connectWallet }: { view: string,
       </div>
     </div>
 
-    <div className="flex gap-4">
+    <div className="flex gap-2 md:gap-4 shrink-0">
       {user?.walletConnected ? (
         <div className="flex items-center gap-4">
            <div className="hidden md:flex bg-slate-950 px-4 py-1.5 rounded-xl border border-white/5 flex-col justify-center">
@@ -77,10 +78,10 @@ const Navbar = ({ view, setView, balance, user, connectWallet }: { view: string,
       ) : (
         <button 
           onClick={connectWallet}
-          className="bg-indigo-600 hover:bg-indigo-500 text-white px-6 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest shadow-xl shadow-indigo-900/20 transition-all active:scale-95 flex items-center gap-2"
+          className="bg-indigo-600 hover:bg-indigo-500 text-white px-3 md:px-6 py-2 md:py-2.5 rounded-xl text-[9px] md:text-[10px] font-black uppercase tracking-widest shadow-xl shadow-indigo-900/20 transition-all active:scale-95 flex items-center gap-2 whitespace-nowrap"
         >
           <Wallet className="w-3.5 h-3.5" />
-          Connect Identity
+          <span className="hidden sm:inline">Connect Identity</span><span className="sm:hidden">Connect</span>
         </button>
       )}
     </div>
@@ -952,6 +953,8 @@ const SovereignOSPage = () => {
           </div>
         </div>
       </section>
+
+      <VitalOSContractPanel />
 
       <VitalOSHardwareAccess />
 
