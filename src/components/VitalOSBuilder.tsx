@@ -84,6 +84,7 @@ export function VitalOSBuilder() {
 
   const loadBlueprint = React.useCallback(async () => {
     const res = await apiFetch('/api/vitalos/blueprint');
+    const res = await fetch('/api/vitalos/blueprint');
 
     if (!res.ok) {
       throw new Error('VitalOS API backend is not connected. Showing Amplify-safe local preview mode.');
@@ -98,6 +99,7 @@ export function VitalOSBuilder() {
       setBlueprint(fallbackBlueprint);
       setError(err instanceof Error ? err.message : 'Unable to load VitalOS blueprint. Showing Amplify-safe local preview mode.');
     });
+    loadBlueprint().catch((err) => setError(err instanceof Error ? err.message : 'Unable to load VitalOS blueprint'));
   }, [loadBlueprint]);
 
   const generateApp = async () => {
@@ -107,6 +109,7 @@ export function VitalOSBuilder() {
 
     try {
       const res = await apiFetch('/api/vitalos/apps/generate', {
+      const res = await fetch('/api/vitalos/apps/generate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ prompt, inputMode })
@@ -141,6 +144,7 @@ export function VitalOSBuilder() {
         { provider: 'amplify-static', mode: 'local-preview', action: 'Generated a client-side manifest because the /api backend is unavailable.' }
       ]);
       setError(err instanceof Error ? `${err.message} Generated a local preview instead.` : 'API unavailable. Generated a local preview instead.');
+      setError(err instanceof Error ? err.message : 'Unable to generate app');
     } finally {
       setIsGenerating(false);
     }
@@ -150,6 +154,7 @@ export function VitalOSBuilder() {
     setError(null);
     try {
       const res = await apiFetch(`/api/vitalos/apps/${appId}/install`, { method: 'POST' });
+      const res = await fetch(`/api/vitalos/apps/${appId}/install`, { method: 'POST' });
       const data = await res.json();
 
       if (!res.ok) {
@@ -163,6 +168,7 @@ export function VitalOSBuilder() {
         generatedApps: current.generatedApps.map((app) => app.id === appId ? { ...app, status: 'installed-local' } : app)
       } : current);
       setError(err instanceof Error ? `${err.message} Marked as locally installed in preview mode.` : 'API unavailable. Marked as locally installed in preview mode.');
+      setError(err instanceof Error ? err.message : 'Unable to install app');
     }
   };
 
@@ -174,6 +180,13 @@ export function VitalOSBuilder() {
             <div>
               <p className="text-[10px] text-indigo-300 font-black uppercase tracking-[0.5em]">Building Phase</p>
               <h2 className="text-3xl md:text-4xl font-display font-black uppercase tracking-tighter text-white mt-2">Agent app factory</h2>
+    <section className="space-y-8" id="vitalos-builder">
+      <div className="grid grid-cols-1 lg:grid-cols-[1fr_0.9fr] gap-8">
+        <div className="p-8 rounded-[36px] bg-indigo-500/5 border border-indigo-500/20 space-y-6">
+          <div className="flex items-start justify-between gap-6">
+            <div>
+              <p className="text-[10px] text-indigo-300 font-black uppercase tracking-[0.5em]">Building Phase</p>
+              <h2 className="text-4xl md:text-5xl font-display font-black uppercase tracking-tighter text-white mt-3">Agent app factory</h2>
               <p className="text-sm text-slate-500 leading-relaxed mt-4 max-w-2xl">
                 This is the first working layer: describe an app, route it through the provider mesh, infer permissions, generate a local manifest, and stage it in the VitalOS sandbox before install.
               </p>
@@ -213,6 +226,7 @@ export function VitalOSBuilder() {
         </div>
 
         <div className="vitalos-window p-5 md:p-7 space-y-5">
+        <div className="p-8 rounded-[36px] bg-white/[0.02] border border-white/5 space-y-6">
           <div className="flex items-center gap-3">
             <Shield className="w-6 h-6 text-emerald-300" strokeWidth={1.5} />
             <div>
@@ -233,6 +247,7 @@ export function VitalOSBuilder() {
 
       <div className="grid grid-cols-1 lg:grid-cols-[0.85fr_1.15fr] gap-8">
         <div className="vitalos-window p-5 md:p-7 space-y-5">
+        <div className="p-8 rounded-[36px] bg-slate-900/60 border border-white/10 space-y-5">
           <div className="flex items-center justify-between">
             <h3 className="text-2xl font-display font-black uppercase tracking-tight text-white">Build progress</h3>
             <Wrench className="w-6 h-6 text-indigo-300" strokeWidth={1.5} />
@@ -252,6 +267,7 @@ export function VitalOSBuilder() {
         </div>
 
         <div className="vitalos-window p-5 md:p-7 space-y-5">
+        <div className="p-8 rounded-[36px] bg-white/[0.02] border border-white/5 space-y-5">
           <div className="flex items-center justify-between">
             <h3 className="text-2xl font-display font-black uppercase tracking-tight text-white">Generated apps</h3>
             <FileJson className="w-6 h-6 text-indigo-300" strokeWidth={1.5} />
@@ -292,6 +308,7 @@ export function VitalOSBuilder() {
 
       <div className="grid grid-cols-1 lg:grid-cols-[1.1fr_0.9fr] gap-8">
         <div className="vitalos-window p-5 md:p-7 space-y-5">
+        <div className="p-8 rounded-[36px] bg-slate-900/60 border border-white/10 space-y-5">
           <div className="flex items-center justify-between">
             <h3 className="text-2xl font-display font-black uppercase tracking-tight text-white">Hardware access matrix</h3>
             <Activity className="w-6 h-6 text-indigo-300" strokeWidth={1.5} />
@@ -311,6 +328,7 @@ export function VitalOSBuilder() {
         </div>
 
         <div className="vitalos-window p-5 md:p-7 space-y-5">
+        <div className="p-8 rounded-[36px] bg-white/[0.02] border border-white/5 space-y-5">
           <h3 className="text-2xl font-display font-black uppercase tracking-tight text-white">Latest agent trace</h3>
           {agentTrace.length ? (
             <div className="space-y-3">

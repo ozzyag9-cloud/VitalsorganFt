@@ -55,6 +55,8 @@ CORS_ORIGIN=https://your-amplify-domain.example.com
 
 After the backend is deployed, set `VITE_API_URL` in Amplify to that backend URL and redeploy the frontend.
 
+```
+
 ## Recommended AWS production layout
 
 ```text
