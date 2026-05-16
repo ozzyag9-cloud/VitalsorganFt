@@ -7,11 +7,12 @@ The repository is a production-grade starter monorepo with Solidity contracts, a
 ## Architecture overview
 
 - `contracts/` — Hardhat project using Solidity `0.8.24`, OpenZeppelin Contracts, TypeChain, and Ethers v6.
+- `chain/` — standalone chain / Layer 3 protocol simulator for blocks, validator eligibility, incentives, expert councils, and policy guardrails.
 - `frontend/` — Next.js + TypeScript + TailwindCSS interface with RainbowKit, wagmi, and viem.
 - `backend/` — Express API with PostgreSQL and Redis connection layers.
 - `zk/` — future proof system workspace for Semaphore, Circom, Noir, and generic zk-SNARK artifacts.
 - `governance/`, `oracles/`, `mobile/` — integration workspaces for protocol expansion.
-- `docs/` — architecture and security documentation.
+- `docs/` — architecture, security, government adoption, expert council, and case-study documentation.
 
 ## Install dependencies
 
@@ -46,9 +47,21 @@ Run each layer independently:
 npm run dev:frontend
 npm run dev:backend
 npm run build:contracts
+npm run dev:chain
 ```
 
 The frontend defaults to `http://localhost:3000`. The backend defaults to `http://localhost:4000`.
+
+## Proof of Life Chain / L3
+
+The `chain/` workspace models the future standalone chain or Layer 3. It includes typed life transactions, domain-specific validator quorum, block building, incentive allocation, expert council definitions, and constitutional guardrails.
+
+```bash
+npm run dev:chain
+npm run build:chain
+```
+
+The first version is a deterministic devnet simulator so protocol economics, policy rules, and validator design can mature before a production consensus client is selected.
 
 ## Contracts
 
@@ -120,4 +133,7 @@ Pages included:
 4. Add Semaphore membership proofs for private DAO citizenship.
 5. Add Circom and Noir circuits for liveness and credential predicates.
 6. Complete Governor treasury and identity-aware voting modules.
-7. Commission external smart contract, backend, and privacy audits.
+7. Expand the Proof of Life Chain devnet into a rollup or appchain prototype.
+8. Form expert councils for constitutional law, education, welfare, health, security, economics, and government adoption.
+9. Prepare the Mauritius pilot package with legal memo, privacy impact assessment, and phased public-sector sandbox.
+10. Commission external smart contract, backend, chain, ZK, policy, and privacy audits.

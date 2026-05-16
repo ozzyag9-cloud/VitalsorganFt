@@ -7,8 +7,9 @@
 3. **Liveness layer** — `ProofOfLife` records self-submitted and validator-attested liveness heartbeats with configurable eligibility windows.
 4. **Attestation layer** — `AttestationRegistry` stores typed attestations from trusted issuers using proof hashes and metadata references.
 5. **Governance layer** — `GovernanceDAO` starts with OpenZeppelin Governor and an external IVotes token, then evolves toward proof-of-human voting controls.
-6. **Application layer** — Next.js and Express expose human-readable dashboards, validator intake APIs, and integration points.
-7. **ZK layer** — `zk/` is prepared for Semaphore, Circom, Noir, and zk-SNARK verifier artifacts.
+6. **Proof of Life Chain / L3 layer** — `chain/` models blocks, domain-specific validator quorum, incentives, public-goods funding, expert councils, and policy guardrails for a future standalone chain or Layer 3.
+7. **Application layer** — Next.js and Express expose human-readable dashboards, validator intake APIs, and integration points.
+8. **ZK layer** — `zk/` is prepared for Semaphore, Circom, Noir, and zk-SNARK verifier artifacts.
 
 ## Contract relationships
 
@@ -57,3 +58,12 @@ The starter DAO uses standard OpenZeppelin Governor primitives. Future governanc
 - **Circom** — custom circuits for credential predicates and nullifier-based uniqueness.
 - **Noir** — developer-friendly proof programs for liveness and identity predicates.
 - **zk-SNARKs** — generic verifier and proving key artifact management.
+
+
+## Proof of Life Chain and domain validation
+
+The chain model treats proof-of-life and proof-of-health as transaction categories that can generate blocks when enough eligible validators attest to domain-specific validity. Health, education, welfare, security, voting, citizenship, and humanitarian-aid modules each require explicit quorum, safeguards, and expert review. The current implementation is a TypeScript devnet simulator rather than a production consensus client, which keeps the policy and economics testable while the team decides whether to launch as a Layer 3 rollup or a standalone chain.
+
+## Expert councils and public-sector adoption
+
+The protocol should be governed by a DAO plus domain councils. Councils include constitutional/legal experts, education reform specialists, welfare and social protection experts, healthcare privacy professionals, security and election-integrity specialists, token economists, government officials, citizen advocates, and auditors. Their role is to draft standards and risk assessments that become transparent governance proposals, not to secretly control citizens.

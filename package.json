@@ -3,7 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "description": "Privacy-preserving decentralized identity and proof-of-life protocol monorepo.",
-  "workspaces": ["contracts", "frontend", "backend"],
+  "workspaces": [
+    "contracts",
+    "frontend",
+    "backend",
+    "chain"
+  ],
   "scripts": {
     "dev": "npm run dev --workspace frontend",
     "dev:frontend": "npm run dev --workspace frontend",
@@ -15,7 +20,9 @@
     "test": "npm run test --workspace contracts",
     "lint": "npm run lint --workspaces --if-present",
     "format": "prettier --write .",
-    "prepare": "husky"
+    "prepare": "husky",
+    "dev:chain": "npm run dev --workspace chain",
+    "build:chain": "npm run build --workspace chain"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^8.46.1",
@@ -26,5 +33,7 @@
     "prettier": "^3.6.2",
     "typescript": "^5.8.3"
   },
-  "engines": {"node": ">=20.0.0"}
+  "engines": {
+    "node": ">=20.0.0"
+  }
 }
