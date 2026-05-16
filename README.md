@@ -1,73 +1,123 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
+# Proof of Life Protocol
 
-# Vitals Dynamic NFT Platform
+Proof of Life Protocol is a privacy-preserving decentralized identity and liveness infrastructure for proof of human existence, proof of liveness, DAO citizenship, fraud-resistant verification, healthcare attestations, educational credentials, humanitarian aid verification, welfare fraud reduction, and AI-resistant governance.
 
-Vitals is a deployment-ready React/Express platform for a living biometric dynamic NFT certificate. The app presents a biometric certificate UI, exposes ERC-721 metadata and presale endpoints, and includes a standalone Solidity contract that can mint and evolve an NFT from oracle-verified wearable state. The recommended launch path is Base Sepolia testnet first, then Base mainnet after presale funding, audit, and treasury readiness.
-Vitals is a deployment-ready React/Express platform for a living biometric dynamic NFT certificate. The app presents a biometric certificate UI, exposes ERC-721 metadata endpoints, and includes a standalone Solidity contract that can mint and evolve an NFT from oracle-verified wearable state.
+The repository is a production-grade starter monorepo with Solidity contracts, a Next.js app, an Express API, protocol documentation, and zero-knowledge integration placeholders.
 
-## What changed for blockchain deployment
+## Architecture overview
 
-- `contracts/VitalsDynamicNFT.sol` is a standalone ERC-721-compatible contract with no package imports. It mints a certificate to a holder wallet and allows an oracle to evolve the NFT as health state changes.
-- The contract stores only `bytes32` commitments for biometrics and holder details. Raw biometric data, health records, and identity documents must remain encrypted/off-chain.
-- `server.ts` exposes metadata and deployment endpoints:
-  - `GET /api/metadata/1` — ERC-721 metadata for the living certificate.
-  - `GET /api/certificate/1` — certificate payload with holder and commitment fields.
-  - `GET /api/deployment/manifest` — constructor args and first-mint inputs.
-  - `POST /api/deployment/simulate` — records a local deployment receipt for demos.
-- The Deployment Suite UI displays chain, contract, metadata URI, and biometric commitment details.
+- `contracts/` — Hardhat project using Solidity `0.8.24`, OpenZeppelin Contracts, TypeChain, and Ethers v6.
+- `frontend/` — Next.js + TypeScript + TailwindCSS interface with RainbowKit, wagmi, and viem.
+- `backend/` — Express API with PostgreSQL and Redis connection layers.
+- `zk/` — future proof system workspace for Semaphore, Circom, Noir, and generic zk-SNARK artifacts.
+- `governance/`, `oracles/`, `mobile/` — integration workspaces for protocol expansion.
+- `docs/` — architecture and security documentation.
 
-## Run locally
-
-**Prerequisites:** Node.js
-
-1. Install dependencies:
-   ```bash
-   npm install
-   ```
-2. Copy `.env.example` to `.env.local` and set your values.
-3. Start the app:
-   ```bash
-   npm run dev
-   ```
-4. Open `http://localhost:3000`.
-
-## Build and validate
+## Install dependencies
 
 ```bash
-npm run lint
-npm run build
+npm install
 ```
 
-## Deploying the dynamic NFT contract
+## Environment setup
 
-The repository does not require a specific Solidity toolchain. Compile `contracts/VitalsDynamicNFT.sol` with Solidity `0.8.20` or newer using Foundry, Hardhat, Remix, or your preferred deployer.
-
-Required environment values for a production deployer:
+Copy the example environment file and fill in production values before deployments:
 
 ```bash
-RPC_URL="https://your-chain-rpc"
-DEPLOYER_PRIVATE_KEY="0x..."
-VITALS_ORACLE_ADDRESS="0x..."
-APP_URL="https://your-vitals-platform.example"
+cp .env.example .env
 ```
 
-Recommended flow:
+Key variables:
 
-1. Start the platform and request `GET /api/deployment/manifest`.
-2. Deploy `VitalsDynamicNFT` with:
-   - `initialOracle`
-   - `initialContractURI`
-3. Call `mintLivingCertificate` from the holder wallet with:
-   - `organType`
-   - `biometricCommitment`
-   - `holderProfileHash`
-   - `certificateId`
-   - `encryptedMetadataURI`
-4. Configure marketplaces to read `/api/metadata/1` or pin the metadata JSON to IPFS.
-5. Have the oracle call `evolveBiometrics` whenever verified wearable data changes.
+- `POLYGON_AMOY_RPC_URL` — Polygon Amoy RPC endpoint.
+- `DEPLOYER_PRIVATE_KEY` — deployment wallet private key.
+- `POLYGONSCAN_API_KEY` — verification API key.
+- `GOVERNANCE_VOTES_TOKEN` — IVotes-compatible governance token address.
+- `DATABASE_URL` — PostgreSQL connection string.
+- `REDIS_URL` — Redis connection string.
+- `NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID` — WalletConnect project ID for RainbowKit.
+- `NEXT_PUBLIC_*_ADDRESS` — deployed contract addresses consumed by the frontend.
 
-## Privacy and safety note
+## Local development
 
-A public blockchain is not an appropriate place for raw biometrics or personally identifying medical details. Vitals uses cryptographic commitments and encrypted off-chain metadata so the NFT can prove continuity without disclosing private health data.
+Run each layer independently:
+
+```bash
+npm run dev:frontend
+npm run dev:backend
+npm run build:contracts
+```
+
+The frontend defaults to `http://localhost:3000`. The backend defaults to `http://localhost:4000`.
+
+## Contracts
+
+Compile and test:
+
+```bash
+npm run build:contracts
+npm test
+```
+
+Deploy to Polygon Amoy after setting `.env`:
+
+```bash
+npm run deploy:amoy --workspace contracts
+```
+
+Verify deployed contracts after exporting deployed addresses and constructor arguments:
+
+```bash
+npm run verify:amoy --workspace contracts
+```
+
+## Backend API
+
+Start the API:
+
+```bash
+npm run dev:backend
+```
+
+Available starter endpoints:
+
+- `GET /` — API identity.
+- `GET /health` — API, PostgreSQL, and Redis health check.
+- `POST /api/attestations/validator` — validator attestation intake placeholder.
+
+## Frontend
+
+Start the app:
+
+```bash
+npm run dev:frontend
+```
+
+Pages included:
+
+- Landing page.
+- Wallet connection page.
+- Identity dashboard.
+- Verification status page.
+- Proof-of-life dashboard.
+- DAO governance placeholder.
+
+## Deployment guide
+
+1. Configure `.env` with Polygon Amoy RPC, deployer key, and explorer API key.
+2. Compile contracts with `npm run build:contracts`.
+3. Run tests with `npm test`.
+4. Deploy contracts with `npm run deploy:amoy --workspace contracts`.
+5. Copy deployed addresses into frontend and backend environment variables.
+6. Verify contracts with `npm run verify:amoy --workspace contracts`.
+7. Deploy the frontend and backend to the preferred cloud environment.
+
+## Roadmap
+
+1. Add identity-gated frontend reads and writes using generated ABIs.
+2. Implement validator service authorization, queueing, and on-chain relay policies.
+3. Introduce encrypted off-chain credential storage and DID document resolution.
+4. Add Semaphore membership proofs for private DAO citizenship.
+5. Add Circom and Noir circuits for liveness and credential predicates.
+6. Complete Governor treasury and identity-aware voting modules.
+7. Commission external smart contract, backend, and privacy audits.
