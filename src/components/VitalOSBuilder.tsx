@@ -37,6 +37,40 @@ type VitalOSBlueprint = {
   safeBuildPath: string[];
 };
 
+const fallbackBlueprint: VitalOSBlueprint = {
+  capabilities: [
+    { id: 'camera', label: 'Camera', domain: 'imaging', webAccess: 'prompted', nativeAccess: 'HAL camera provider', status: 'web-ready' },
+    { id: 'microphone', label: 'Microphone', domain: 'audio', webAccess: 'prompted', nativeAccess: 'AudioFlinger / HAL', status: 'web-ready' },
+    { id: 'gnss', label: 'GPS / GNSS', domain: 'location', webAccess: 'prompted', nativeAccess: 'GNSS HAL', status: 'web-ready' },
+    { id: 'bluetooth', label: 'Bluetooth', domain: 'radio', webAccess: 'web bluetooth where supported', nativeAccess: 'Bluetooth stack', status: 'prototype' },
+  ],
+  phases: [
+    { id: 'phase-1', title: 'Amplify Web Shell', progress: 70, deliverables: ['Static PWA deploy', 'Fullscreen shell', 'HTTPS hardware prompts'] },
+    { id: 'phase-2', title: 'Agent API Backend', progress: 35, deliverables: ['Express/ECS backend', 'Provider adapters', 'Persistent generated apps'] },
+    { id: 'phase-3', title: 'Native Device Agent', progress: 10, deliverables: ['AOSP image', 'Device HAL services', 'Owner vault'] },
+  ],
+  generatedApps: [
+    {
+      id: 'static-breath-guardian',
+      name: 'Breath Guardian',
+      prompt: 'Static fallback app for Amplify frontend-only deployments.',
+      status: 'local-preview',
+      riskLevel: 'medium',
+      createdAt: new Date().toISOString(),
+      permissions: ['microphone', 'gnss', 'notifications'],
+      screens: ['Today', 'Risk Map', 'Audit Log'],
+      automations: ['Prompt before protected sensor use', 'Keep logs local by default'],
+      agents: ['claude', 'openai', 'gemini', 'deepcode', 'grok'],
+    }
+  ],
+  safeBuildPath: [
+    'Amplify can host the PWA shell, but /api endpoints need an Express container, Lambda, or ECS backend.',
+    'Use HTTPS browser APIs for camera, microphone, location, Bluetooth, and motion prompts.',
+    'Keep provider API keys in AWS environment variables or Secrets Manager, never in the client bundle.',
+    'Move unrestricted hardware control to a native VitalOS device image later.'
+  ]
+};
+
 const DEFAULT_PROMPT = 'Build me a private hydration, sleep, and heart-health assistant with reminders, wearable sync, and an audit log.';
 
 export function VitalOSBuilder() {
@@ -49,11 +83,20 @@ export function VitalOSBuilder() {
 
   const loadBlueprint = React.useCallback(async () => {
     const res = await fetch('/api/vitalos/blueprint');
+
+    if (!res.ok) {
+      throw new Error('VitalOS API backend is not connected. Showing Amplify-safe local preview mode.');
+    }
+
     const data = await res.json();
     setBlueprint(data);
   }, []);
 
   React.useEffect(() => {
+    loadBlueprint().catch((err) => {
+      setBlueprint(fallbackBlueprint);
+      setError(err instanceof Error ? err.message : 'Unable to load VitalOS blueprint. Showing Amplify-safe local preview mode.');
+    });
     loadBlueprint().catch((err) => setError(err instanceof Error ? err.message : 'Unable to load VitalOS blueprint'));
   }, [loadBlueprint]);
 
@@ -77,6 +120,27 @@ export function VitalOSBuilder() {
       setAgentTrace(data.agentTrace || []);
       await loadBlueprint();
     } catch (err) {
+      const localApp: VitalOSApp = {
+        id: `local-${Date.now()}`,
+        name: prompt.split(/\s+/).slice(0, 3).join(' ') || 'Local VitalOS App',
+        prompt,
+        status: 'local-preview',
+        riskLevel: 'medium',
+        createdAt: new Date().toISOString(),
+        permissions: ['notifications', inputMode === 'voice' ? 'microphone' : 'health-vault'],
+        screens: ['Home', 'Signals', 'Permissions', 'Audit Log'],
+        automations: ['Run in Amplify frontend preview mode until the API backend is connected'],
+        agents: ['claude', 'openai', 'gemini', 'deepcode', 'grok']
+      };
+
+      setBlueprint((current) => ({
+        ...(current || fallbackBlueprint),
+        generatedApps: [localApp, ...((current || fallbackBlueprint).generatedApps || [])]
+      }));
+      setAgentTrace([
+        { provider: 'amplify-static', mode: 'local-preview', action: 'Generated a client-side manifest because the /api backend is unavailable.' }
+      ]);
+      setError(err instanceof Error ? `${err.message} Generated a local preview instead.` : 'API unavailable. Generated a local preview instead.');
       setError(err instanceof Error ? err.message : 'Unable to generate app');
     } finally {
       setIsGenerating(false);
@@ -95,11 +159,23 @@ export function VitalOSBuilder() {
 
       await loadBlueprint();
     } catch (err) {
+      setBlueprint((current) => current ? {
+        ...current,
+        generatedApps: current.generatedApps.map((app) => app.id === appId ? { ...app, status: 'installed-local' } : app)
+      } : current);
+      setError(err instanceof Error ? `${err.message} Marked as locally installed in preview mode.` : 'API unavailable. Marked as locally installed in preview mode.');
       setError(err instanceof Error ? err.message : 'Unable to install app');
     }
   };
 
   return (
+    <section className="space-y-6" id="vitalos-builder">
+      <div className="grid grid-cols-1 lg:grid-cols-[1fr_0.9fr] gap-8">
+        <div className="vitalos-window p-5 md:p-7 space-y-5">
+          <div className="flex items-start justify-between gap-6">
+            <div>
+              <p className="text-[10px] text-indigo-300 font-black uppercase tracking-[0.5em]">Building Phase</p>
+              <h2 className="text-3xl md:text-4xl font-display font-black uppercase tracking-tighter text-white mt-2">Agent app factory</h2>
     <section className="space-y-8" id="vitalos-builder">
       <div className="grid grid-cols-1 lg:grid-cols-[1fr_0.9fr] gap-8">
         <div className="p-8 rounded-[36px] bg-indigo-500/5 border border-indigo-500/20 space-y-6">
@@ -145,6 +221,7 @@ export function VitalOSBuilder() {
           </div>
         </div>
 
+        <div className="vitalos-window p-5 md:p-7 space-y-5">
         <div className="p-8 rounded-[36px] bg-white/[0.02] border border-white/5 space-y-6">
           <div className="flex items-center gap-3">
             <Shield className="w-6 h-6 text-emerald-300" strokeWidth={1.5} />
@@ -165,6 +242,7 @@ export function VitalOSBuilder() {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-[0.85fr_1.15fr] gap-8">
+        <div className="vitalos-window p-5 md:p-7 space-y-5">
         <div className="p-8 rounded-[36px] bg-slate-900/60 border border-white/10 space-y-5">
           <div className="flex items-center justify-between">
             <h3 className="text-2xl font-display font-black uppercase tracking-tight text-white">Build progress</h3>
@@ -184,6 +262,7 @@ export function VitalOSBuilder() {
           ))}
         </div>
 
+        <div className="vitalos-window p-5 md:p-7 space-y-5">
         <div className="p-8 rounded-[36px] bg-white/[0.02] border border-white/5 space-y-5">
           <div className="flex items-center justify-between">
             <h3 className="text-2xl font-display font-black uppercase tracking-tight text-white">Generated apps</h3>
@@ -224,6 +303,7 @@ export function VitalOSBuilder() {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-[1.1fr_0.9fr] gap-8">
+        <div className="vitalos-window p-5 md:p-7 space-y-5">
         <div className="p-8 rounded-[36px] bg-slate-900/60 border border-white/10 space-y-5">
           <div className="flex items-center justify-between">
             <h3 className="text-2xl font-display font-black uppercase tracking-tight text-white">Hardware access matrix</h3>
@@ -243,6 +323,7 @@ export function VitalOSBuilder() {
           </div>
         </div>
 
+        <div className="vitalos-window p-5 md:p-7 space-y-5">
         <div className="p-8 rounded-[36px] bg-white/[0.02] border border-white/5 space-y-5">
           <h3 className="text-2xl font-display font-black uppercase tracking-tight text-white">Latest agent trace</h3>
           {agentTrace.length ? (
