@@ -1,0 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root { color-scheme: dark; }
+body { @apply bg-protocol-night text-slate-100 antialiased; }
+a { @apply transition-colors; }
