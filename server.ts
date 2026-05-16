@@ -9,10 +9,160 @@ async function startServer() {
 
   app.use(express.json());
 
+  app.use((req, res, next) => {
+    const allowedOrigin = process.env.CORS_ORIGIN || process.env.APP_URL || '*';
+    res.header('Access-Control-Allow-Origin', allowedOrigin);
+    res.header('Vary', 'Origin');
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    res.header('Access-Control-Allow-Methods', 'GET,POST,OPTIONS');
+
+    if (req.method === 'OPTIONS') {
+      return res.sendStatus(204);
+    }
+
+    next();
+  });
+
   const hashPayload = (payload: unknown) =>
     `0x${crypto.createHash("sha256").update(JSON.stringify(payload)).digest("hex")}`;
 
   const nowIso = () => new Date().toISOString();
+
+  const vitalOsAgentProviders = [
+    {
+      id: "claude",
+      name: "Claude",
+      owner: "Anthropic",
+      envKey: "ANTHROPIC_API_KEY",
+      role: "Long-context product reasoning, safety review, and requirements clarification."
+    },
+    {
+      id: "openai",
+      name: "OpenAI",
+      owner: "OpenAI",
+      envKey: "OPENAI_API_KEY",
+      role: "App generation, tool orchestration, speech/text intent handling, and local workflow planning."
+    },
+    {
+      id: "gemini",
+      name: "Gemini",
+      owner: "Google",
+      envKey: "GEMINI_API_KEY",
+      role: "Multimodal understanding, sensor-context analysis, image/audio/video workflow support."
+    },
+    {
+      id: "deepcode",
+      name: "DeepCode",
+      owner: "Snyk/DeepCode",
+      envKey: "DEEPCODE_API_KEY",
+      role: "Generated-app code review, vulnerability scanning, and policy linting before install."
+    },
+    {
+      id: "grok",
+      name: "Grok",
+      owner: "xAI",
+      envKey: "XAI_API_KEY",
+      role: "Realtime assistant persona, exploratory reasoning, and external-world context adapters."
+    }
+  ];
+
+
+  const vitalOsHardwareCapabilities = [
+    { id: "camera", label: "Camera", domain: "imaging", webAccess: "prompted", nativeAccess: "HAL camera provider", status: "web-ready" },
+    { id: "microphone", label: "Microphone", domain: "audio", webAccess: "prompted", nativeAccess: "AudioFlinger / HAL", status: "web-ready" },
+    { id: "gnss", label: "GPS / GNSS", domain: "location", webAccess: "prompted", nativeAccess: "GNSS HAL", status: "web-ready" },
+    { id: "accelerometer", label: "Accelerometer", domain: "motion", webAccess: "browser sensor API", nativeAccess: "Sensor HAL", status: "prototype" },
+    { id: "bluetooth", label: "Bluetooth", domain: "radio", webAccess: "web bluetooth where supported", nativeAccess: "Bluetooth stack", status: "prototype" },
+    { id: "nfc", label: "NFC", domain: "secure element", webAccess: "limited", nativeAccess: "NFC service + secure element", status: "native-required" },
+    { id: "biometrics", label: "Biometrics", domain: "identity", webAccess: "WebAuthn only", nativeAccess: "BiometricPrompt / TEE", status: "native-required" },
+    { id: "battery", label: "Battery", domain: "power", webAccess: "limited", nativeAccess: "power HAL", status: "native-required" }
+  ];
+
+  const vitalOsBuildPhases = [
+    { id: "phase-0", title: "Reference Device", progress: 20, deliverables: ["Unlockable bootloader target", "Kernel source audit", "Vendor blob inventory"] },
+    { id: "phase-1", title: "Fullscreen Web Shell", progress: 65, deliverables: ["PWA manifest", "Settings console", "Provider registry"] },
+    { id: "phase-2", title: "Agent App Factory", progress: 35, deliverables: ["Natural-language planner", "Generated app manifest", "Sandbox review trace"] },
+    { id: "phase-3", title: "Native Services", progress: 10, deliverables: ["AOSP service map", "Hardware daemon contracts", "OTA/update model"] }
+  ];
+
+  const generatedVitalOsApps: any[] = [
+    {
+      id: "vapp-breath-guardian",
+      name: "Breath Guardian",
+      prompt: "Track asthma risk using air quality, breathing reminders, GPS, and notifications.",
+      status: "sandboxed",
+      riskLevel: "medium",
+      createdAt: nowIso(),
+      permissions: ["microphone", "gnss", "notifications", "network"],
+      screens: ["Today", "Risk Map", "Breathwork", "Medication Reminders"],
+      automations: ["Alert when AQI rises near saved locations", "Start breathwork timer after symptom log"],
+      agents: ["claude", "openai", "gemini", "deepcode", "grok"]
+    }
+  ];
+
+  const providerReadiness = () =>
+    vitalOsAgentProviders.map(({ envKey, ...provider }) => ({
+      ...provider,
+      envKey,
+      configured: Boolean(process.env[envKey]),
+      keyVisibility: "server-only"
+    }));
+
+  const inferVitalOsPermissions = (prompt: string) => {
+    const normalizedPrompt = prompt.toLowerCase();
+    const permissionMap = [
+      { permission: "microphone", keywords: ["voice", "audio", "mic", "breath", "sound", "listen"] },
+      { permission: "camera", keywords: ["camera", "photo", "scan", "image", "vision"] },
+      { permission: "gnss", keywords: ["gps", "location", "map", "near", "travel", "route"] },
+      { permission: "notifications", keywords: ["notify", "remind", "alert", "alarm", "schedule"] },
+      { permission: "accelerometer", keywords: ["motion", "steps", "fall", "movement", "run", "walk"] },
+      { permission: "bluetooth", keywords: ["bluetooth", "wearable", "ring", "device", "sensor"] },
+      { permission: "health-vault", keywords: ["health", "sleep", "heart", "hydration", "medical", "biometric"] },
+      { permission: "network", keywords: ["weather", "air quality", "cloud", "api", "web", "online"] }
+    ];
+
+    const permissions = permissionMap
+      .filter((entry) => entry.keywords.some((keyword) => normalizedPrompt.includes(keyword)))
+      .map((entry) => entry.permission);
+
+    return Array.from(new Set(permissions.length ? permissions : ["notifications", "health-vault"]));
+  };
+
+  const buildVitalOsApp = (prompt: string, inputMode = "text") => {
+    const permissions = inferVitalOsPermissions(prompt);
+    const shortName = prompt
+      .replace(/[^a-z0-9\s]/gi, "")
+      .trim()
+      .split(/\s+/)
+      .slice(0, 3)
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+      .join(" ") || "Custom VitalOS App";
+    const riskLevel = permissions.some((permission) => ["microphone", "camera", "gnss", "biometrics", "health-vault"].includes(permission)) ? "medium" : "low";
+
+    return {
+      id: `vapp-${crypto.randomUUID()}`,
+      name: shortName,
+      prompt,
+      inputMode,
+      status: "sandboxed",
+      riskLevel,
+      createdAt: nowIso(),
+      permissions,
+      screens: ["Home", "Live Signals", "Automation Rules", "Audit Log"],
+      automations: [
+        "Ask before using protected hardware permissions",
+        "Write every agent action to the local audit log",
+        "Keep generated data in the encrypted owner vault by default"
+      ],
+      agents: vitalOsAgentProviders.map((provider) => provider.id),
+      manifest: {
+        runtime: "vitalos-web-sandbox",
+        installMode: "local-owner-only",
+        rollback: true,
+        permissions
+      }
+    };
+  };
 
   // Mock State
   const state = {
@@ -212,6 +362,85 @@ async function startServer() {
       holderProfileHash: state.nft.holderProfileHash,
       metadata: buildMetadata()
     });
+  });
+
+  app.post("/api/connect-wallet", (req, res) => {
+    const { walletAddress, web3Domain } = req.body;
+
+    if (!walletAddress || typeof walletAddress !== "string") {
+      return res.status(400).json({ success: false, message: "walletAddress is required" });
+    }
+
+    state.user.walletConnected = true;
+    state.user.walletAddress = walletAddress;
+    state.user.web3Domain = web3Domain || null;
+    recomputeCommitments();
+
+    res.json({ success: true, user: state.user, holderProfileHash: state.nft.holderProfileHash });
+  });
+
+  app.get("/api/vitalos/agent-providers", (req, res) => {
+    res.json({
+      providers: providerReadiness(),
+      runtime: {
+        shell: "fullscreen-web-os",
+        installMode: "pwa",
+        permissionModel: "browser-mediated until native firmware/OEM integration"
+      },
+      requiredEnv: vitalOsAgentProviders.map((provider) => provider.envKey)
+    });
+  });
+
+  app.get("/api/vitalos/blueprint", (req, res) => {
+    res.json({
+      capabilities: vitalOsHardwareCapabilities,
+      phases: vitalOsBuildPhases,
+      generatedApps: generatedVitalOsApps,
+      safeBuildPath: [
+        "Use owner-authorized bootloader unlocks and reference devices.",
+        "Keep API keys server-side and secrets out of generated app bundles.",
+        "Simulate hardware first, then move selected features into native services.",
+        "Never bypass anti-theft, carrier, enterprise, or account locks."
+      ]
+    });
+  });
+
+  app.get("/api/vitalos/apps", (req, res) => {
+    res.json({ apps: generatedVitalOsApps });
+  });
+
+  app.post("/api/vitalos/apps/generate", (req, res) => {
+    const { prompt, inputMode } = req.body;
+
+    if (!prompt || typeof prompt !== "string" || prompt.trim().length < 8) {
+      return res.status(400).json({ success: false, message: "Describe the app in at least 8 characters." });
+    }
+
+    const appManifest = buildVitalOsApp(prompt.trim(), inputMode || "text");
+    generatedVitalOsApps.unshift(appManifest);
+
+    res.json({
+      success: true,
+      app: appManifest,
+      agentTrace: providerReadiness().map((provider) => ({
+        provider: provider.id,
+        mode: provider.configured ? "api-ready" : "stubbed-until-api-key",
+        action: provider.role
+      }))
+    });
+  });
+
+  app.post("/api/vitalos/apps/:appId/install", (req, res) => {
+    const appManifest = generatedVitalOsApps.find((app) => app.id === req.params.appId);
+
+    if (!appManifest) {
+      return res.status(404).json({ success: false, message: "VitalOS app not found" });
+    }
+
+    appManifest.status = "installed-local";
+    appManifest.installedAt = nowIso();
+
+    res.json({ success: true, app: appManifest });
   });
 
   app.get("/api/deployment/manifest", (req, res) => {

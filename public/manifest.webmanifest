@@ -1,0 +1,20 @@
+{
+  "name": "Vitals Sovereign Web OS",
+  "short_name": "VitalOS",
+  "description": "Fullscreen-capable VitalOS web shell for biometric hardware operations and multi-agent app generation.",
+  "start_url": "/?view=sovereign-os",
+  "scope": "/",
+  "display": "fullscreen",
+  "orientation": "any",
+  "background_color": "#020617",
+  "theme_color": "#4f46e5",
+  "categories": ["health", "productivity", "utilities"],
+  "icons": [
+    {
+      "src": "/vitalos-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
