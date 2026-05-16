@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { VitalsNft, UserStats } from '../types';
+import { apiFetch } from '../lib/api';
 
 const BASE_SEPOLIA = {
   chainId: '0x14a34',
@@ -16,7 +17,7 @@ export function useVitals() {
 
   const fetchState = async () => {
     try {
-      const res = await fetch('/api/state');
+      const res = await apiFetch('/api/state');
       const data = await res.json();
       setNft(data.nft);
       setUser(data.user);
@@ -29,7 +30,7 @@ export function useVitals() {
 
   const sync = async () => {
     try {
-      const res = await fetch('/api/sync', { method: 'POST' });
+      const res = await apiFetch('/api/sync', { method: 'POST' });
       const data = await res.json();
       setNft(data.newState.nft);
       setUser(data.newState.user);
@@ -41,7 +42,7 @@ export function useVitals() {
 
   const claim = async () => {
     try {
-      const res = await fetch('/api/claim', { method: 'POST' });
+      const res = await apiFetch('/api/claim', { method: 'POST' });
       const data = await res.json();
       await fetchState();
       return data;
@@ -52,7 +53,7 @@ export function useVitals() {
 
   const evolve = async () => {
     try {
-      const res = await fetch('/api/evolve', { method: 'POST' });
+      const res = await apiFetch('/api/evolve', { method: 'POST' });
       const data = await res.json();
       await fetchState();
       return data;
@@ -63,7 +64,7 @@ export function useVitals() {
 
   const activate = async () => {
     try {
-      const res = await fetch('/api/activate', { method: 'POST' });
+      const res = await apiFetch('/api/activate', { method: 'POST' });
       await fetchState();
     } catch (e) {
       console.error(e);
@@ -72,7 +73,7 @@ export function useVitals() {
 
   const pairWearable = async () => {
     try {
-      const res = await fetch('/api/pair-wearable', { method: 'POST' });
+      const res = await apiFetch('/api/pair-wearable', { method: 'POST' });
       await fetchState();
     } catch (e) {
       console.error(e);
@@ -81,7 +82,7 @@ export function useVitals() {
 
   const activateHardware = async (serial: string) => {
     try {
-      const res = await fetch('/api/activate-hardware', { 
+      const res = await apiFetch('/api/activate-hardware', { 
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ serial })
@@ -94,7 +95,7 @@ export function useVitals() {
 
   const setTarget = async (type: string, goal: number) => {
     try {
-      await fetch('/api/set-target', {
+      await apiFetch('/api/set-target', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ type, goal })
@@ -107,7 +108,7 @@ export function useVitals() {
 
   const swapVitals = async (amount: number) => {
     try {
-      await fetch('/api/swap-vital', {
+      await apiFetch('/api/swap-vital', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ amount })
@@ -120,7 +121,7 @@ export function useVitals() {
 
   const stakeVitals = async (amount: number) => {
     try {
-      await fetch('/api/stake', {
+      await apiFetch('/api/stake', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ amount })
@@ -133,7 +134,7 @@ export function useVitals() {
 
   const unstakeVitals = async (amount: number) => {
     try {
-      await fetch('/api/unstake', {
+      await apiFetch('/api/unstake', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ amount })
@@ -146,7 +147,7 @@ export function useVitals() {
 
   const logProgress = async (targetId: string, value: number) => {
     try {
-      await fetch('/api/log-progress', {
+      await apiFetch('/api/log-progress', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ targetId, value })
@@ -159,7 +160,7 @@ export function useVitals() {
 
   const buy = async (certId: string) => {
     try {
-      const res = await fetch('/api/buy', { 
+      const res = await apiFetch('/api/buy', { 
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ certId })
@@ -195,7 +196,7 @@ export function useVitals() {
           }
         }
 
-        await fetch('/api/connect-wallet', {
+        await apiFetch('/api/connect-wallet', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ walletAddress, web3Domain: domain || null })

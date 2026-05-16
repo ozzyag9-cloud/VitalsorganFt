@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="VitalOS icon">
+  <rect width="512" height="512" rx="112" fill="#020617"/>
+  <circle cx="256" cy="256" r="168" fill="#4f46e5" opacity="0.18"/>
+  <path d="M128 164h64l64 184 64-184h64L286 408h-60L128 164Z" fill="#fff"/>
+  <path d="M344 104c36 18 64 49 78 87" stroke="#818cf8" stroke-width="24" stroke-linecap="round" fill="none"/>
+</svg>
