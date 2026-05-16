@@ -777,6 +777,8 @@ const SovereignOSPage = () => {
   return (
     <div className="vitalos-shell max-w-[1600px] mx-auto py-6 md:py-8 px-3 md:px-6 overflow-hidden min-h-screen space-y-6 md:space-y-8">
       <section className="vitalos-window relative p-5 md:p-8 overflow-hidden">
+    <div className="max-w-7xl mx-auto py-12 px-6 overflow-hidden min-h-screen space-y-16">
+      <section className="relative p-8 md:p-16 rounded-[48px] border border-indigo-500/20 bg-indigo-500/5 overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_rgba(99,102,241,0.25),_transparent_45%)] pointer-events-none" />
         <div className="relative z-10 grid grid-cols-1 lg:grid-cols-[1.1fr_0.9fr] gap-12 items-center">
           <div className="space-y-8">
@@ -789,6 +791,10 @@ const SovereignOSPage = () => {
                 VitalOS <span className="text-indigo-400">Core</span>
               </h1>
               <p className="text-slate-300 text-sm md:text-base leading-relaxed font-light max-w-3xl">
+              <h1 className="text-6xl md:text-8xl font-display font-black uppercase tracking-tighter leading-[0.82] text-white">
+                VitalOS <span className="text-indigo-400">Core</span>
+              </h1>
+              <p className="text-slate-300 text-lg md:text-xl leading-relaxed font-light max-w-3xl">
                 A mobile operating system concept for full-device sovereignty: kernel-level hardware access, per-sensor operational apps, encrypted owner-controlled telemetry, and a multi-agent no-code layer that builds personalized mini-apps from natural language.
               </p>
             </div>
@@ -854,6 +860,7 @@ const SovereignOSPage = () => {
 
       <section className="grid grid-cols-1 lg:grid-cols-[0.9fr_1.1fr] gap-8 items-stretch">
         <div className="vitalos-window p-5 md:p-7 space-y-5">
+        <div className="p-8 rounded-[36px] bg-slate-900/60 border border-white/10 space-y-6">
           <p className="text-[10px] text-indigo-400 font-black uppercase tracking-[0.5em]">No-Code Agent Pipeline</p>
           <h2 className="text-4xl font-display font-black uppercase tracking-tighter text-white">From voice prompt to installed app</h2>
           <div className="space-y-4">
@@ -886,11 +893,13 @@ const SovereignOSPage = () => {
       </section>
 
       <section className="grid grid-cols-1 lg:grid-cols-[1.1fr_0.9fr] gap-5" id="vitalos-settings">
+      <section className="grid grid-cols-1 lg:grid-cols-[1.1fr_0.9fr] gap-8" id="vitalos-settings">
         <div className="p-8 rounded-[36px] bg-slate-900/60 border border-white/10 space-y-6">
           <div className="flex items-center justify-between gap-4">
             <div>
               <p className="text-[10px] text-indigo-400 font-black uppercase tracking-[0.5em]">Multi-Agent Runtime</p>
               <h2 className="text-2xl md:text-3xl font-display font-black uppercase tracking-tighter text-white mt-2">Provider mesh ready for your APIs</h2>
+              <h2 className="text-4xl font-display font-black uppercase tracking-tighter text-white mt-3">Provider mesh ready for your APIs</h2>
             </div>
             <KeyRound className="w-8 h-8 text-indigo-300 shrink-0" strokeWidth={1.5} />
           </div>
@@ -918,6 +927,10 @@ const SovereignOSPage = () => {
           <div>
             <p className="text-[10px] text-indigo-400 font-black uppercase tracking-[0.5em]">Fullscreen Web OS</p>
             <h2 className="text-2xl md:text-3xl font-display font-black uppercase tracking-tighter text-white mt-2">Settings without leaving the app</h2>
+        <div className="p-8 rounded-[36px] bg-white/[0.02] border border-white/5 space-y-6">
+          <div>
+            <p className="text-[10px] text-indigo-400 font-black uppercase tracking-[0.5em]">Fullscreen Web OS</p>
+            <h2 className="text-4xl font-display font-black uppercase tracking-tighter text-white mt-3">Settings without leaving the app</h2>
           </div>
           <p className="text-sm text-slate-500 leading-relaxed">
             The current deliverable runs as a fullscreen-capable PWA-style web shell. Browser security still requires user permission for protected hardware, but the interface is structured as the OS settings console you requested.
