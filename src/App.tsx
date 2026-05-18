@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Heart, Brain, Zap, Droplets, Activity, Gauge, Flame, Wallet, Trophy, User, ArrowRight, X, Shield, Fingerprint, Calendar, Lock, LineChart, Cpu, Coins, Search, Hourglass, BarChart2, Globe, ExternalLink, Star, Phone, MessageSquare, Video, Music2, MessageCircle, Camera, Instagram, Facebook, Youtube, Play, Layout, ShoppingBag, Store, HardDrive, AppWindow, Radio, Settings, Terminal, ShieldCheck, Bluetooth, Wifi, Smartphone, Monitor, Database, Code, Brackets, Ghost, Radar, Dna, Moon, Layers, FlaskConical, Twitter, Share2, Binary, Puzzle, Key, RefreshCw, Layers3, Briefcase } from 'lucide-react';
+import { Heart, Brain, Zap, Droplets, Activity, Gauge, Flame, Wallet, Trophy, User, ArrowRight, X, Shield, Fingerprint, Calendar, Lock, LineChart, Cpu, Coins, Search, Hourglass, BarChart2, Globe, ExternalLink, Star, Phone, MessageSquare, Video, Music2, MessageCircle, Camera, Instagram, Facebook, Youtube, Play, Layout, ShoppingBag, Store, HardDrive, AppWindow, Radio, Settings, Terminal, ShieldCheck, Bluetooth, Wifi, Smartphone, Monitor, Database, Code, Brackets, Ghost, Radar, Dna, Moon, Layers, FlaskConical, Twitter, Share2, Binary, Puzzle, Key, RefreshCw, Layers3, Briefcase, BookOpen, Mail } from 'lucide-react';
 import { AreaChart, Area, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { useVitals } from './hooks/useVitals';
 import { cn, formatNumber } from './lib/utils';
@@ -32,27 +32,27 @@ const sleepData = [
 // --- Components ---
 
 const Navbar = ({ view, setView, balance, user, connectWallet }: { view: string, setView: (v: string) => void, balance: number, user: any, connectWallet: () => void }) => (
-  <nav className="max-w-7xl mx-auto flex justify-between items-center mb-6 bg-slate-900/50 border border-slate-800 rounded-2xl p-4 sticky top-6 z-50 backdrop-blur-xl">
+  <nav className="max-w-7xl mx-auto flex justify-between items-center mb-6 bg-toxic/5 border border-toxic/20 rounded-2xl p-4 sticky top-6 z-50 backdrop-blur-xl shadow-[0_20px_50px_rgba(0,255,65,0.05)]">
     <div className="flex items-center gap-6">
       <div 
         onClick={() => setView('landing')}
         className="flex items-center gap-3 cursor-pointer group"
       >
-        <div className="w-10 h-10 bg-indigo-600 rounded-lg flex items-center justify-center font-black text-xl shadow-lg shadow-indigo-500/20 group-hover:rotate-12 transition-transform text-white">V</div>
+        <div className="w-10 h-10 bg-toxic rounded-lg flex items-center justify-center font-black text-xl shadow-lg shadow-toxic/20 group-hover:rotate-12 transition-transform text-black">V</div>
         <div>
-          <h1 className="text-xl font-display font-black tracking-tight uppercase leading-none text-white">VITALS</h1>
+          <h1 className="text-xl font-display font-black tracking-tight uppercase leading-none text-white text-glow-toxic">VITALS</h1>
           <div className="flex items-center gap-2 mt-0.5">
-            <span className="text-[8px] text-slate-500 font-mono tracking-[0.2em] leading-none uppercase">Gen-0 Protocol</span>
-            <span className="text-[7px] bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 px-1 py-0.5 rounded font-black uppercase tracking-widest leading-none">Pre-sale Pending</span>
+            <span className="text-[8px] text-toxic/50 font-mono tracking-[0.2em] leading-none uppercase">Gen-0 Protocol</span>
+            <span className="text-[7px] bg-toxic/10 text-toxic border border-toxic/20 px-1 py-0.5 rounded font-black uppercase tracking-widest leading-none">Pre-sale Pending</span>
           </div>
         </div>
       </div>
       
       <div className="hidden lg:flex gap-6 text-[10px] uppercase font-bold tracking-widest text-slate-400">
-        <button onClick={() => setView('landing')} className={cn("hover:text-indigo-400 transition-colors uppercase", view === 'landing' && "text-indigo-400")}>Protocol</button>
-        <button onClick={() => setView('launchpad')} className={cn("hover:text-indigo-400 transition-colors uppercase", view === 'launchpad' && "text-indigo-400")}>Launchpad</button>
-        <button onClick={() => setView('mint')} className={cn("hover:text-indigo-400 transition-colors uppercase", view === 'mint' && "text-indigo-400")}>Minting</button>
-        <button onClick={() => setView('dashboard')} className={cn("hover:text-indigo-400 transition-colors uppercase", view === 'dashboard' && "text-indigo-400")}>VitalOS</button>
+        <button onClick={() => setView('landing')} className={cn("hover:text-toxic transition-colors uppercase", view === 'landing' && "text-toxic")}>Protocol</button>
+        <button onClick={() => setView('launchpad')} className={cn("hover:text-toxic transition-colors uppercase", view === 'launchpad' && "text-toxic")}>Launchpad</button>
+        <button onClick={() => setView('mint')} className={cn("hover:text-toxic transition-colors uppercase", view === 'mint' && "text-toxic")}>Minting</button>
+        <button onClick={() => setView('dashboard')} className={cn("hover:text-toxic transition-colors uppercase", view === 'dashboard' && "text-toxic")}>VitalOS</button>
         <button onClick={() => { setView('landing'); setTimeout(() => window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' }), 100); }} className="hover:text-rose-400 transition-colors uppercase border-l border-white/5 pl-6">Mission Registry</button>
       </div>
     </div>
@@ -611,11 +611,11 @@ const LandingPage = ({ onEnter, onOpenGuide, user }: { onEnter: (v: string) => v
             className="text-8xl md:text-[10rem] font-display italic text-white tracking-tighter leading-[0.8]"
           >
             Biological <br /> 
-            <span className="text-indigo-500 not-italic font-sans font-black tracking-[-0.05em] uppercase text-7xl md:text-9xl">Sovereignty</span>
+            <span className="text-toxic not-italic font-sans font-black tracking-[-0.05em] uppercase text-7xl md:text-9xl">Sovereignty</span>
           </motion.h1>
 
-          <p className="text-slate-400 max-w-2xl mx-auto text-xl md:text-2xl font-light tracking-wide leading-relaxed">
-            The world's first decentralized biological insurance & asset protocol. Tokenize your health via <span className="text-white font-bold italic tracking-tighter">VitalOS</span>, secure sovereign hardware, and earn $VITAL yield for biological excellence.
+          <p className="text-toxic/60 max-w-2xl mx-auto text-xl md:text-2xl font-light tracking-wide leading-relaxed">
+            The world's first decentralized biological OS. Secure your health via <span className="text-white font-bold italic tracking-tighter text-glow-toxic">VitalOS</span>, bridge your legacy email to Web3, and run high-bandwidth on-chain media.
           </p>
         </div>
 
@@ -627,9 +627,9 @@ const LandingPage = ({ onEnter, onOpenGuide, user }: { onEnter: (v: string) => v
         >
           <button 
             onClick={() => onEnter('mint')} 
-            className="group relative px-16 py-7 bg-white rounded-none overflow-hidden flex items-center gap-6 shadow-[0_30px_60px_-15px_rgba(255,255,255,0.2)] hover:scale-105 active:scale-95 transition-all"
+            className="group relative px-16 py-7 bg-toxic rounded-none overflow-hidden flex items-center gap-6 shadow-[0_30px_60px_-15px_rgba(0,255,65,0.3)] hover:scale-105 active:scale-95 transition-all"
           >
-            <span className="text-sm font-black uppercase tracking-[0.6em] text-slate-950">Secure Genesis</span>
+            <span className="text-sm font-black uppercase tracking-[0.6em] text-slate-950">Seize Access</span>
             <ArrowRight className="w-5 h-5 text-slate-900 group-hover:translate-x-2 transition-transform" />
           </button>
 
@@ -669,15 +669,15 @@ const LandingPage = ({ onEnter, onOpenGuide, user }: { onEnter: (v: string) => v
       </section>
 
       {/* Stats Section */}
-      <section className="py-32 grid grid-cols-2 md:grid-cols-4 gap-px bg-white/10 border border-white/10 rounded-[40px] overflow-hidden">
+      <section className="py-32 grid grid-cols-2 md:grid-cols-4 gap-px bg-toxic/10 border border-toxic/20 rounded-[40px] overflow-hidden">
          {[
            { label: "V-ID Minted Nodes", val: "882K", sub: "Global Identity Mesh" },
-           { label: "Average Latency", val: "1ms", sub: "Solana Supercluster" },
-           { label: "On-Chain Media", val: "12PB", sub: "V-Codec Compressed" },
-           { label: "Yield Velocity", val: "$4.2M", sub: "Daily $VITAL Rewards" }
+           { label: "Core Sync Speed", val: "1ms", sub: "Liquid Protocol" },
+           { label: "Bandwidth Offset", val: "99%", sub: "V-Codec Efficient" },
+           { label: "Trial Conversion", val: "15D", sub: "Trial to dNFT Loop" }
          ].map((stat, i) => (
-           <div key={i} className="bg-slate-950 p-12 text-center hover:bg-white/[0.02] transition-colors group">
-              <p className="text-4xl font-mono font-bold text-white mb-2 group-hover:text-indigo-400 transition-colors uppercase tracking-tighter">{stat.val}</p>
+           <div key={i} className="bg-obsidian p-12 text-center hover:bg-toxic/[0.03] transition-colors group">
+              <p className="text-4xl font-mono font-bold text-white mb-2 group-hover:text-toxic transition-colors uppercase tracking-tighter text-glow-toxic">{stat.val}</p>
               <p className="text-[10px] text-slate-500 font-black uppercase tracking-widest mb-1">{stat.label}</p>
               <p className="text-[8px] text-slate-700 font-mono tracking-widest uppercase">{stat.sub}</p>
            </div>
@@ -2197,101 +2197,146 @@ const VitalOS = ({ nft, user, sync, claim, evolve, activate, pairWearable, activ
   }, [isHardwareSynced]);
 
   const apps: any[] = [
-    { id: 'vpass', name: 'V-Pass', icon: Key, color: 'bg-indigo-600', content: (
-      <div className="flex flex-col h-full bg-[#030509]">
-        <div className="p-8 pb-4">
-           <h4 className="text-2xl font-display font-black text-white uppercase tracking-tighter">Identity Bridge</h4>
-           <p className="text-[10px] text-slate-500 font-black uppercase tracking-[0.2em] mt-1">Status: Web2.5 Sovereign Link Active</p>
+    { id: 'vpass', name: 'V-Pass', icon: Key, color: 'bg-toxic/20', content: (
+      <div className="flex flex-col h-full bg-obsidian">
+        <div className="p-8 pb-4 flex justify-between items-center">
+           <div>
+              <h4 className="text-2xl font-display font-black text-white uppercase tracking-tighter">Identity Core</h4>
+              <p className="text-[10px] text-toxic font-black uppercase tracking-[0.2em] mt-1 text-glow-toxic">Web2.5 Sovereign Link: ACTIVE</p>
+           </div>
+           <button className="px-3 py-1 bg-toxic/10 border border-toxic/30 rounded-full text-[8px] text-toxic font-black uppercase">ZK-Verified</button>
         </div>
         
         <div className="flex-1 overflow-y-auto px-6 pb-24 space-y-8 scrollbar-hide">
            {/* Email to Wallet Link */}
-           <div className="p-8 bg-indigo-500/5 border border-indigo-500/20 rounded-[40px] space-y-6">
+           <div className="p-8 liquid-metal rounded-[40px] space-y-6">
               <div className="flex justify-between items-start">
                  <div className="space-y-1">
-                    <p className="text-[10px] text-indigo-400 font-black uppercase tracking-widest">Master Identity</p>
-                    <p className="text-xl font-display font-black text-white uppercase">Sovereign Email</p>
+                    <p className="text-[10px] text-toxic font-black uppercase tracking-widest">Master Identity Bridge</p>
+                    <p className="text-xl font-display font-black text-white uppercase tracking-tighter">Email-to-Solana</p>
                  </div>
-                 <ShieldCheck className="w-6 h-6 text-indigo-500" />
+                 <RefreshCw className="w-6 h-6 text-toxic animate-spin-slow" />
               </div>
               
               <div className="space-y-4">
-                 <div className="p-4 bg-black/40 rounded-2xl border border-white/5 space-y-1">
-                    <p className="text-[8px] text-slate-500 font-black uppercase">Standard Email Address</p>
+                 <div className="p-4 bg-black/60 rounded-2xl border border-white/5 space-y-1 group hover:border-toxic/30 transition-all cursor-pointer">
+                    <p className="text-[8px] text-slate-500 font-black uppercase tracking-widest flex justify-between">
+                       Legacy Entry 
+                       <span className="text-emerald-500">BOUND</span>
+                    </p>
                     <p className="text-sm font-mono text-white">founder@vitalos.space</p>
                  </div>
-                 <div className="p-4 bg-indigo-500/10 rounded-2xl border border-indigo-500/20 space-y-1">
-                    <p className="text-[8px] text-indigo-400 font-black uppercase">Cryptographic Anchor</p>
-                    <p className="text-xs font-mono text-indigo-300">0xVital...8827</p>
+                 <div className="p-4 bg-toxic/5 rounded-2xl border border-toxic/20 space-y-1">
+                    <p className="text-[8px] text-toxic font-black uppercase tracking-widest">On-Chain Asset Hash</p>
+                    <p className="text-xs font-mono text-toxic/70">0xVital...8827</p>
                  </div>
               </div>
 
-              <p className="text-[10px] text-slate-500 font-light leading-relaxed">
-                 Your standard email is now a <span className="text-white font-bold">Web3 Auth Node</span>. Use your email/password to sign transactions or the biometric enclave.
-              </p>
+              <div className="p-4 bg-white/5 rounded-2xl border border-white/5 font-mono text-[9px] text-slate-400 space-y-2">
+                 <p className="text-white font-bold uppercase tracking-widest">Deployment Technicals:</p>
+                 <p>&gt; Access VitalOS via <span className="text-toxic">vitalos.space</span> or on-device email login.</p>
+                 <p>&gt; Sign-in creates a ZK-Handshake. Your private key (PK) is derived only in memory via <span className="text-toxic">WebAuthn/Passkeys</span>.</p>
+                 <p>&gt; No manual PK management. Your email is the cryptographic anchor.</p>
+              </div>
            </div>
 
-           {/* Security: Credentials */}
+           {/* Deployment Whitepaper Section */}
            <div className="space-y-4">
-              <h5 className="text-[10px] text-slate-500 font-black uppercase tracking-widest px-2">Recovery & Cold Access</h5>
-              <div className="p-6 bg-white/[0.03] border border-white/5 rounded-[32px] space-y-6">
-                 <div className="flex items-center gap-4">
-                    <div className="w-10 h-10 bg-white/5 rounded-full flex items-center justify-center">
-                       <Lock className="w-5 h-5 text-slate-400" />
-                    </div>
-                    <div>
-                       <p className="text-xs font-black text-white uppercase">Mnemonic Seed Cipher</p>
-                       <p className="text-[8px] text-slate-500 uppercase">24-Word Master Secret</p>
-                    </div>
-                 </div>
-                 
-                 <div className="bg-black p-4 rounded-xl border border-white/10 blur-sm hover:blur-none transition-all cursor-pointer">
-                    <p className="text-[8px] font-mono text-indigo-400 leading-relaxed text-center">
-                       ocean / bridge / satellite / crystal / quantum / stability / neural / beacon / fossil / gravity / solar / pulse...
-                    </p>
-                 </div>
-                 <p className="text-[8px] text-rose-500 text-center font-black uppercase tracking-widest italic">Never share this string with VitalOS staff</p>
-              </div>
-           </div>
-
-           {/* Unified Login Simulation */}
-           <div className="space-y-4 pb-4">
-              <h5 className="text-[10px] text-slate-500 font-black uppercase tracking-widest px-2">One-Touch Login Sync</h5>
-              <div className="grid grid-cols-2 gap-3">
+              <h5 className="text-[10px] text-bronze font-black uppercase tracking-widest px-2">Launch Protocol & Security</h5>
+              <div className="space-y-3">
                  {[
-                   { name: 'Facebook', icon: Facebook },
-                   { name: 'Instagram', icon: Instagram },
-                   { name: 'TikTok', icon: Music2 },
-                   { name: 'X / Twitter', icon: Twitter }
-                 ].map(social => (
-                   <button key={social.name} className="p-4 bg-white/[0.03] border border-white/5 rounded-2xl flex items-center gap-3 group hover:bg-white/10 transition-all">
-                      <social.icon className="w-4 h-4 text-slate-400 group-hover:text-white transition-colors" />
-                      <span className="text-[9px] font-black text-slate-500 group-hover:text-white uppercase tracking-widest">{social.name}</span>
-                   </button>
+                   { 
+                     title: "Isolated Enclave Protection", 
+                     desc: "If your Android/iOS is attacked, VitalOS stays locked. All OS data is encrypted via ZK-enclave, requiring a biometric signing event that bypasses the host kernel.",
+                     icon: ShieldCheck 
+                   },
+                   { 
+                     title: "dNFT Ownership Gating", 
+                     desc: "Full installation requires the V-OS dNFT. After a 15-day on-chain trial, users must stake $VITAL or mint the dNFT to maintain system persistence.",
+                     icon: Puzzle
+                   },
+                   { 
+                     title: "Zero-Knowledge Auth", 
+                     desc: "Sign transactions with standard biometric (FaceID/TouchID). Passkeys store your shard, ensuring no attacker can extract your PK from the browser cache.",
+                     icon: Smartphone
+                   }
+                 ].map((doc, i) => (
+                   <div key={i} className="p-5 bg-white/[0.03] border border-white/5 rounded-[28px] space-y-3 group hover:bg-white/[0.06] transition-all">
+                      <div className="flex items-center gap-3">
+                         <div className="w-8 h-8 rounded-xl bg-toxic/10 border border-toxic/20 flex items-center justify-center">
+                            <doc.icon className="w-4 h-4 text-toxic" />
+                         </div>
+                         <h6 className="text-[11px] font-black text-white uppercase tracking-tighter">{doc.title}</h6>
+                      </div>
+                      <p className="text-[9px] text-slate-500 font-light leading-relaxed">{doc.desc}</p>
+                   </div>
                  ))}
               </div>
            </div>
         </div>
       </div>
     )},
-    { id: 'cloud', name: 'V-Stream', icon: Video, color: 'bg-purple-600', content: (
+    { id: 'manifesto', name: 'Briefing', icon: BookOpen, color: 'bg-bronze/20', content: (
+      <div className="flex flex-col h-full bg-[#030509]">
+        <div className="p-8 pb-4">
+           <h4 className="text-2xl font-display font-black text-white uppercase tracking-tighter">System Manifesto</h4>
+           <p className="text-[10px] text-bronze font-black uppercase tracking-[0.2em] mt-1 text-glow-toxic">CONFIDENTIAL LAUNCH BRIEF</p>
+        </div>
+        <div className="flex-1 overflow-y-auto px-6 pb-24 space-y-8 scrollbar-hide text-[11px] leading-relaxed font-light text-slate-400">
+           <div className="p-8 liquid-metal rounded-[40px] space-y-6">
+              <h5 className="text-toxic font-black uppercase tracking-widest text-sm">Sale & Deployment Strategy</h5>
+              <p>To scale <span className="text-white font-bold">vitalos.space</span> without compromise, we utilize a <span className="text-white">Dual-Gating Mechanism</span>:</p>
+              <ul className="space-y-4">
+                 <li>
+                    <span className="text-white font-bold block mb-1">1. 15-Day On-Chain Trial:</span> 
+                    New users access the full OS via web-app. Their activity is logged as temporary ZK-proofs on the testnet.
+                 </li>
+                 <li>
+                    <span className="text-white font-bold block mb-1">2. dNFT / Token Gate:</span> 
+                    Post-trial, users must prove ownership of the <span className="text-toxic">VitalOS Genesis dNFT</span> or stake a set amount of $VITAL. This prevents botting and sybil attacks.
+                 </li>
+              </ul>
+           </div>
+
+           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="p-6 bg-white/5 border border-white/10 rounded-3xl space-y-3">
+                 <Lock className="w-5 h-5 text-rose-500" />
+                 <h6 className="text-white font-bold uppercase tracking-widest">Anti-Exploit Enclosure</h6>
+                 <p className="text-[10px]">Since VitalOS is a web-app, it operates in a separate browser context (Process Isolation). Even if the host Android device is rooted, the browser sandbox prevents memory scraping of the V-Pass Enclave.</p>
+              </div>
+              <div className="p-6 bg-white/5 border border-white/10 rounded-3xl space-y-3">
+                 <Mail className="w-5 h-5 text-toxic" />
+                 <h6 className="text-white font-bold uppercase tracking-widest">Email Sovereignty</h6>
+                 <p className="text-[10px]">The "Standard Email" link uses a custom <span className="text-toxic">OIDC to Web3 Bridge</span>. It generates a non-custodial address from the user's email entropy, ensuring only the email owner can recover the account.</p>
+              </div>
+           </div>
+
+           <div className="p-8 bg-bronze/10 border border-bronze/30 rounded-[40px] text-center space-y-4">
+              <h5 className="text-white font-black uppercase tracking-[0.2em]">Market Launch Notice</h5>
+              <p>We are selling biological excellence. Launch starts on X (Twitter) via Genesis Whitelisting. Each dNFT represents physical ownership of the OS kernel.</p>
+              <button className="px-8 py-3 bg-bronze text-black font-black uppercase tracking-widest rounded-xl text-[10px]">View Tokenomics</button>
+           </div>
+        </div>
+      </div>
+    )},
+    { id: 'cloud', name: 'V-Stream', icon: Video, color: 'bg-toxic/20', content: (
       <div className="flex flex-col h-full bg-[#030509]">
         <div className="p-8 pb-4 flex justify-between items-center">
            <div>
               <h4 className="text-2xl font-display font-black text-white uppercase tracking-tighter">Media Enclave</h4>
-              <p className="text-[10px] text-purple-400 font-black uppercase tracking-[0.5em] mt-1">Groundbreaking V-Codec v4.2</p>
+              <p className="text-[10px] text-toxic font-black uppercase tracking-[0.5em] mt-1 text-glow-toxic">Proprietary V-Codec v4.2</p>
            </div>
-           <div className="px-3 py-1 bg-purple-500/10 border border-purple-500/30 rounded-full text-[8px] text-purple-400 font-black animate-pulse">RECORDING LIVE</div>
+           <div className="px-3 py-1 bg-toxic/10 border border-toxic/30 rounded-full text-[8px] text-toxic font-black animate-pulse uppercase tracking-widest">Live: MINTING</div>
         </div>
         
         <div className="flex-1 overflow-y-auto px-6 pb-24 space-y-8 scrollbar-hide">
            {/* Visualizer / Preview */}
            <div className="relative aspect-video bg-black rounded-[40px] border border-white/10 overflow-hidden group">
-              <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&q=80&w=600')] bg-cover bg-center grayscale opacity-40" />
+              <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&q=80&w=600')] bg-cover bg-center grayscale opacity-40 group-hover:opacity-60 transition-opacity" />
               <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent" />
               
               <div className="absolute top-4 left-4 flex gap-2">
-                 <div className="px-2 py-1 bg-rose-500 text-white rounded text-[8px] font-black uppercase">Nano-Comp</div>
+                 <div className="px-2 py-1 bg-toxic text-black rounded text-[8px] font-black uppercase">Nano-Comp Lvl 4</div>
                  <div className="px-2 py-1 bg-black/60 backdrop-blur-md text-white rounded text-[8px] font-mono">0.024 MB/s</div>
               </div>
 
@@ -2303,7 +2348,7 @@ const VitalOS = ({ nft, user, sync, claim, evolve, activate, pairWearable, activ
                          key={i}
                          animate={{ height: [10, 40, 10], opacity: [0.3, 1, 0.3] }}
                          transition={{ duration: 1.5, repeat: Infinity, delay: i * 0.05 }}
-                         className="w-1 bg-purple-500 rounded-full"
+                         className="w-1 bg-toxic rounded-full"
                        />
                     ))}
                  </div>
@@ -2311,41 +2356,41 @@ const VitalOS = ({ nft, user, sync, claim, evolve, activate, pairWearable, activ
 
               <div className="absolute bottom-4 left-6 right-6 flex justify-between items-end">
                  <div className="space-y-1">
-                    <p className="text-[10px] font-black text-white uppercase">Direct On-Chain Link</p>
-                    <p className="text-[8px] text-slate-400 italic">Minter Hash: 0x8a7...f1e</p>
+                    <p className="text-[10px] font-black text-white uppercase">Sovereign Stream Hash</p>
+                    <p className="text-[8px] text-toxic/70 italic">0x8a7...f1e</p>
                  </div>
-                 <div className="w-10 h-10 bg-purple-600 rounded-full flex items-center justify-center shadow-lg shadow-purple-900/40">
-                    <Zap className="w-5 h-5 text-white" />
+                 <div className="w-10 h-10 bg-toxic rounded-full flex items-center justify-center shadow-lg shadow-toxic/40 group-hover:scale-110 transition-transform">
+                    <Zap className="w-5 h-5 text-black" />
                  </div>
               </div>
            </div>
 
            {/* Codec Advantage Stats */}
            <div className="grid grid-cols-2 gap-4">
-              <div className="p-6 bg-purple-500/5 border border-purple-500/10 rounded-[32px] space-y-2">
-                 <Binary className="w-5 h-5 text-purple-400" />
+              <div className="p-6 bg-toxic/5 border border-toxic/10 rounded-[32px] space-y-2">
+                 <Binary className="w-5 h-5 text-toxic" />
                  <div className="space-y-0.5">
-                    <p className="text-xl font-display font-black text-white leading-none">99.8%</p>
-                    <p className="text-[8px] text-slate-500 font-black uppercase tracking-widest">Compression Efficiency</p>
+                    <p className="text-xl font-display font-black text-white leading-none">99.9%</p>
+                    <p className="text-[8px] text-slate-500 font-black uppercase tracking-widest">Efficiency</p>
                  </div>
               </div>
               <div className="p-6 bg-emerald-500/5 border border-emerald-500/10 rounded-[32px] space-y-2">
                  <ShieldCheck className="w-5 h-5 text-emerald-400" />
                  <div className="space-y-0.5">
-                    <p className="text-xl font-display font-black text-white leading-none">MINTED</p>
-                    <p className="text-[8px] text-slate-500 font-black uppercase tracking-widest">On-Chain Encryption</p>
+                    <p className="text-xl font-display font-black text-white leading-none">ZK-Frame</p>
+                    <p className="text-[8px] text-slate-500 font-black uppercase tracking-widest">Integrity</p>
                  </div>
               </div>
            </div>
 
            {/* Corporate / Market Copy */}
-           <div className="p-8 bg-white/[0.03] border border-white/5 rounded-[40px] space-y-4">
-              <h5 className="text-[10px] text-indigo-400 font-black uppercase tracking-widest">Enterprise Ready</h5>
+           <div className="p-8 liquid-metal rounded-[40px] space-y-4">
+              <h5 className="text-[10px] text-toxic font-black uppercase tracking-widest">Enterprise Protocol</h5>
               <p className="text-xs text-slate-400 leading-relaxed font-light">
-                 VitalOS <span className="text-white font-bold">V-Codec</span> is the first media format optimized for blockchain bandwidth. Each frame is a cryptographically verified proof, making it the ultimate tool for filmmakers, journalists, and corporate legal archives.
+                 The <span className="text-white font-bold italic">V-Codec</span> is a uniquely developed, proprietary algorithm that renders traditional media standards obsolete. Film corporations and broadcasters can now stream 8K data with 99% bandwidth efficiency—fully <span className="text-toxic">minted as a smart contract</span> during transport.
               </p>
-              <button className="w-full py-4 bg-indigo-600 text-white rounded-2xl text-[10px] font-black uppercase tracking-[0.4em] hover:bg-indigo-500 transition-colors">
-                 License Engine
+              <button className="w-full py-4 bg-toxic text-black rounded-2xl text-[10px] font-black uppercase tracking-[0.4em] hover:bg-white transition-all">
+                 License Engine V2
               </button>
            </div>
         </div>
@@ -3251,40 +3296,40 @@ const VitalOS = ({ nft, user, sync, claim, evolve, activate, pairWearable, activ
                  onClick={() => setOpenApp('guardian')}
                  className="relative w-48 h-48 flex items-center justify-center group"
                >
-                  <div className="absolute inset-0 bg-white/[0.02] backdrop-blur-3xl rounded-full border border-white/10 shadow-[0_0_80px_rgba(79,70,229,0.1)] group-hover:border-white/20 transition-all duration-700" />
-                  <div className="absolute inset-10 bg-indigo-500/5 blur-3xl animate-core-pulse rounded-full" />
+                  <div className="absolute inset-0 bg-toxic/5 backdrop-blur-3xl rounded-full border border-toxic/20 shadow-[0_0_80px_rgba(0,255,65,0.2)] group-hover:border-toxic/40 transition-all duration-700" />
+                  <div className="absolute inset-10 bg-toxic/10 blur-3xl animate-core-pulse rounded-full" />
                   
                   <div className="relative flex flex-col items-center text-center space-y-2 pointer-events-none">
                      <div className="relative">
-                        <Activity className="w-12 h-12 text-white/40 mb-1 group-hover:text-indigo-400 transition-colors" />
+                        <Activity className="w-12 h-12 text-white/40 mb-1 group-hover:text-toxic transition-colors" />
                         <motion.div 
                           animate={{ opacity: [0, 1, 0] }}
                           transition={{ duration: 2, repeat: Infinity }}
-                          className="absolute -top-3 -right-3 text-[10px] text-emerald-500 font-mono font-black tracking-widest"
+                          className="absolute -top-3 -right-3 text-[10px] text-toxic font-mono font-black tracking-widest"
                         >
                           SYNC
                         </motion.div>
                      </div>
                      <div className="space-y-0.5">
-                        <h3 className="text-3xl font-display font-black text-white uppercase tracking-tighter leading-none">{nft.healthScore}%</h3>
-                        <p className="text-[8px] text-slate-500 font-black uppercase tracking-[0.3em]">Guardian State</p>
+                        <h3 className="text-3xl font-display font-black text-white uppercase tracking-tighter leading-none text-glow-toxic">{nft.healthScore}%</h3>
+                        <p className="text-[8px] text-toxic font-black uppercase tracking-[0.3em]">Guardian State</p>
                      </div>
                   </div>
                </motion.button>
 
                {/* Orbital Stats */}
-               <div className="absolute top-0 -left-32 -translate-y-full p-4 glass-card rounded-[40px] border-white/5 space-y-1 w-32 animate-float">
+               <div className="absolute top-0 -left-32 -translate-y-full p-4 liquid-metal rounded-[40px] border-toxic/20 space-y-1 w-32 animate-float">
                   <div className="flex justify-between items-center">
-                     <Heart className="w-3 h-3 text-rose-500" />
-                     <span className="text-[8px] text-rose-500 italic">BPM</span>
+                     <Heart className="w-3 h-3 text-toxic" />
+                     <span className="text-[8px] text-toxic italic uppercase font-black">BPM</span>
                   </div>
                   <p className="text-lg font-mono font-bold text-white leading-none">72</p>
                </div>
                
-               <div className="absolute bottom-0 -right-32 translate-y-full p-4 glass-card rounded-[40px] border-white/5 space-y-1 w-32 animate-float [animation-delay:2s]">
+               <div className="absolute bottom-0 -right-32 translate-y-full p-4 liquid-metal rounded-[40px] border-toxic/20 space-y-1 w-32 animate-float [animation-delay:2s]">
                   <div className="flex justify-between items-center">
-                     <Coins className="w-3 h-3 text-indigo-400" />
-                     <span className="text-[8px] text-indigo-400 italic">VTL</span>
+                     <Coins className="w-3 h-3 text-bronze" />
+                     <span className="text-[8px] text-bronze italic uppercase font-black">VTL</span>
                   </div>
                   <p className="text-lg font-mono font-bold text-white leading-none">+12.4</p>
                </div>
@@ -3373,9 +3418,10 @@ const VitalOS = ({ nft, user, sync, claim, evolve, activate, pairWearable, activ
                 {[
                    { id: 'phone', icon: Phone, color: 'text-emerald-400' },
                    { id: 'vitals', icon: Activity, color: 'text-rose-500' },
-                   { id: 'vpass', icon: Key, color: 'text-indigo-400' },
-                   { id: 'cloud', icon: Video, color: 'text-purple-500' },
-                   { id: 'settings', icon: Settings, color: 'text-slate-400' },
+                   { id: 'vpass', icon: Key, color: 'text-toxic' },
+                   { id: 'cloud', icon: Video, color: 'text-toxic' },
+                   { id: 'manifesto', icon: BookOpen, color: 'text-bronze' },
+                   { id: 'settings', icon: Settings, color: 'text-slate-500' },
                    { id: 'landing', icon: Globe, color: 'text-blue-400', view: true }
                 ].map((item, i) => (
                    <motion.button
