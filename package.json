@@ -1,38 +1,20 @@
 {
-  "name": "VitalOS",
-  "version": "1.0.0",
+  "name": "vitals---the-move-to-evolve-ecosystem",
+  "private": true,
+  "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "tsx server.ts",
-    "build": "vite build && esbuild server.ts --bundle --platform=node --format=cjs --packages=external --outfile=dist/server.cjs",
-    "start": "node dist/server.cjs",
-    "lint": "tsc --noEmit"
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
   },
   "dependencies": {
-    "@google/genai": "^1.31.0",
-    "@tailwindcss/vite": "^4.0.0",
-    "@vitejs/plugin-react": "^4.3.4",
-    "clsx": "^2.1.1",
-    "dotenv": "^16.4.7",
-    "express": "^4.21.2",
-    "lucide-react": "^0.475.0",
-    "motion": "^12.4.3",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
-    "recharts": "^2.15.1",
-    "tailwind-merge": "^3.0.1",
-    "thirdweb": "^5.93.0",
-    "tsx": "^4.19.2",
-    "vite": "^6.1.0"
+
   },
   "devDependencies": {
-    "@types/express": "^5.0.0",
-    "@types/node": "^22.13.1",
-    "@types/react": "^19.0.0",
-    "@types/react-dom": "^19.0.0",
-    "autoprefixer": "^10.4.20",
-    "esbuild": "^0.25.0",
-    "tailwindcss": "^4.0.0",
-    "typescript": "^5.7.3"
+    "@types/node": "^22.14.0",
+    
+    "typescript": "~5.8.2",
+    "vite": "^6.2.0"
   }
 }
