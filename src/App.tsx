@@ -2086,6 +2086,7 @@ const VitalOS = ({ nft, user, sync, claim, evolve, activate, pairWearable, activ
   const [battery, setBattery] = useState(88);
   const [hardwareBattery, setHardwareBattery] = useState(92);
   const [time, setTime] = useState(new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
+  const [date, setDate] = useState(new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' }));
   const [isBooting, setIsBooting] = useState(true);
   const [isLocked, setIsLocked] = useState(true);
   const [isHardwareSynced, setIsHardwareSynced] = useState(nft.isHardwareBound || false);
@@ -2182,7 +2183,9 @@ const VitalOS = ({ nft, user, sync, claim, evolve, activate, pairWearable, activ
     }
 
     const timer = setInterval(() => {
-      setTime(new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
+      const now = new Date();
+      setTime(now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
+      setDate(now.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' }));
       if (isHardwareSynced) {
         setHardwareBattery(prev => Math.max(1, prev - (Math.random() > 0.99 ? 1 : 0)));
       }
@@ -2617,96 +2620,191 @@ const VitalOS = ({ nft, user, sync, claim, evolve, activate, pairWearable, activ
          </div>
       </div>
     )},
-    { id: 'tiktok', name: 'TikTok', icon: Music2, color: 'bg-black', content: (
+    { id: 'vtok', name: 'V-Tok', icon: Music2, color: 'bg-black', content: (
       <div className="h-full bg-black relative flex flex-col pt-12 overflow-hidden">
          <div className="flex justify-center gap-6 text-white text-[10px] font-black uppercase tracking-widest relative z-20">
-            <span className="opacity-50">Following</span>
-            <span className="border-b-2 border-white pb-1">For You</span>
+            <span className="opacity-50">On-Chain Feed</span>
+            <span className="border-b-2 border-toxic text-toxic pb-1">Sovereign Stream</span>
          </div>
          <div className="absolute inset-0 flex items-center justify-center">
             <div className="w-full h-full bg-slate-900 group relative">
-               <img src="https://images.unsplash.com/photo-1558346490-a72e53ae2d4f?auto=format&fit=crop&q=80&w=800" className="w-full h-full object-cover opacity-60" alt="TikTok" referrerPolicy="no-referrer" />
-               <div className="absolute bottom-20 left-6 text-white space-y-2">
-                  <p className="font-bold">@vital_os_official</p>
-                  <p className="text-xs font-light">Biological operating system live demonstration #tech #vitals</p>
+               <img src="https://images.unsplash.com/photo-1558346490-a72e53ae2d4f?auto=format&fit=crop&q=80&w=800" className="w-full h-full object-cover opacity-40 group-hover:opacity-60 transition-opacity" alt="TikTok" referrerPolicy="no-referrer" />
+               <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-80" />
+               
+               <div className="absolute bottom-24 left-6 text-white space-y-3 max-w-[280px]">
                   <div className="flex items-center gap-2">
+                    <div className="w-8 h-8 rounded-full border border-toxic bg-black/40 flex items-center justify-center text-[10px] font-black">V</div>
+                    <p className="font-black text-sm uppercase tracking-tighter">@vital_enclave</p>
+                    <span className="text-[8px] bg-toxic/20 text-toxic border border-toxic/30 px-1 rounded">VERIFIED_HOST</span>
+                  </div>
+                  <p className="text-xs font-light leading-relaxed">Streaming biometric hash data directly to the Vital Grid. #Sovereignty #Web3 #BioHacking</p>
+                  <div className="flex items-center gap-2 text-toxic">
                      <Music2 className="w-3 h-3" />
-                     <span className="text-[10px] animate-pulse">Original Sound - Vital Grid</span>
+                     <span className="text-[10px] font-mono animate-pulse">0x8842_Sync_Pulse.mp3</span>
                   </div>
                </div>
-               <div className="absolute right-4 bottom-32 flex flex-col items-center gap-6">
-                  <div className="w-12 h-12 bg-white/10 rounded-full border border-white/20 flex items-center justify-center"><Heart className="w-6 h-6 text-rose-500 fill-rose-500" /></div>
-                  <div className="w-12 h-12 bg-white/10 rounded-full border border-white/20 flex items-center justify-center"><MessageCircle className="w-6 h-6 text-white" /></div>
-                  <div className="w-12 h-12 bg-white/10 rounded-full border border-white/20 flex items-center justify-center"><Zap className="w-6 h-6 text-amber-500" /></div>
+               
+               <div className="absolute right-4 bottom-32 flex flex-col items-center gap-8">
+                  <div className="flex flex-col items-center gap-1">
+                    <div className="w-12 h-12 bg-white/5 backdrop-blur-xl rounded-full border border-white/20 flex items-center justify-center hover:bg-toxic/20 transition-all cursor-pointer group"><Heart className="w-6 h-6 text-white group-hover:text-rose-500 group-hover:fill-rose-500" /></div>
+                    <span className="text-[8px] font-black">1.2M</span>
+                  </div>
+                  <div className="flex flex-col items-center gap-1">
+                    <div className="w-12 h-12 bg-white/5 backdrop-blur-xl rounded-full border border-white/20 flex items-center justify-center hover:bg-toxic/20 transition-all cursor-pointer group"><MessageCircle className="w-6 h-6 text-white" /></div>
+                    <span className="text-[8px] font-black">44K</span>
+                  </div>
+                  <div className="flex flex-col items-center gap-1">
+                    <div className="w-12 h-12 bg-white/5 backdrop-blur-xl rounded-full border border-toxic/40 flex items-center justify-center hover:bg-toxic/20 transition-all cursor-pointer group"><Zap className="w-6 h-6 text-toxic animate-pulse" /></div>
+                    <span className="text-[8px] font-black text-toxic">MINT</span>
+                  </div>
+                  <div className="w-10 h-10 rounded-full border-2 border-white/20 overflow-hidden animate-spin-slow">
+                    <img src="https://images.unsplash.com/photo-1614728263952-84ea256f9679?auto=format&fit=crop&q=80&w=100" alt="Disc" />
+                  </div>
                </div>
             </div>
          </div>
       </div>
     )},
-    { id: 'instagram', name: 'Instagram', icon: Camera, color: 'bg-gradient-to-tr from-amber-500 via-rose-500 to-purple-600', content: (
-      <div className="flex flex-col h-full bg-black text-white">
-         <div className="p-6 pt-12 border-b border-white/5 flex justify-between items-center">
-            <h4 className="font-serif italic text-2xl tracking-tighter">VitalGram</h4>
+    { id: 'vgram', name: 'V-Gram', icon: Camera, color: 'bg-gradient-to-tr from-amber-500 via-rose-500 to-purple-600', content: (
+      <div className="flex flex-col h-full bg-[#030509] text-white">
+         <div className="p-6 pt-12 border-b border-white/5 flex justify-between items-center bg-black/40 backdrop-blur-xl sticky top-0 z-20">
+            <h4 className="font-display font-black text-2xl tracking-tighter uppercase text-toxic">V-Gram</h4>
             <div className="flex gap-6">
-               <Heart className="w-6 h-6" />
+               <div className="relative">
+                  <Heart className="w-6 h-6" />
+                  <div className="absolute -top-1 -right-1 w-2 h-2 bg-toxic rounded-full" />
+               </div>
                <MessageCircle className="w-6 h-6" />
             </div>
          </div>
-         <div className="flex-1 overflow-y-auto space-y-8 pb-12">
+         <div className="flex-1 overflow-y-auto space-y-12 pb-24 scrollbar-hide">
+            {/* Decentralized Stories */}
+            <div className="px-4 py-6 flex gap-4 overflow-x-auto scrollbar-hide border-b border-white/5">
+              {[...Array(6)].map((_, i) => (
+                <div key={i} className="flex flex-col items-center gap-2 flex-shrink-0">
+                  <div className="w-16 h-16 rounded-full bg-gradient-to-tr from-toxic to-indigo-500 p-0.5 shadow-lg shadow-toxic/10">
+                    <div className="w-full h-full bg-black rounded-full border-2 border-black flex items-center justify-center overflow-hidden">
+                       <img src={`https://i.pravatar.cc/150?u=${i}`} alt="User" />
+                    </div>
+                  </div>
+                  <span className="text-[8px] font-black uppercase tracking-widest text-slate-400">Node_{i}</span>
+                </div>
+              ))}
+            </div>
+
             {[1, 2, 3].map(i => (
               <div key={i} className="space-y-4">
-                 <div className="px-4 flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-amber-400 to-rose-500 p-0.5"><div className="w-full h-full bg-black rounded-full" /></div>
-                    <span className="text-xs font-bold uppercase tracking-widest text-slate-200">grid_pioneer_{i}</span>
-                 </div>
-                 <div className="aspect-square bg-white/5 border-y border-white/5 flex items-center justify-center overflow-hidden">
-                    <img src={`https://images.unsplash.com/photo-${1550000000000 + i}?auto=format&fit=crop&q=80&w=800`} className="w-full h-full object-cover" alt="Post" referrerPolicy="no-referrer" />
-                 </div>
-                 <div className="px-6 space-y-1">
-                    <div className="flex gap-4">
-                       <Heart className="w-5 h-5 text-rose-500 fill-rose-500" />
-                       <MessageCircle className="w-5 h-5" />
-                       <Search className="w-5 h-5" />
+                 <div className="px-6 flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                       <div className="w-10 h-10 rounded-full border border-toxic/30 p-0.5 overflow-hidden"><img src={`https://i.pravatar.cc/150?u=post${i}`} alt="Avatar" /></div>
+                       <div className="text-left">
+                          <p className="text-[10px] font-black text-white uppercase tracking-tighter">Pioneer_Node_{i}</p>
+                          <p className="text-[8px] text-toxic/70 font-mono">0xV...{i}4A2</p>
+                       </div>
                     </div>
-                    <p className="text-xs font-bold leading-tight">88,402 likes</p>
-                    <p className="text-xs line-clamp-2"><span className="font-bold">grid_pioneer_{i}</span> Reached 98% synchronicity with the biological core today! #sovereign #AI</p>
+                    <button onClick={() => addNotification('IPFS link copied', 'success')}><RefreshCw className="w-4 h-4 text-slate-600" /></button>
+                 </div>
+                 <div className="aspect-square bg-slate-900 border-y border-white/5 overflow-hidden relative group">
+                    <img src={`https://images.unsplash.com/photo-${1550745165 + i * 100}?auto=format&fit=crop&q=80&w=800`} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000" alt="Post" referrerPolicy="no-referrer" />
+                    <div className="absolute top-4 right-4 px-2 py-1 bg-black/60 backdrop-blur-md rounded border border-white/20 text-[8px] font-black uppercase tracking-widest">NFT Certified</div>
+                 </div>
+                 <div className="px-8 space-y-3">
+                    <div className="flex justify-between items-center">
+                      <div className="flex gap-6">
+                         <Heart className="w-6 h-6 text-toxic fill-toxic/10 group-hover:fill-toxic transition-all" />
+                         <MessageCircle className="w-6 h-6" />
+                         <Share2 className="w-6 h-6" />
+                      </div>
+                      <Puzzle className="w-6 h-6 text-indigo-400" />
+                    </div>
+                    <div>
+                      <p className="text-xs font-black leading-tight">MINTED BY 142 NODES</p>
+                      <p className="text-xs font-light mt-1"><span className="font-black text-toxic uppercase">Pioneer_Node_{i}</span> Syncing my biological frequencies with the mainnet core has never felt more sovereign. #VitalOS #Web3</p>
+                    </div>
+                    <p className="text-[8px] text-slate-500 font-black uppercase tracking-widest">View On-Chain Conversation (12 comments)</p>
                  </div>
               </div>
             ))}
          </div>
       </div>
     )},
-    { id: 'facebook', name: 'Facebook', icon: Facebook, color: 'bg-blue-600', content: (
-      <div className="flex flex-col h-full bg-[#18191a] text-[#e4e6eb]">
-         <div className="p-6 pt-12 bg-[#242526] border-b border-white/5 flex justify-between items-center">
-            <h4 className="text-2xl font-black italic tracking-tighter text-blue-500">vbook</h4>
+    { id: 'vconnect', name: 'V-Connect', icon: Facebook, color: 'bg-blue-600', content: (
+      <div className="flex flex-col h-full bg-[#030509] text-[#e4e6eb]">
+         <div className="p-6 pt-12 bg-black/40 border-b border-white/5 flex justify-between items-center sticky top-0 z-20 backdrop-blur-xl">
+            <h4 className="text-2xl font-black italic tracking-tighter text-indigo-500">V-Connect</h4>
             <div className="flex gap-3">
-               <div className="w-10 h-10 bg-[#3a3b3c] rounded-full flex items-center justify-center"><Search className="w-5 h-5" /></div>
-               <div className="w-10 h-10 bg-[#3a3b3c] rounded-full flex items-center justify-center"><BarChart2 className="w-5 h-5" /></div>
+               <div className="w-10 h-10 bg-white/5 rounded-full flex items-center justify-center hover:bg-white/10 transition-all"><Search className="w-5 h-5" /></div>
+               <div className="w-10 h-10 bg-white/5 rounded-full flex items-center justify-center hover:bg-white/10 transition-all"><BarChart2 className="w-5 h-5" /></div>
             </div>
          </div>
-         <div className="flex-1 overflow-y-auto p-4 space-y-4">
-            <div className="bg-[#242526] p-4 rounded-xl border border-white/5 space-y-4">
-               <div className="flex gap-3">
-                  <div className="w-10 h-10 bg-[#3a3b3c] rounded-full" />
-                  <div className="flex-1 h-10 bg-[#3a3b3c] rounded-full px-4 flex items-center text-slate-400 text-xs">What's on your grid?</div>
+         <div className="flex-1 overflow-y-auto p-4 space-y-4 scrollbar-hide pb-24">
+            <div className="bg-white/5 p-6 rounded-[32px] border border-white/10 space-y-4 shadow-xl">
+               <div className="flex gap-4">
+                  <div className="w-12 h-12 bg-indigo-500/10 rounded-2xl flex items-center justify-center border border-indigo-500/20 text-indigo-400 font-black">V</div>
+                  <div className="flex-1 h-12 bg-black/40 rounded-2xl px-6 flex items-center text-slate-400 text-xs font-light">Broadcast to the social graph...</div>
                </div>
-               <div className="flex border-t border-white/5 pt-3">
-                  {['Live', 'Photo', 'Bio'].map(a => <button key={a} className="flex-1 text-[10px] font-bold uppercase tracking-widest text-[#b0b3b8]">{a}</button>)}
+               <div className="flex border-t border-white/5 pt-4 gap-2">
+                  {['Live Stream', 'Bio-Vault', 'Handshake'].map(a => (
+                    <button key={a} onClick={() => addNotification(`${a} active`, 'info')} className="flex-1 py-2 bg-white/5 rounded-xl text-[8px] font-black uppercase tracking-widest text-slate-300 hover:bg-indigo-500 hover:text-white transition-all">{a}</button>
+                  ))}
                </div>
             </div>
+
             {[1, 2].map(i => (
-              <div key={i} className="bg-[#242526] p-6 rounded-2xl border border-white/5 space-y-4">
-                 <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 bg-blue-500/10 rounded-full flex items-center justify-center border border-blue-500/20 text-blue-500 font-bold uppercase">{i}</div>
-                    <div>
-                       <p className="text-xs font-bold">Vital Council</p>
-                       <p className="text-[10px] text-slate-500 font-bold uppercase">Sponsored • 2h ago</p>
+              <div key={i} className="bg-white/[0.03] p-8 rounded-[40px] border border-white/5 space-y-6">
+                 <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-4">
+                       <div className="w-12 h-12 bg-toxic/10 rounded-full flex items-center justify-center border border-toxic/20 text-toxic font-black uppercase tracking-tighter">GC</div>
+                       <div>
+                          <p className="text-sm font-black text-white uppercase tracking-widest">Vital Grid Council</p>
+                          <p className="text-[9px] text-slate-500 font-black uppercase">Decentralized Governance • 4h ago</p>
+                       </div>
+                    </div>
+                    <button className="px-3 py-1 bg-toxic/10 text-toxic text-[8px] font-black uppercase rounded-full border border-toxic/20">Follow Node</button>
+                 </div>
+                 <p className="text-xs text-slate-300 font-light leading-relaxed">The epoch 8842 voting cycle is now open. All dNFT holders are invited to signal their preference for the next kernel distribution parameters.</p>
+                 <div className="aspect-video bg-black/40 rounded-3xl border border-white/5 overflow-hidden group relative">
+                    <img src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80&w=800" className="w-full h-full object-cover grayscale brightness-75 group-hover:scale-105 transition-transform duration-1000" alt="Governance" />
+                    <div className="absolute inset-0 bg-indigo-500/20 mix-blend-overlay" />
+                    <div className="absolute inset-0 flex items-center justify-center">
+                       <div className="w-16 h-16 bg-white/10 backdrop-blur-xl rounded-full border border-white/20 flex items-center justify-center"><Zap className="w-8 h-8 text-white fill-white" /></div>
                     </div>
                  </div>
-                 <p className="text-xs">Join the 0-Day biological grid. Reserve your hardware batch today.</p>
-                 <div className="aspect-video bg-white/5 rounded-xl flex items-center justify-center overflow-hidden">
-                    <img src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80&w=800" className="w-full h-full object-cover" alt="Ad" referrerPolicy="no-referrer" />
+                 <div className="flex gap-8 pt-2">
+                    <button className="flex items-center gap-2 text-[10px] font-black text-indigo-400 uppercase tracking-widest"><Heart className="w-4 h-4 fill-indigo-400" /> 1.2K Votes</button>
+                    <button className="flex items-center gap-2 text-[10px] font-black text-slate-500 uppercase tracking-widest"><MessageCircle className="w-4 h-4" /> Delegate Access</button>
+                 </div>
+              </div>
+            ))}
+         </div>
+      </div>
+    )},
+    { id: 'vnode', name: 'V-Node', icon: Twitter, color: 'bg-black', content: (
+      <div className="flex flex-col h-full bg-black text-white">
+         <div className="p-6 pt-12 border-b border-white/5 flex items-center justify-between bg-black/80 backdrop-blur-xl sticky top-0 z-20">
+            <div className="w-8 h-8 bg-white rounded-lg flex items-center justify-center text-black font-black text-xl">X</div>
+            <div className="flex gap-6"><Settings className="w-5 h-5 text-slate-500" /></div>
+         </div>
+         <div className="flex-1 overflow-y-auto px-4 divide-y divide-white/5 scrollbar-hide pb-24">
+            {[
+              { author: "SovereignNode", handle: "0x8842...4411", msg: "Censorship-resistant microblogging is not just a feature, it's a biological right. #VitalOS #FreeSpeech", time: "2m", likes: "14K" },
+              { author: "GridWatcher", handle: "grid_intel", msg: "Unusual activity detected in the entropy pool. Handshake protocols intensifying. Stay alert pioneers.", time: "15m", likes: "822" },
+              { author: "Founder88", handle: "genesis_auth", msg: "Batch 01 hardware has arrived. The bridge is complete.", time: "1h", likes: "4.4K" }
+            ].map((tweet, i) => (
+              <div key={i} className="py-6 flex gap-4 hover:bg-white/[0.02] transition-all cursor-pointer px-2">
+                 <div className="w-12 h-12 rounded-full bg-white/5 border border-white/10 flex-shrink-0 flex items-center justify-center font-black text-xs text-slate-600">{tweet.author[0]}</div>
+                 <div className="flex-1 space-y-2">
+                    <div className="flex items-center gap-2">
+                       <span className="text-[11px] font-black uppercase tracking-tighter">{tweet.author}</span>
+                       <span className="text-[9px] text-slate-500 font-mono">@{tweet.handle} • {tweet.time}</span>
+                    </div>
+                    <p className="text-xs text-slate-200 font-light leading-relaxed">{tweet.msg}</p>
+                    <div className="flex justify-between items-center pt-2 max-w-[240px]">
+                       <button className="flex items-center gap-1.5 text-[9px] text-slate-500 group"><MessageCircle className="w-3.5 h-3.5 group-hover:text-blue-400" /> 24</button>
+                       <button className="flex items-center gap-1.5 text-[9px] text-slate-500 group"><RefreshCw className="w-3.5 h-3.5 group-hover:text-toxic" /> 142</button>
+                       <button className="flex items-center gap-1.5 text-[9px] text-slate-500 group"><Heart className="w-3.5 h-3.5 group-hover:text-rose-500" /> {tweet.likes}</button>
+                       <button className="flex items-center gap-1.5 text-[9px] text-slate-500 group"><BarChart2 className="w-3.5 h-3.5 group-hover:text-blue-400" /></button>
+                    </div>
                  </div>
               </div>
             ))}
@@ -2990,18 +3088,47 @@ const VitalOS = ({ nft, user, sync, claim, evolve, activate, pairWearable, activ
     )},
     { id: 'settings', name: 'Settings', icon: Settings, color: 'bg-slate-700', content: (
       <div className="flex flex-col h-full bg-[#030509]">
-        <div className="p-8 pb-4">
-           <h4 className="text-2xl font-display font-black text-white uppercase tracking-tighter">System Configuration</h4>
-           <div className="flex items-center gap-2 mt-1">
-              <span className="text-[8px] bg-indigo-500/10 text-indigo-400 px-2 py-0.5 rounded border border-indigo-500/20 font-black uppercase">Kernel v2.5.1 Stable</span>
-              <span className="text-[8px] bg-emerald-500/10 text-emerald-400 px-2 py-0.5 rounded border border-emerald-500/20 font-black uppercase">Android-Bridge Active</span>
+        <div className="p-8 pb-4 flex justify-between items-center">
+           <div>
+              <h4 className="text-2xl font-display font-black text-white uppercase tracking-tighter">System Configuration</h4>
+              <div className="flex items-center gap-2 mt-1">
+                 <span className="text-[8px] bg-indigo-500/10 text-indigo-400 px-2 py-0.5 rounded border border-indigo-500/20 font-black uppercase">Kernel v2.5.1 Stable</span>
+                 <span className="text-[8px] bg-emerald-500/10 text-emerald-400 px-2 py-0.5 rounded border border-emerald-500/20 font-black uppercase">Android-Bridge Active</span>
+              </div>
            </div>
+           <button onClick={() => addNotification('System up to date', 'success')} className="p-2 bg-white/5 rounded-xl border border-white/10 text-white hover:bg-white/10 transition-all">
+              <RefreshCw className="w-4 h-4" />
+           </button>
         </div>
         
         <div className="flex-1 overflow-y-auto px-6 pb-24 space-y-8 scrollbar-hide">
+           {/* Section: Time & Region */}
+           <div className="space-y-4">
+              <h5 className="text-[10px] text-toxic font-black uppercase tracking-widest px-2">Time & Synchronization</h5>
+              <div className="p-6 bg-white/[0.03] border border-white/5 rounded-[32px] space-y-4">
+                 <div className="flex justify-between items-center">
+                    <div>
+                        <p className="text-[10px] text-white font-black uppercase">System Time</p>
+                        <p className="text-xl font-mono text-toxic">{time}</p>
+                    </div>
+                    <div className="text-right">
+                        <p className="text-[10px] text-white font-black uppercase">Date</p>
+                        <p className="text-[10px] text-slate-400 font-bold">{date}</p>
+                    </div>
+                 </div>
+                 <div className="pt-4 border-t border-white/5 flex gap-2">
+                    <button onClick={() => addNotification('NTP Sync Initiated', 'info')} className="flex-1 py-2 bg-toxic/10 border border-toxic/20 rounded-lg text-[8px] text-toxic font-black uppercase tracking-widest hover:bg-toxic/20 transition-all">Sync with Atomic Clock</button>
+                    <button onClick={() => addNotification('Timezone locked to Grid', 'warn')} className="flex-1 py-2 bg-white/5 border border-white/10 rounded-lg text-[8px] text-white font-black uppercase tracking-widest hover:bg-white/10 transition-all">Set Region</button>
+                 </div>
+              </div>
+           </div>
+
            {/* Section: Unified Account Identity */}
            <div className="space-y-4">
-              <h5 className="text-[10px] text-indigo-400 font-black uppercase tracking-widest px-2">Sovereign Social Grid</h5>
+              <div className="flex justify-between items-center px-2">
+                 <h5 className="text-[10px] text-indigo-400 font-black uppercase tracking-widest">Sovereign Social Grid</h5>
+                 <button onClick={() => addNotification('Account discovery active', 'info')} className="text-[8px] text-indigo-400 font-black uppercase tracking-widest hover:underline">+ Add Account</button>
+              </div>
               <div className="space-y-2">
                  {[
                    { name: 'X / Twitter', val: '@VitalOS_Live', icon: Twitter, active: true },
@@ -3010,7 +3137,7 @@ const VitalOS = ({ nft, user, sync, claim, evolve, activate, pairWearable, activ
                    { name: 'Instagram', val: 'Meta-Auth Linked', icon: Instagram, active: true },
                    { name: 'Facebook', val: 'Secure Proxy Active', icon: Facebook, active: true }
                  ].map((social, i) => (
-                   <button key={i} className="w-full p-4 bg-white/[0.03] border border-white/5 rounded-2xl flex justify-between items-center group hover:bg-white/5 transition-all">
+                   <button key={i} onClick={() => addNotification(`${social.name} configuration opened`, 'info')} className="w-full p-4 bg-white/[0.03] border border-white/5 rounded-2xl flex justify-between items-center group hover:bg-white/5 transition-all">
                       <div className="flex items-center gap-3">
                          <social.icon className={cn("w-4 h-4", social.active ? "text-white" : "text-slate-600")} />
                          <div className="text-left">
@@ -3018,7 +3145,10 @@ const VitalOS = ({ nft, user, sync, claim, evolve, activate, pairWearable, activ
                             <p className="text-[8px] text-slate-500 font-bold">{social.val}</p>
                          </div>
                       </div>
-                      <ShieldCheck className={cn("w-3.5 h-3.5", social.active ? "text-emerald-500" : "text-slate-800")} />
+                      <div className="flex items-center gap-2">
+                        <ShieldCheck className={cn("w-3.5 h-3.5", social.active ? "text-emerald-500" : "text-slate-800")} />
+                        <ArrowRight className="w-3 h-3 text-white/0 group-hover:text-white/30 transition-all" />
+                      </div>
                    </button>
                  ))}
               </div>
@@ -3029,13 +3159,16 @@ const VitalOS = ({ nft, user, sync, claim, evolve, activate, pairWearable, activ
               <h5 className="text-[10px] text-rose-400 font-black uppercase tracking-widest px-2">Hardware Root Access</h5>
               <div className="grid grid-cols-2 gap-3">
                  {[
-                   { label: 'CPU Cluster', val: 'HYPER-SYNC', icon: Cpu },
-                   { label: 'Secure Element', val: 'UNLOCKED', icon: Key },
-                   { label: 'Neural Bus', val: 'OVERCLOCKED', icon: Zap },
-                   { label: 'Entropy Pool', val: 'RAW-FEED', icon: RefreshCw }
+                   { label: 'CPU Cluster', val: 'HYPER-SYNC', icon: Cpu, action: 'Re-calibrate' },
+                   { label: 'Secure Element', val: 'UNLOCKED', icon: Key, action: 'Rekey' },
+                   { label: 'Neural Bus', val: 'OVERCLOCKED', icon: Zap, action: 'Tune' },
+                   { label: 'Entropy Pool', val: 'RAW-FEED', icon: RefreshCw, action: 'Reset' }
                  ].map((hw, i) => (
-                   <div key={i} className="p-4 bg-white/[0.03] border border-white/5 rounded-2xl space-y-2">
-                      <hw.icon className="w-3 h-3 text-slate-400" />
+                   <div key={i} className="p-4 bg-white/[0.03] border border-white/5 rounded-2xl space-y-2 group cursor-pointer hover:bg-white/5 transition-all" onClick={() => addNotification(`${hw.label} ${hw.action} initiated`, 'warn')}>
+                      <div className="flex justify-between items-center">
+                        <hw.icon className="w-3 h-3 text-slate-400" />
+                        <ArrowRight className="w-2 h-2 text-white/0 group-hover:text-white/30 transition-all" />
+                      </div>
                       <div className="space-y-0.5">
                          <p className="text-[10px] font-black text-white">{hw.val}</p>
                          <p className="text-[7px] text-slate-500 font-black uppercase">{hw.label}</p>
@@ -3055,13 +3188,13 @@ const VitalOS = ({ nft, user, sync, claim, evolve, activate, pairWearable, activ
                  </div>
               </div>
               <div className="space-y-2">
-                 <div className="flex justify-between items-center p-3 bg-black/40 rounded-xl border border-white/5">
+                 <div className="flex justify-between items-center p-3 bg-black/40 rounded-xl border border-white/5 cursor-pointer hover:bg-black/60 transition-all" onClick={() => addNotification('Notification sync toggled', 'info')}>
                     <span className="text-[8px] text-slate-400 font-bold uppercase">Sync Notifications</span>
-                    <div className="w-8 h-4 bg-amber-500 rounded-full p-1"><div className="w-2 h-2 bg-white rounded-full ml-auto" /></div>
+                    <div className="w-8 h-4 bg-amber-500 rounded-full p-1 transition-all"><div className="w-2 h-2 bg-white rounded-full ml-auto" /></div>
                  </div>
-                 <div className="flex justify-between items-center p-3 bg-black/40 rounded-xl border border-white/5">
+                 <div className="flex justify-between items-center p-3 bg-black/40 rounded-xl border border-white/5 cursor-pointer hover:bg-black/60 transition-all" onClick={() => addNotification('Kernel overlap requested', 'warn')}>
                     <span className="text-[8px] text-slate-400 font-bold uppercase">Kernel Overlap</span>
-                    <div className="w-8 h-4 bg-white/10 rounded-full p-1"><div className="w-2 h-2 bg-white/20 rounded-full" /></div>
+                    <div className="w-8 h-4 bg-white/10 rounded-full p-1 transition-all"><div className="w-2 h-2 bg-white/20 rounded-full" /></div>
                  </div>
               </div>
            </div>
@@ -3180,7 +3313,7 @@ const VitalOS = ({ nft, user, sync, claim, evolve, activate, pairWearable, activ
             
             <div className="text-center space-y-2 relative z-10">
                <h1 className="text-7xl font-display font-black text-white tracking-tighter">{time}</h1>
-               <p className="text-[10px] text-slate-400 font-black uppercase tracking-[0.4em]">Tuesday, May 27</p>
+               <p className="text-[10px] text-toxic font-black uppercase tracking-[0.4em]">{date}</p>
             </div>
 
             <motion.button 
@@ -3335,26 +3468,28 @@ const VitalOS = ({ nft, user, sync, claim, evolve, activate, pairWearable, activ
                </div>
             </div>
 
-            {/* Application Nodes - Floating */}
-            <div className="absolute bottom-32 left-0 right-0 px-6 flex justify-center gap-4 z-30">
-               {apps.slice(0, 5).map((app, i) => (
-                 <motion.button
-                   key={app.id}
-                   whileHover={{ y: -8, scale: 1.1 }}
-                   whileTap={{ scale: 0.9 }}
-                   initial={{ opacity: 0, y: 40 }}
-                   animate={{ opacity: 1, y: 0 }}
-                   transition={{ delay: i * 0.1, duration: 0.5, type: "spring" }}
-                   onClick={() => setOpenApp(app.id)}
-                   className="group relative flex flex-col items-center gap-3"
-                 >
-                    <div className="relative w-16 h-16 rounded-[28px] glass-card flex items-center justify-center group-hover:bg-white/10 transition-all border-white/10 group-hover:border-white/20">
-                       <div className={cn("absolute inset-2 blur-xl opacity-0 group-hover:opacity-40 transition-opacity rounded-full", app.color)} />
-                       <app.icon className="w-6 h-6 text-white/50 group-hover:text-white transition-all transform group-hover:scale-110" strokeWidth={1} />
-                    </div>
-                    <span className="text-[7px] text-slate-500 font-black uppercase tracking-[0.2em] group-hover:text-white transition-colors">{app.name}</span>
-                 </motion.button>
-               ))}
+            {/* Application Nodes - Grid */}
+            <div className="absolute top-1/2 left-0 right-0 -translate-y-1/2 px-12 z-30">
+               <div className="grid grid-cols-4 gap-y-12">
+                 {apps.filter(app => !['builder', 'landing'].includes(app.id)).map((app, i) => (
+                   <motion.button
+                     key={app.id}
+                     whileHover={{ y: -8, scale: 1.1 }}
+                     whileTap={{ scale: 0.9 }}
+                     initial={{ opacity: 0, scale: 0.8 }}
+                     animate={{ opacity: 1, scale: 1 }}
+                     transition={{ delay: i * 0.05, duration: 0.4 }}
+                     onClick={() => setOpenApp(app.id)}
+                     className="group relative flex flex-col items-center gap-3"
+                   >
+                      <div className="relative w-16 h-16 rounded-[28px] glass-card flex items-center justify-center group-hover:bg-white/10 transition-all border-white/10 group-hover:border-white/20">
+                         <div className={cn("absolute inset-2 blur-xl opacity-0 group-hover:opacity-40 transition-opacity rounded-full", app.color)} />
+                         <app.icon className="w-6 h-6 text-white/50 group-hover:text-white transition-all transform group-hover:scale-110" strokeWidth={1} />
+                      </div>
+                      <span className="text-[7px] text-slate-500 font-black uppercase tracking-[0.2em] group-hover:text-white transition-colors">{app.name}</span>
+                   </motion.button>
+                 ))}
+               </div>
             </div>
 
             <div className="absolute bottom-12 left-0 right-0 px-12 z-30">
