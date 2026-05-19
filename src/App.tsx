@@ -590,15 +590,15 @@ const LandingPage = ({ onEnter, onOpenGuide, user }: { onEnter: (v: string) => v
           transition={{ duration: 1.5 }}
           className="relative z-10 mb-12"
         >
-          <div className="absolute inset-0 bg-indigo-500/20 blur-[150px] rounded-full -z-10" />
-          <PhotorealisticRing tier={CertificateTier.Sovereign} size={420} className="drop-shadow-[0_0_100px_rgba(99,102,241,0.2)] hover:scale-110 transition-transform duration-1000" />
+          <div className="absolute inset-0 bg-toxic/20 blur-[150px] rounded-full -z-10" />
+          <PhotorealisticRing tier={CertificateTier.Sovereign} size={420} className="drop-shadow-[0_0_100px_rgba(0,255,65,0.2)] hover:scale-110 transition-transform duration-1000" />
         </motion.div>
 
         <div className="space-y-8 relative z-10 max-w-4xl">
           <motion.div 
              initial={{ opacity: 0, y: 10 }}
              animate={{ opacity: 1, y: 0 }}
-             className="inline-flex items-center gap-4 px-6 py-2.5 rounded-full bg-white/5 border border-indigo-500/30 backdrop-blur-2xl"
+             className="inline-flex items-center gap-4 px-6 py-2.5 rounded-full bg-white/5 border border-toxic/30 backdrop-blur-2xl"
           >
              <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
              <span className="text-[10px] font-black uppercase tracking-[0.5em] text-white">VITALOS.SPACE IS LIVE • GEN-0 SEEDING</span>
@@ -635,9 +635,9 @@ const LandingPage = ({ onEnter, onOpenGuide, user }: { onEnter: (v: string) => v
 
           <button 
             onClick={() => onEnter('dashboard')} 
-            className="group relative px-16 py-7 border border-white/10 rounded-none overflow-hidden bg-white/5 hover:bg-white/10 transition-all hover:scale-105 active:scale-95"
+            className="group relative px-16 py-7 border border-toxic/10 rounded-none overflow-hidden bg-white/5 hover:bg-white/10 transition-all hover:scale-105 active:scale-95 shadow-[0_30px_60px_-15px_rgba(0,0,0,0.5)]"
           >
-            <span className="text-sm font-black uppercase tracking-[0.6em] text-slate-300 italic">Access VitalOS</span>
+            <span className="text-sm font-black uppercase tracking-[0.6em] text-white italic">Access VitalOS</span>
           </button>
         </motion.div>
 
@@ -1812,14 +1812,14 @@ const Dashboard = ({ nft, user, sync, claim, evolve, activate, pairWearable, act
               <AreaChart data={sleepData}>
                 <defs>
                   <linearGradient id="colorSleep" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#818cf8" stopOpacity={0.4}/>
-                    <stop offset="95%" stopColor="#818cf8" stopOpacity={0}/>
+                    <stop offset="5%" stopColor="#00FF41" stopOpacity={0.4}/>
+                    <stop offset="95%" stopColor="#00FF41" stopOpacity={0}/>
                   </linearGradient>
                 </defs>
                 <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" vertical={false} />
                 <XAxis dataKey="day" axisLine={false} tickLine={false} tick={{ fill: '#475569', fontSize: 10, fontWeight: 900 }} dy={10} />
                 <Tooltip contentStyle={{ backgroundColor: '#020408', border: '1px solid #1e293b', borderRadius: '4px', fontSize: '10px' }} />
-                <Area type="monotone" dataKey="hours" stroke="#818cf8" strokeWidth={3} fillOpacity={1} fill="url(#colorSleep)" />
+                <Area type="monotone" dataKey="hours" stroke="#00FF41" strokeWidth={3} fillOpacity={1} fill="url(#colorSleep)" />
               </AreaChart>
             </ResponsiveContainer>
           </div>
@@ -2009,7 +2009,7 @@ const Dashboard = ({ nft, user, sync, claim, evolve, activate, pairWearable, act
 const getTierColor = (tier: string) => {
   switch (tier) {
     case 'Sovereign': return 'text-amber-400 border-amber-500/30 bg-amber-500/10 shadow-amber-500/5';
-    case 'Nexus': return 'text-indigo-400 border-indigo-500/30 bg-indigo-500/10 shadow-indigo-500/5';
+    case 'Nexus': return 'text-toxic border-toxic/30 bg-toxic/10 shadow-toxic/5';
     case 'Pulse': return 'text-rose-400 border-red-500/30 bg-red-500/10 shadow-red-500/5';
     default: return 'text-slate-400 border-slate-700 bg-slate-800/10';
   }
@@ -2046,7 +2046,7 @@ const BioGraph = () => {
         <motion.path
           d="M 0 32 Q 50 10 100 32 T 200 32 T 300 32 T 400 32"
           fill="none"
-          stroke="rgba(99, 102, 241, 0.5)"
+          stroke="rgba(0, 255, 65, 0.5)"
           strokeWidth="2"
           initial={{ pathLength: 0 }}
           animate={{ 
@@ -3119,10 +3119,10 @@ const VitalOS = ({ nft, user, sync, claim, evolve, activate, pairWearable, activ
 
   return (
     <div className="fixed inset-0 z-[1000] bg-slate-950 flex items-center justify-center p-0 md:p-6 overflow-hidden">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,_rgba(120,119,198,0.15),_rgba(255,255,255,0))] pointer-events-none" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,_rgba(0,255,65,0.08),_rgba(255,255,255,0))] pointer-events-none" />
       
-      <div className="w-full h-full max-w-md md:h-[880px] bg-[#020408]/90 backdrop-blur-2xl rounded-none md:rounded-[48px] border-0 md:border border-white/10 shadow-[0_40px_100px_rgba(0,0,0,0.8)] relative overflow-hidden flex flex-col font-sans transition-all">
-      <div className="absolute inset-0 bg-gradient-to-b from-indigo-500/[0.02] to-transparent pointer-events-none" />
+      <div className="w-full h-full max-w-md md:h-[880px] bg-obsidian/90 backdrop-blur-2xl rounded-none md:rounded-[48px] border-0 md:border border-white/10 shadow-[0_40px_100px_rgba(0,0,0,0.8)] relative overflow-hidden flex flex-col font-sans transition-all">
+      <div className="absolute inset-0 bg-gradient-to-b from-toxic/[0.02] to-transparent pointer-events-none" />
       
       {/* Notifications Overlay */}
       <div className="absolute top-12 left-0 right-0 z-[200] px-6 space-y-2 pointer-events-none">
@@ -3194,12 +3194,12 @@ const VitalOS = ({ nft, user, sync, claim, evolve, activate, pairWearable, activ
               }}
               className="w-24 h-24 bg-white/5 border border-white/20 rounded-full flex items-center justify-center relative z-10 group"
             >
-               <div className="absolute inset-0 bg-indigo-500/20 blur-2xl group-hover:bg-indigo-500/40 transition-colors rounded-full" />
+               <div className="absolute inset-0 bg-toxic/10 blur-2xl group-hover:bg-toxic/30 transition-colors rounded-full" />
                <Fingerprint className="w-10 h-10 text-white relative" strokeWidth={1} />
             </motion.button>
 
             <div className="text-center relative z-10 space-y-4">
-               <p className="text-[8px] text-indigo-400 font-black uppercase tracking-widest animate-pulse">Touch to Authorize Biometric Key</p>
+               <p className="text-[8px] text-toxic font-black uppercase tracking-widest animate-pulse">Touch to Authorize Biometric Key</p>
                {!isHardwareSynced && (
                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/30">
                     <Zap className="w-2 h-2 text-amber-500" />
@@ -3384,22 +3384,9 @@ const VitalOS = ({ nft, user, sync, claim, evolve, activate, pairWearable, activ
             
             <div className="flex-1 overflow-y-auto overflow-x-hidden">
                {currentApp?.content ? currentApp.content : (
-                 <Dashboard 
-                   activeTabOverride={currentApp?.component || 'overview'}
-                   nft={nft} 
-                   user={user} 
-                   sync={sync} 
-                   claim={claim} 
-                   evolve={evolve} 
-                   activate={activate}
-                   pairWearable={pairWearable}
-                   activateHardware={activateHardware}
-                   setTarget={setTarget}
-                   swapVitals={swapVitals}
-                   stakeVitals={stakeVitals}
-                   unstakeVitals={unstakeVitals}
-                   logProgress={logProgress}
-                 />
+                 <div className="flex items-center justify-center h-full text-slate-600 text-[10px] font-black uppercase tracking-[0.4em]">
+                    App Context Error: Missing Enclave Reference
+                 </div>
                )}
             </div>
           </motion.div>
