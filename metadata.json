@@ -1,0 +1,12 @@
+{
+  "name": "VitalOS - Sovereign Biological Operating System",
+  "description": "The world's first decentralized biological operating system. Sync your health, earn $VITAL, and manage your sovereign identity on-chain.",
+  "requestFramePermissions": [
+    "geolocation",
+    "camera",
+    "microphone"
+  ],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
