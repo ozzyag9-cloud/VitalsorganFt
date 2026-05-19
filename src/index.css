@@ -1,0 +1,45 @@
+@import "tailwindcss";
+
+:root {
+  --obsidian: #030509;
+  --toxic: #00FF41;
+}
+
+body {
+  background-color: var(--obsidian);
+  color: white;
+  margin: 0;
+  overflow: hidden;
+}
+
+@layer components {
+  .glass-card {
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+  }
+}
+
+.text-glow-toxic {
+  text-shadow: 0 0 10px rgba(0, 255, 65, 0.5);
+}
+
+.bg-toxic {
+  background-color: var(--toxic);
+}
+
+.text-toxic {
+  color: var(--toxic);
+}
+
+.border-toxic {
+  border-color: var(--toxic);
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
