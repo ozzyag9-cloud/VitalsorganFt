@@ -1003,9 +1003,9 @@ const MintingPage = ({ user, buy, connectWallet }: { user: any, buy: (id: string
     <div className="max-w-7xl mx-auto py-24 px-6 min-h-screen">
       <div className="flex flex-col lg:flex-row justify-between items-end mb-24 gap-12">
         <div className="space-y-6">
-          <div className="inline-flex items-center gap-4 px-4 py-1.5 bg-indigo-500/10 border border-indigo-500/20 rounded-full">
-             <div className="w-1.5 h-1.5 rounded-full bg-indigo-500 animate-pulse" />
-             <span className="text-[10px] font-black uppercase tracking-widest text-indigo-400">Genesis Founder Mint Live</span>
+          <div className="inline-flex items-center gap-4 px-4 py-1.5 bg-toxic/10 border border-toxic/20 rounded-full">
+             <div className="w-1.5 h-1.5 rounded-full bg-toxic animate-pulse" />
+             <span className="text-[10px] font-black uppercase tracking-widest text-toxic/80">Genesis Founder Mint Live</span>
           </div>
           <h1 className="text-7xl font-display font-black uppercase tracking-tighter leading-none text-white">Secure <br/> Your Link</h1>
           <p className="text-slate-500 text-lg max-w-xl font-light leading-relaxed">
@@ -1537,10 +1537,10 @@ const Dashboard = ({ nft, user, sync, claim, evolve, activate, pairWearable, act
           {!nft.isActivated && (
             <div className="absolute inset-0 z-30 flex items-center justify-center bg-slate-950/90 backdrop-blur-xl">
               <div className="text-center p-12 max-w-lg">
-                <div className="w-24 h-24 bg-indigo-500/10 rounded-full flex items-center justify-center mx-auto mb-8 border border-indigo-500/30 relative">
-                  <div className="absolute inset-0 bg-indigo-500/20 blur-xl animate-pulse rounded-full" />
-                  <Fingerprint className="w-10 h-10 text-indigo-500 relative" strokeWidth={1} />
-                </div>
+              <div className="w-24 h-24 bg-toxic/10 rounded-full flex items-center justify-center mx-auto mb-8 border border-toxic/30 relative">
+                  <div className="absolute inset-0 bg-toxic/20 blur-xl animate-pulse rounded-full" />
+                  <Fingerprint className="w-10 h-10 text-toxic relative" strokeWidth={1} />
+              </div>
                 <h3 className="text-3xl font-black text-white uppercase tracking-tighter mb-4">Authorize Biometric Stream</h3>
                 <p className="text-slate-500 text-sm mb-10 leading-relaxed italic uppercase tracking-tight">
                   Your encrypted {nft.certificateTier} hardware link is dormant. authorize software emulation to begin biological synchronization protocols.
@@ -1868,7 +1868,7 @@ const Dashboard = ({ nft, user, sync, claim, evolve, activate, pairWearable, act
                        {isGeneratingManifest ? 'Indexing Bio-Hash...' : 'Generate New IPFS CID'}
                     </button>
 
-                    <div className="bg-indigo-500/10 border border-indigo-500/20 p-8 rounded-3xl space-y-4">
+                <div className="bg-toxic/10 border border-toxic/20 p-8 rounded-3xl space-y-4">
                        <h4 className="text-xs font-black uppercase tracking-widest text-white">Handshake Instructions</h4>
                        <ol className="text-[11px] text-slate-400 space-y-3 list-decimal ml-4 font-light">
                           <li>Click the <span className="text-white font-bold">Settings (Gear) icon</span> in the top-right corner of the AI Studio interface.</li>
@@ -1924,7 +1924,7 @@ const Dashboard = ({ nft, user, sync, claim, evolve, activate, pairWearable, act
                  <div className="bg-black/50 p-8 rounded-2xl border border-white/5 font-mono text-[10px] text-slate-400 space-y-4 min-h-[300px]">
                     <div className="flex gap-4">
                        <span className="text-slate-700">14:02:11</span>
-                       <span className="text-indigo-400">&gt;&gt; RUNNING_VITALS_BUILD_6.4.2</span>
+                       <span className="text-toxic/80">&gt;&gt; RUNNING_VITALS_BUILD_6.4.2</span>
                     </div>
                     <div className="flex gap-4">
                        <span className="text-slate-700">14:02:15</span>
@@ -3137,7 +3137,7 @@ const VitalOS = ({ nft, user, sync, claim, evolve, activate, pairWearable, activ
                 "p-4 rounded-2xl border backdrop-blur-xl shadow-2xl flex items-center gap-3",
                 n.type === 'success' ? "bg-emerald-500/10 border-emerald-500/30 text-emerald-400" :
                 n.type === 'warn' ? "bg-rose-500/10 border-rose-500/30 text-rose-400" :
-                "bg-indigo-500/10 border-indigo-500/30 text-indigo-400"
+                "bg-toxic/10 border-toxic/30 text-toxic"
               )}
             >
               <Zap className="w-4 h-4 shrink-0" />
@@ -3160,11 +3160,11 @@ const VitalOS = ({ nft, user, sync, claim, evolve, activate, pairWearable, activ
                 rotate: [0, 90, 180, 270, 360]
               }}
               transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
-              className="w-16 h-16 border-t-2 border-indigo-500 rounded-full"
+              className="w-16 h-16 border-t-2 border-toxic rounded-full"
             />
             <div className="text-center space-y-2">
                <h2 className="text-xl font-display font-black text-white tracking-[0.4em] uppercase">VitalOS</h2>
-               <p className="text-[8px] text-indigo-500 font-mono tracking-widest animate-pulse">KERNEL_1.0.4_INITIALIZING...</p>
+               <p className="text-[8px] text-toxic font-mono tracking-widest animate-pulse">KERNEL_1.0.4_INITIALIZING...</p>
             </div>
           </motion.div>
         )}
@@ -3222,7 +3222,7 @@ const VitalOS = ({ nft, user, sync, claim, evolve, activate, pairWearable, activ
               onClick={() => setView('landing')}
               className="p-1 hover:bg-white/10 rounded-full transition-colors group"
            >
-              <Zap className="w-3 h-3 text-indigo-500 group-hover:animate-pulse" />
+              <Zap className="w-3 h-3 text-toxic group-hover:animate-pulse" />
            </button>
            <span>{time}</span>
            {isHardwareSynced && (
@@ -3262,7 +3262,7 @@ const VitalOS = ({ nft, user, sync, claim, evolve, activate, pairWearable, activ
                     opacity: [0.1, 0.2, 0.1],
                  }}
                  transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
-                 className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-indigo-500/20 blur-[120px] pointer-events-none"
+                 className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-toxic/20 blur-[120px] pointer-events-none"
                />
                <motion.div 
                  animate={{ 
@@ -3360,7 +3360,7 @@ const VitalOS = ({ nft, user, sync, claim, evolve, activate, pairWearable, activ
             <div className="absolute bottom-12 left-0 right-0 px-12 z-30">
                <button 
                  onClick={() => setOpenApp('builder')}
-                 className="w-full py-4 glass-card rounded-[40px] border-indigo-500/20 text-indigo-400 text-[10px] font-black uppercase tracking-[0.5em] hover:bg-indigo-500/10 transition-all group"
+                 className="w-full py-4 glass-card rounded-[40px] border-toxic/20 text-toxic text-[10px] font-black uppercase tracking-[0.5em] hover:bg-toxic/10 transition-all group"
                >
                   <span className="group-hover:tracking-[0.8em] transition-all duration-700">Open OS Environment</span>
                </button>
@@ -3503,24 +3503,66 @@ export default function App() {
           transition={{ duration: 0.3 }}
         >
           {view === 'landing' && <LandingPage onEnter={setView} onOpenGuide={() => setIsGuideOpen(true)} user={user} />}
-          {view === 'launchpad' && user && <MintingPage user={user} buy={buy} connectWallet={() => setIsIdentityModalOpen(true)} />}
-          {view === 'mint' && user && <MintingPage user={user} buy={buy} connectWallet={() => setIsIdentityModalOpen(true)} />}
-          {view === 'dashboard' && user && (
+          {view === 'launchpad' && (
+            <MintingPage 
+              user={user || { 
+                walletConnected: false, 
+                vitalsTBalance: 0, 
+                vitalsTStaked: 0, 
+                availableCertificates: [
+                  { id: "CERT-P1", tier: CertificateTier.Pulse, organ: OrganType.Lungs, priceUsdt: 50, priceEth: 0.02, priceSol: 0.45, isOwned: false, multiplier: 1.0, traits: ["Bio-Link Initialized"] },
+                  { id: "CERT-N2", tier: CertificateTier.Nexus, organ: OrganType.Brain, priceUsdt: 150, priceEth: 0.06, priceSol: 1.35, isOwned: false, multiplier: 2.2, traits: ["Neural Peak"] },
+                  { id: "CERT-S3", tier: CertificateTier.Sovereign, organ: OrganType.Skin, priceUsdt: 450, priceEth: 0.18, priceSol: 4.05, isOwned: false, multiplier: 5.0, traits: ["Vital Mark"] }
+                ] 
+              }} 
+              buy={buy} 
+              connectWallet={() => setIsIdentityModalOpen(true)} 
+            />
+          )}
+          {view === 'mint' && (
+            <MintingPage 
+              user={user || { 
+                walletConnected: false, 
+                vitalsTBalance: 0, 
+                vitalsTStaked: 0, 
+                availableCertificates: [
+                  { id: "CERT-P1", tier: CertificateTier.Pulse, organ: OrganType.Lungs, priceUsdt: 50, priceEth: 0.02, priceSol: 0.45, isOwned: false, multiplier: 1.0, traits: ["Bio-Link Initialized"] },
+                  { id: "CERT-N2", tier: CertificateTier.Nexus, organ: OrganType.Brain, priceUsdt: 150, priceEth: 0.06, priceSol: 1.35, isOwned: false, multiplier: 2.2, traits: ["Neural Peak"] },
+                  { id: "CERT-S3", tier: CertificateTier.Sovereign, organ: OrganType.Skin, priceUsdt: 450, priceEth: 0.18, priceSol: 4.05, isOwned: false, multiplier: 5.0, traits: ["Vital Mark"] }
+                ] 
+              }} 
+              buy={buy} 
+              connectWallet={() => setIsIdentityModalOpen(true)} 
+            />
+          )}
+          {view === 'dashboard' && (
             <VitalOS 
               nft={nft || {
-                certificateTier: 'PREVIEW_MODE',
+                certificateId: 'V-ID-PREVIEW',
+                certificateTier: CertificateTier.Sovereign,
                 unclaimedVital: 1250,
                 earnedTraits: ['Sovereign_Preview'],
                 organType: 'Heart',
-                healthScore: 72
+                healthScore: 72,
+                isActivated: true,
+                isHardwareBound: false
               }} 
-              user={user} 
+              user={user || { 
+                walletConnected: false, 
+                walletAddress: null, 
+                vitalsBalance: 0,
+                vitalsTBalance: 0,
+                vitalsTStaked: 0,
+                isWearablePaired: false,
+                availableCertificates: []
+              }} 
               sync={sync} 
               claim={claim} 
               evolve={evolve} 
               activate={activate}
               pairWearable={pairWearable}
               activateHardware={activateHardware}
+              buy={buy}
               setTarget={setTarget}
               swapVitals={swapVitals}
               stakeVitals={stakeVitals}
