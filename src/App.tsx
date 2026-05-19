@@ -1,5 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
+import { 
+  createThirdwebClient, 
+  getContract,
+  defineChain
+} from "thirdweb";
+import { 
+  ConnectButton, 
+  ThirdwebProvider,
+  useActiveAccount,
+  useActiveWallet
+} from "thirdweb/react";
 import { Heart, Brain, Zap, Droplets, Activity, Gauge, Flame, Wallet, Trophy, User, ArrowRight, X, Shield, Fingerprint, Calendar, Lock, LineChart, Cpu, Coins, Search, Hourglass, BarChart2, Globe, ExternalLink, Star, Phone, MessageSquare, Video, Music2, MessageCircle, Camera, Instagram, Facebook, Youtube, Play, Layout, ShoppingBag, Store, HardDrive, AppWindow, Radio, Settings, Terminal, ShieldCheck, Bluetooth, Wifi, Smartphone, Monitor, Database, Code, Brackets, Ghost, Radar, Dna, Moon, Layers, FlaskConical, Twitter, Share2, Binary, Puzzle, Key, RefreshCw, Layers3, Briefcase, BookOpen, Mail } from 'lucide-react';
 import { AreaChart, Area, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { useVitals } from './hooks/useVitals';
@@ -7,6 +18,11 @@ import { cn, formatNumber } from './lib/utils';
 import { BiometricCertificate } from './components/BiometricCertificate';
 import { HealthState, CertificateTier, OrganType } from './types';
 import { PhotorealisticRing } from './components/PhotorealisticRing';
+
+// Thirdweb Client initialization
+const client = createThirdwebClient({
+  clientId: "8383cd0939b07911befda59db81bed5a"
+});
 
 // --- Data ---
 const stepsData = [
@@ -58,29 +74,14 @@ const Navbar = ({ view, setView, balance, user, connectWallet }: { view: string,
     </div>
 
     <div className="flex gap-4">
-      {user?.walletConnected ? (
-        <div className="flex items-center gap-4">
-           <div className="hidden md:flex bg-slate-950 px-4 py-1.5 rounded-xl border border-white/5 flex-col justify-center">
-             <span className="text-[8px] text-slate-500 uppercase font-black leading-none mb-0.5 tracking-tighter">$VITAL Balance</span>
-             <span className="text-xs font-mono font-bold text-white leading-none">{formatNumber(balance)}</span>
-           </div>
-           <div className="bg-toxic/5 px-4 py-2 rounded-xl border border-toxic/20 flex items-center gap-3 shadow-[0_0_20px_rgba(0,255,65,0.05)]">
-              <div className="w-2 h-2 rounded-full bg-toxic shadow-[0_0_8px_rgba(0,255,65,1)]" />
-              <div className="flex flex-col items-end">
-                <span className="text-[10px] font-black text-white uppercase tracking-widest leading-tight">Identity Node</span>
-                <span className="text-[8px] font-mono text-toxic font-bold uppercase opacity-60">0x8a7...f1e</span>
-              </div>
-           </div>
-        </div>
-      ) : (
-        <button 
-          onClick={connectWallet}
-          className="bg-toxic hover:bg-white text-black px-6 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest shadow-xl shadow-toxic/20 transition-all active:scale-95 flex items-center gap-2"
-        >
-          <Wallet className="w-3.5 h-3.5" />
-          Seize Identity
-        </button>
-      )}
+      <ConnectButton
+        client={client}
+        theme={"dark"}
+        connectButton={{
+          label: "Seize Identity",
+          className: "bg-toxic hover:bg-white text-black px-6 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest shadow-xl shadow-toxic/20 transition-all active:scale-95 flex items-center gap-2"
+        }}
+      />
     </div>
   </nav>
 );
@@ -2081,7 +2082,7 @@ const BioGraph = () => {
   );
 };
 
-const VitalOS = ({ nft, user, sync, claim, evolve, activate, pairWearable, activateHardware, buy, setTarget, swapVitals, stakeVitals, unstakeVitals, logProgress, setView }: any) => {
+const VitalOS = ({ nft, user, socialFeed, sync, claim, evolve, activate, pairWearable, activateHardware, buy, setTarget, swapVitals, stakeVitals, unstakeVitals, logProgress, setView }: any) => {
   const [openApp, setOpenApp] = useState<string | null>(null);
   const [battery, setBattery] = useState(88);
   const [hardwareBattery, setHardwareBattery] = useState(92);
@@ -2094,6 +2095,12 @@ const VitalOS = ({ nft, user, sync, claim, evolve, activate, pairWearable, activ
   const [dialedNumber, setDialedNumber] = useState('');
   const [isScanningGuardian, setIsScanningGuardian] = useState(false);
   const [scanProgress, setScanProgress] = useState(0);
+  const [likes, setLikes] = useState<Record<string, boolean>>({});
+  
+  const toggleLike = (postId: string) => {
+    setLikes(prev => ({ ...prev, [postId]: !prev[postId] }));
+    addNotification(likes[postId] ? 'Interaction Revoked' : 'Interaction Signed on Grid', likes[postId] ? 'warn' : 'success');
+  };
 
   useEffect(() => {
     if (isScanningGuardian) {
@@ -2159,6 +2166,9 @@ const VitalOS = ({ nft, user, sync, claim, evolve, activate, pairWearable, activ
     }, 100);
   };
 
+  const [timeOffset, setTimeOffset] = useState(0); // in milliseconds
+  const [customDate, setCustomDate] = useState<string | null>(null);
+
   useEffect(() => {
     // Battery API
     if ('getBattery' in navigator) {
@@ -2183,9 +2193,9 @@ const VitalOS = ({ nft, user, sync, claim, evolve, activate, pairWearable, activ
     }
 
     const timer = setInterval(() => {
-      const now = new Date();
-      setTime(now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
-      setDate(now.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' }));
+      const now = new Date(Date.now() + timeOffset);
+      setTime(now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }));
+      setDate(now.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' }));
       if (isHardwareSynced) {
         setHardwareBattery(prev => Math.max(1, prev - (Math.random() > 0.99 ? 1 : 0)));
       }
@@ -2197,7 +2207,12 @@ const VitalOS = ({ nft, user, sync, claim, evolve, activate, pairWearable, activ
       clearInterval(timer);
       clearTimeout(bootTimer);
     };
-  }, [isHardwareSynced]);
+  }, [isHardwareSynced, timeOffset]);
+
+  const handleAdjustTime = (hours: number) => {
+    setTimeOffset(prev => prev + hours * 3600000);
+    addNotification(`Time adjusted by ${hours} hours`, 'success');
+  };
 
   const apps: any[] = [
     { id: 'vpass', name: 'V-Pass', icon: Key, color: 'bg-toxic/20', content: (
@@ -2626,42 +2641,56 @@ const VitalOS = ({ nft, user, sync, claim, evolve, activate, pairWearable, activ
             <span className="opacity-50">On-Chain Feed</span>
             <span className="border-b-2 border-toxic text-toxic pb-1">Sovereign Stream</span>
          </div>
-         <div className="absolute inset-0 flex items-center justify-center">
-            <div className="w-full h-full bg-slate-900 group relative">
-               <img src="https://images.unsplash.com/photo-1558346490-a72e53ae2d4f?auto=format&fit=crop&q=80&w=800" className="w-full h-full object-cover opacity-40 group-hover:opacity-60 transition-opacity" alt="TikTok" referrerPolicy="no-referrer" />
-               <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-80" />
-               
-               <div className="absolute bottom-24 left-6 text-white space-y-3 max-w-[280px]">
-                  <div className="flex items-center gap-2">
-                    <div className="w-8 h-8 rounded-full border border-toxic bg-black/40 flex items-center justify-center text-[10px] font-black">V</div>
-                    <p className="font-black text-sm uppercase tracking-tighter">@vital_enclave</p>
-                    <span className="text-[8px] bg-toxic/20 text-toxic border border-toxic/30 px-1 rounded">VERIFIED_HOST</span>
-                  </div>
-                  <p className="text-xs font-light leading-relaxed">Streaming biometric hash data directly to the Vital Grid. #Sovereignty #Web3 #BioHacking</p>
-                  <div className="flex items-center gap-2 text-toxic">
-                     <Music2 className="w-3 h-3" />
-                     <span className="text-[10px] font-mono animate-pulse">0x8842_Sync_Pulse.mp3</span>
-                  </div>
-               </div>
-               
-               <div className="absolute right-4 bottom-32 flex flex-col items-center gap-8">
-                  <div className="flex flex-col items-center gap-1">
-                    <div className="w-12 h-12 bg-white/5 backdrop-blur-xl rounded-full border border-white/20 flex items-center justify-center hover:bg-toxic/20 transition-all cursor-pointer group"><Heart className="w-6 h-6 text-white group-hover:text-rose-500 group-hover:fill-rose-500" /></div>
-                    <span className="text-[8px] font-black">1.2M</span>
-                  </div>
-                  <div className="flex flex-col items-center gap-1">
-                    <div className="w-12 h-12 bg-white/5 backdrop-blur-xl rounded-full border border-white/20 flex items-center justify-center hover:bg-toxic/20 transition-all cursor-pointer group"><MessageCircle className="w-6 h-6 text-white" /></div>
-                    <span className="text-[8px] font-black">44K</span>
-                  </div>
-                  <div className="flex flex-col items-center gap-1">
-                    <div className="w-12 h-12 bg-white/5 backdrop-blur-xl rounded-full border border-toxic/40 flex items-center justify-center hover:bg-toxic/20 transition-all cursor-pointer group"><Zap className="w-6 h-6 text-toxic animate-pulse" /></div>
-                    <span className="text-[8px] font-black text-toxic">MINT</span>
-                  </div>
-                  <div className="w-10 h-10 rounded-full border-2 border-white/20 overflow-hidden animate-spin-slow">
-                    <img src="https://images.unsplash.com/photo-1614728263952-84ea256f9679?auto=format&fit=crop&q=80&w=100" alt="Disc" />
-                  </div>
-               </div>
-            </div>
+         <div className="flex-1 overflow-y-auto scroll-snap-type-y-mandatory scroll-smooth relative z-10 scrollbar-hide py-4">
+            {(socialFeed?.vtok || []).map((item: any) => (
+              <div key={item.id} className="h-full w-full relative flex-shrink-0 snap-start">
+                <div className="absolute inset-0 bg-slate-900 group relative">
+                   <img src={item.videoUrl} className="w-full h-full object-cover opacity-40 group-hover:opacity-60 transition-opacity" alt="TikTok" referrerPolicy="no-referrer" />
+                   <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-80" />
+                   
+                   <div className="absolute bottom-24 left-6 text-white space-y-3 max-w-[280px]">
+                      <div className="flex items-center gap-2">
+                        <div className="w-8 h-8 rounded-full border border-toxic bg-black/40 flex items-center justify-center text-[10px] font-black">{item.author[0]}</div>
+                        <p className="font-black text-sm uppercase tracking-tighter">@{item.author}</p>
+                        <span className="text-[8px] bg-toxic/20 text-toxic border border-toxic/30 px-1 rounded">VERIFIED_HOST</span>
+                      </div>
+                      <p className="text-xs font-light leading-relaxed">{item.caption}</p>
+                      <div className="flex items-center gap-2 text-toxic">
+                         <Music2 className="w-3 h-3" />
+                         <span className="text-[10px] font-mono animate-pulse">0x8842_Sync_Pulse.mp3</span>
+                      </div>
+                   </div>
+                   
+                   <div className="absolute right-4 bottom-32 flex flex-col items-center gap-8">
+                      <div className="flex flex-col items-center gap-1">
+                        <div 
+                          onClick={() => toggleLike(`tok-${item.id}`)}
+                          className={cn("w-12 h-12 rounded-full border flex items-center justify-center transition-all cursor-pointer backdrop-blur-xl", likes[`tok-${item.id}`] ? "bg-rose-500/20 border-rose-500" : "bg-white/5 border-white/20 hover:bg-toxic/20")}
+                        >
+                          <Heart className={cn("w-6 h-6", likes[`tok-${item.id}`] ? "text-rose-500 fill-rose-500" : "text-white")} />
+                        </div>
+                        <span className="text-[8px] font-black">{item.likes}</span>
+                      </div>
+                      <div className="flex flex-col items-center gap-1">
+                        <div className="w-12 h-12 bg-white/5 backdrop-blur-xl rounded-full border border-white/20 flex items-center justify-center hover:bg-toxic/20 transition-all cursor-pointer"><MessageCircle className="w-6 h-6 text-white" /></div>
+                        <span className="text-[8px] font-black">{item.comments}</span>
+                      </div>
+                      <div className="flex flex-col items-center gap-1">
+                        <div 
+                          onClick={() => addNotification('Media Segment Minted to Ledger', 'success')}
+                          className="w-12 h-12 bg-white/5 backdrop-blur-xl rounded-full border border-toxic/40 flex items-center justify-center hover:bg-toxic/20 transition-all cursor-pointer group"
+                        >
+                          <Zap className="w-6 h-6 text-toxic group-hover:scale-125 transition-transform" />
+                        </div>
+                        <span className="text-[8px] font-black text-toxic uppercase">Mint</span>
+                      </div>
+                      <div className="w-10 h-10 rounded-full border-2 border-white/20 overflow-hidden animate-spin-slow">
+                        <img src={`https://i.pravatar.cc/100?u=${item.id}`} alt="Disc" />
+                      </div>
+                   </div>
+                </div>
+              </div>
+            ))}
          </div>
       </div>
     )},
@@ -2692,36 +2721,38 @@ const VitalOS = ({ nft, user, sync, claim, evolve, activate, pairWearable, activ
               ))}
             </div>
 
-            {[1, 2, 3].map(i => (
-              <div key={i} className="space-y-4">
+            {(socialFeed?.vgram || []).map((post: any) => (
+              <div key={post.id} className="space-y-4">
                  <div className="px-6 flex items-center justify-between">
                     <div className="flex items-center gap-3">
-                       <div className="w-10 h-10 rounded-full border border-toxic/30 p-0.5 overflow-hidden"><img src={`https://i.pravatar.cc/150?u=post${i}`} alt="Avatar" /></div>
+                       <div className="w-10 h-10 rounded-full border border-toxic/30 p-0.5 overflow-hidden"><img src={`https://i.pravatar.cc/150?u=post${post.id}`} alt="Avatar" /></div>
                        <div className="text-left">
-                          <p className="text-[10px] font-black text-white uppercase tracking-tighter">Pioneer_Node_{i}</p>
-                          <p className="text-[8px] text-toxic/70 font-mono">0xV...{i}4A2</p>
+                          <p className="text-[10px] font-black text-white uppercase tracking-tighter">{post.author}</p>
+                          <p className="text-[8px] text-toxic/70 font-mono">{post.handle}</p>
                        </div>
                     </div>
                     <button onClick={() => addNotification('IPFS link copied', 'success')}><RefreshCw className="w-4 h-4 text-slate-600" /></button>
                  </div>
                  <div className="aspect-square bg-slate-900 border-y border-white/5 overflow-hidden relative group">
-                    <img src={`https://images.unsplash.com/photo-${1550745165 + i * 100}?auto=format&fit=crop&q=80&w=800`} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000" alt="Post" referrerPolicy="no-referrer" />
+                    <img src={post.imageUrl} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000" alt="Post" referrerPolicy="no-referrer" />
                     <div className="absolute top-4 right-4 px-2 py-1 bg-black/60 backdrop-blur-md rounded border border-white/20 text-[8px] font-black uppercase tracking-widest">NFT Certified</div>
                  </div>
                  <div className="px-8 space-y-3">
                     <div className="flex justify-between items-center">
                       <div className="flex gap-6">
-                         <Heart className="w-6 h-6 text-toxic fill-toxic/10 group-hover:fill-toxic transition-all" />
+                         <div onClick={() => toggleLike(`gram-${post.id}`)} className="cursor-pointer">
+                           <Heart className={cn("w-6 h-6 transition-all", likes[`gram-${post.id}`] ? "text-toxic fill-toxic" : "text-white")} />
+                         </div>
                          <MessageCircle className="w-6 h-6" />
                          <Share2 className="w-6 h-6" />
                       </div>
                       <Puzzle className="w-6 h-6 text-indigo-400" />
                     </div>
                     <div>
-                      <p className="text-xs font-black leading-tight">MINTED BY 142 NODES</p>
-                      <p className="text-xs font-light mt-1"><span className="font-black text-toxic uppercase">Pioneer_Node_{i}</span> Syncing my biological frequencies with the mainnet core has never felt more sovereign. #VitalOS #Web3</p>
+                      <p className="text-xs font-black leading-tight">MINTED BY {post.likes} NODES</p>
+                      <p className="text-xs font-light mt-1"><span className="font-black text-toxic uppercase">{post.author}</span> {post.caption}</p>
                     </div>
-                    <p className="text-[8px] text-slate-500 font-black uppercase tracking-widest">View On-Chain Conversation (12 comments)</p>
+                    <p className="text-[8px] text-slate-500 font-black uppercase tracking-widest cursor-pointer">View On-Chain Conversation</p>
                  </div>
               </div>
             ))}
@@ -2750,28 +2781,26 @@ const VitalOS = ({ nft, user, sync, claim, evolve, activate, pairWearable, activ
                </div>
             </div>
 
-            {[1, 2].map(i => (
-              <div key={i} className="bg-white/[0.03] p-8 rounded-[40px] border border-white/5 space-y-6">
+            {(socialFeed?.vnode || []).slice(0, 2).map((post: any) => (
+              <div key={post.id} className="bg-white/[0.03] p-8 rounded-[40px] border border-white/5 space-y-6">
                  <div className="flex items-center justify-between">
                     <div className="flex items-center gap-4">
-                       <div className="w-12 h-12 bg-toxic/10 rounded-full flex items-center justify-center border border-toxic/20 text-toxic font-black uppercase tracking-tighter">GC</div>
+                       <div className="w-12 h-12 bg-toxic/10 rounded-full flex items-center justify-center border border-toxic/20 text-toxic font-black uppercase tracking-tighter">{post.author[0]}</div>
                        <div>
-                          <p className="text-sm font-black text-white uppercase tracking-widest">Vital Grid Council</p>
-                          <p className="text-[9px] text-slate-500 font-black uppercase">Decentralized Governance • 4h ago</p>
+                          <p className="text-sm font-black text-white uppercase tracking-widest">{post.author}</p>
+                          <p className="text-[9px] text-slate-500 font-black uppercase">{post.handle} • {post.time}</p>
                        </div>
                     </div>
-                    <button className="px-3 py-1 bg-toxic/10 text-toxic text-[8px] font-black uppercase rounded-full border border-toxic/20">Follow Node</button>
+                    <button onClick={() => addNotification('Node Followed', 'success')} className="px-3 py-1 bg-toxic/10 text-toxic text-[8px] font-black uppercase rounded-full border border-toxic/20">Follow Node</button>
                  </div>
-                 <p className="text-xs text-slate-300 font-light leading-relaxed">The epoch 8842 voting cycle is now open. All dNFT holders are invited to signal their preference for the next kernel distribution parameters.</p>
-                 <div className="aspect-video bg-black/40 rounded-3xl border border-white/5 overflow-hidden group relative">
-                    <img src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80&w=800" className="w-full h-full object-cover grayscale brightness-75 group-hover:scale-105 transition-transform duration-1000" alt="Governance" />
-                    <div className="absolute inset-0 bg-indigo-500/20 mix-blend-overlay" />
-                    <div className="absolute inset-0 flex items-center justify-center">
-                       <div className="w-16 h-16 bg-white/10 backdrop-blur-xl rounded-full border border-white/20 flex items-center justify-center"><Zap className="w-8 h-8 text-white fill-white" /></div>
-                    </div>
-                 </div>
+                 <p className="text-xs text-slate-300 font-light leading-relaxed">{post.msg}</p>
                  <div className="flex gap-8 pt-2">
-                    <button className="flex items-center gap-2 text-[10px] font-black text-indigo-400 uppercase tracking-widest"><Heart className="w-4 h-4 fill-indigo-400" /> 1.2K Votes</button>
+                    <button 
+                      onClick={() => toggleLike(`conn-${post.id}`)}
+                      className={cn("flex items-center gap-2 text-[10px] font-black uppercase tracking-widest transition-all", likes[`conn-${post.id}`] ? "text-rose-500" : "text-indigo-400")}
+                    >
+                      <Heart className={cn("w-4 h-4", likes[`conn-${post.id}`] ? "fill-rose-500" : "fill-indigo-400")} /> {likes[`conn-${post.id}`] ? 'Voted' : 'Signal'}
+                    </button>
                     <button className="flex items-center gap-2 text-[10px] font-black text-slate-500 uppercase tracking-widest"><MessageCircle className="w-4 h-4" /> Delegate Access</button>
                  </div>
               </div>
@@ -2786,12 +2815,8 @@ const VitalOS = ({ nft, user, sync, claim, evolve, activate, pairWearable, activ
             <div className="flex gap-6"><Settings className="w-5 h-5 text-slate-500" /></div>
          </div>
          <div className="flex-1 overflow-y-auto px-4 divide-y divide-white/5 scrollbar-hide pb-24">
-            {[
-              { author: "SovereignNode", handle: "0x8842...4411", msg: "Censorship-resistant microblogging is not just a feature, it's a biological right. #VitalOS #FreeSpeech", time: "2m", likes: "14K" },
-              { author: "GridWatcher", handle: "grid_intel", msg: "Unusual activity detected in the entropy pool. Handshake protocols intensifying. Stay alert pioneers.", time: "15m", likes: "822" },
-              { author: "Founder88", handle: "genesis_auth", msg: "Batch 01 hardware has arrived. The bridge is complete.", time: "1h", likes: "4.4K" }
-            ].map((tweet, i) => (
-              <div key={i} className="py-6 flex gap-4 hover:bg-white/[0.02] transition-all cursor-pointer px-2">
+            {(socialFeed?.vnode || []).map((tweet: any) => (
+              <div key={tweet.id} className="py-6 flex gap-4 hover:bg-white/[0.02] transition-all cursor-pointer px-2">
                  <div className="w-12 h-12 rounded-full bg-white/5 border border-white/10 flex-shrink-0 flex items-center justify-center font-black text-xs text-slate-600">{tweet.author[0]}</div>
                  <div className="flex-1 space-y-2">
                     <div className="flex items-center gap-2">
@@ -2802,7 +2827,12 @@ const VitalOS = ({ nft, user, sync, claim, evolve, activate, pairWearable, activ
                     <div className="flex justify-between items-center pt-2 max-w-[240px]">
                        <button className="flex items-center gap-1.5 text-[9px] text-slate-500 group"><MessageCircle className="w-3.5 h-3.5 group-hover:text-blue-400" /> 24</button>
                        <button className="flex items-center gap-1.5 text-[9px] text-slate-500 group"><RefreshCw className="w-3.5 h-3.5 group-hover:text-toxic" /> 142</button>
-                       <button className="flex items-center gap-1.5 text-[9px] text-slate-500 group"><Heart className="w-3.5 h-3.5 group-hover:text-rose-500" /> {tweet.likes}</button>
+                       <button 
+                         onClick={(e) => { e.stopPropagation(); toggleLike(`node-${tweet.id}`); }}
+                         className={cn("flex items-center gap-1.5 text-[9px] transition-all", likes[`node-${tweet.id}`] ? "text-rose-500" : "text-slate-500")}
+                       >
+                         <Heart className={cn("w-3.5 h-3.5", likes[`node-${tweet.id}`] ? "fill-rose-500" : "")} /> {tweet.likes}
+                       </button>
                        <button className="flex items-center gap-1.5 text-[9px] text-slate-500 group"><BarChart2 className="w-3.5 h-3.5 group-hover:text-blue-400" /></button>
                     </div>
                  </div>
@@ -3116,9 +3146,11 @@ const VitalOS = ({ nft, user, sync, claim, evolve, activate, pairWearable, activ
                         <p className="text-[10px] text-slate-400 font-bold">{date}</p>
                     </div>
                  </div>
-                 <div className="pt-4 border-t border-white/5 flex gap-2">
-                    <button onClick={() => addNotification('NTP Sync Initiated', 'info')} className="flex-1 py-2 bg-toxic/10 border border-toxic/20 rounded-lg text-[8px] text-toxic font-black uppercase tracking-widest hover:bg-toxic/20 transition-all">Sync with Atomic Clock</button>
-                    <button onClick={() => addNotification('Timezone locked to Grid', 'warn')} className="flex-1 py-2 bg-white/5 border border-white/10 rounded-lg text-[8px] text-white font-black uppercase tracking-widest hover:bg-white/10 transition-all">Set Region</button>
+                 <div className="pt-4 border-t border-white/5 grid grid-cols-2 gap-2">
+                    <button onClick={() => setTimeOffset(0)} className="py-2 bg-toxic/10 border border-toxic/20 rounded-lg text-[8px] text-toxic font-black uppercase tracking-widest hover:bg-toxic/20 transition-all">Reset Sync</button>
+                    <button onClick={() => addNotification('Timezone locked to Grid', 'warn')} className="py-2 bg-white/5 border border-white/10 rounded-lg text-[8px] text-white font-black uppercase tracking-widest hover:bg-white/10 transition-all">Set Region</button>
+                    <button onClick={() => handleAdjustTime(1)} className="py-2 bg-white/5 border border-white/10 rounded-lg text-[8px] text-white font-black uppercase tracking-widest hover:bg-white/10 transition-all">+1 Hour</button>
+                    <button onClick={() => handleAdjustTime(-1)} className="py-2 bg-white/5 border border-white/10 rounded-lg text-[8px] text-white font-black uppercase tracking-widest hover:bg-white/10 transition-all">-1 Hour</button>
                  </div>
               </div>
            </div>
@@ -3127,7 +3159,7 @@ const VitalOS = ({ nft, user, sync, claim, evolve, activate, pairWearable, activ
            <div className="space-y-4">
               <div className="flex justify-between items-center px-2">
                  <h5 className="text-[10px] text-indigo-400 font-black uppercase tracking-widest">Sovereign Social Grid</h5>
-                 <button onClick={() => addNotification('Account discovery active', 'info')} className="text-[8px] text-indigo-400 font-black uppercase tracking-widest hover:underline">+ Add Account</button>
+                 <button onClick={() => addNotification('Identify discovery active. Enter handle below...', 'info')} className="text-[8px] text-indigo-400 font-black uppercase tracking-widest hover:underline">+ Add Account</button>
               </div>
               <div className="space-y-2">
                  {[
@@ -3137,7 +3169,7 @@ const VitalOS = ({ nft, user, sync, claim, evolve, activate, pairWearable, activ
                    { name: 'Instagram', val: 'Meta-Auth Linked', icon: Instagram, active: true },
                    { name: 'Facebook', val: 'Secure Proxy Active', icon: Facebook, active: true }
                  ].map((social, i) => (
-                   <button key={i} onClick={() => addNotification(`${social.name} configuration opened`, 'info')} className="w-full p-4 bg-white/[0.03] border border-white/5 rounded-2xl flex justify-between items-center group hover:bg-white/5 transition-all">
+                   <button key={i} onClick={() => addNotification(`${social.name} configuration requested. Linking dapp...`, 'success')} className="w-full p-4 bg-white/[0.03] border border-white/5 rounded-2xl flex justify-between items-center group hover:bg-white/10 transition-all active:scale-95 shadow-lg shadow-black/20">
                       <div className="flex items-center gap-3">
                          <social.icon className={cn("w-4 h-4", social.active ? "text-white" : "text-slate-600")} />
                          <div className="text-left">
@@ -3595,6 +3627,14 @@ export default function App() {
   const [view, setView] = React.useState('landing');
   const [isIdentityModalOpen, setIsIdentityModalOpen] = React.useState(false);
   const [isGuideOpen, setIsGuideOpen] = React.useState(false);
+  const [socialFeed, setSocialFeed] = React.useState<any>(null);
+
+  useEffect(() => {
+    fetch('/api/social/feed')
+      .then(res => res.json())
+      .then(data => setSocialFeed(data))
+      .catch(err => console.error("Social feed error:", err));
+  }, []);
 
   if (loading) return <div className="h-screen flex items-center justify-center text-slate-400 uppercase tracking-widest text-[10px] font-mono">Initializing Protocol...</div>;
 
@@ -3604,7 +3644,8 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-obsidian text-slate-100 font-sans selection:bg-toxic selection:text-black pb-20">
+    <ThirdwebProvider>
+      <div className="min-h-screen bg-obsidian text-slate-100 font-sans selection:bg-toxic selection:text-black pb-20">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_-20%,_rgba(0,255,65,0.05),_rgba(255,255,255,0))] pointer-events-none" />
       
       {view !== 'dashboard' && (
@@ -3691,6 +3732,7 @@ export default function App() {
                 isWearablePaired: false,
                 availableCertificates: []
               }} 
+              socialFeed={socialFeed}
               sync={sync} 
               claim={claim} 
               evolve={evolve} 
@@ -3726,5 +3768,6 @@ export default function App() {
         </footer>
       )}
     </div>
+    </ThirdwebProvider>
   );
 }
