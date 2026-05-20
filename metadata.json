@@ -1,0 +1,12 @@
+{
+  "name": "VitalOS",
+  "description": "VitalOS - Web3 Operating System and Crypto Dashboard dashboard. Connect wallets, run web apps, monitor blockchain statistics and system logs in a stunning terminal-inspired, cyberpunk-styled dashboard.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone",
+    "geolocation"
+  ],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

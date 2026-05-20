@@ -1,0 +1,53 @@
+@import "tailwindcss";
+
+@theme {
+  --color-obsidian: #08090c;
+  --color-cyber-dark: #12161c;
+  --color-toxic: #00ff41;
+  --color-terminal: #00ff66;
+  --color-neon-blue: #00f0ff;
+  --color-neon-purple: #bd00ff;
+  --color-cyber-gray: #1e2530;
+}
+
+@layer base {
+  body {
+    background-color: var(--color-obsidian);
+    color: #f1f5f9;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  }
+
+  /* Custom styling for scanlines/glass CRT aesthetics */
+  .crt-scanlines {
+    background: linear-gradient(
+      rgba(18, 16, 16, 0) 50%, 
+      rgba(0, 0, 0, 0.25) 50%
+    );
+    background-size: 100% 4px;
+    pointer-events: none;
+  }
+
+  .glow-toxic {
+    text-shadow: 0 0 10px rgba(0, 255, 65, 0.4), 0 0 20px rgba(0, 255, 65, 0.2);
+  }
+
+  .glow-blue {
+    text-shadow: 0 0 10px rgba(0, 240, 255, 0.4), 0 0 20px rgba(0, 240, 255, 0.2);
+  }
+
+  /* Custom scrollbars */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #08090c;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #1e2530;
+    border-radius: 3px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #00ff41;
+  }
+}
